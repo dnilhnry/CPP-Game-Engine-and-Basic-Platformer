@@ -3,7 +3,6 @@
 // Chris Rook
 // Last modified 20/09/2018
 
-
 #pragma once
 
 #include "vector2D.h"
@@ -13,11 +12,11 @@
 class Camera
 {
 private:
-	Vector2D m_screenCentre;			// Coordinates of the centre of the screen (width/2, height/2)
-	Vector2D m_worldPosition;			// World coordinates for the centre of the screen			
-	float m_zoom;						   // Scale factor for drawing. 
+	Vector2D m_screenCentre;  // Coordinates of the centre of the screen (width/2, height/2)
+	Vector2D m_worldPosition; // World coordinates for the centre of the screen
+	float m_zoom;			  // Scale factor for drawing.
 public:
-	// Sets the camera with an intial position at 0,0 with 
+	// Sets the camera with an intial position at 0,0 with
 	// a scale to make the screen have a height of 2000 using world coordinates.
 	// So the top of the screen is 1000. Bottom of the screen is -1000.
 	// Left and right will depend on screen aspect
@@ -46,7 +45,7 @@ public:
 	// using the current camera settings
 	Segment2D Transform(Segment2D size) const;
 
-	// Sets the camera with an intial position at 0,0 with 
+	// Sets the camera with an intial position at 0,0 with
 	// a scale to make the screen have a height of 2000 using world coordinates.
 	// So the top of the screen is 1000. Bottom of the screen is -1000.
 	// Left and right will depend on screen aspect
@@ -58,4 +57,3 @@ public:
 	// Sets the camera zoom
 	void SetZoom(float zoom);
 };
-

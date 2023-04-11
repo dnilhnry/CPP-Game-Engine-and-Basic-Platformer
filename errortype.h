@@ -9,5 +9,8 @@
 
 #pragma once
 
-enum ErrorType{SUCCESS, FAILURE};
-
+enum ErrorType
+{
+    SUCCESS,
+    FAILURE
+};

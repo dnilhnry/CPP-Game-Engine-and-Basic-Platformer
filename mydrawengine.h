@@ -10,9 +10,9 @@
 #pragma once
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")
-#pragma comment(lib, "dxguid.lib")  
-#include <d3d9.h>		// directX draw
-#include <d3dx9.h>		// extra directX draw stuff   
+#pragma comment(lib, "dxguid.lib")
+#include <d3d9.h>  // directX draw
+#include <d3dx9.h> // extra directX draw stuff
 #include "errorlogger.h"
 #include "vector2d.h"
 #include "shapes.h"
@@ -22,11 +22,10 @@
 #include "string"
 #include "camera.h"
 
-
 // Macros ***************************************************
 // Colour system
-#define _RGB565(r,g,b)  ((((b>>3)%32)) + (((g>>2)%64)<<5) + (((r>>3)%32)<<11))
-#define _XRGB(r,g,b) ((255<<24)+(r<<16) + (g<<8) +b)
+#define _RGB565(r, g, b) ((((b >> 3) % 32)) + (((g >> 2) % 64) << 5) + (((r >> 3) % 32) << 11))
+#define _XRGB(r, g, b) ((255 << 24) + (r << 16) + (g << 8) + b)
 
 // The class spec *******************************************
 
@@ -34,7 +33,6 @@
 // use directX for a computer game, using 32-bit graphics.
 // The functions are organised in a class for convenience, rather
 // than for OO principles.
-
 
 // PictureIndex is just an int
 // Used to index each image loaded
@@ -44,35 +42,33 @@ typedef int PictureIndex;
 // Used to index each font specified
 typedef int FontIndex;
 
-
 // Class to handle 2D drawing on screen
-class MyDrawEngine 
+class MyDrawEngine
 {
 
 private:
+	// Defines the vertex format used in Direct3D
+	struct MYVERTEX
+	{
+		FLOAT x, y, z, rhw;
+		DWORD colour;
+	};
 
-   // Defines the vertex format used in Direct3D
-struct MYVERTEX
-{
-	FLOAT x,y,z,rhw;
-	DWORD colour;
-};
-
-#define MYFVF (D3DFVF_XYZRHW|D3DFVF_DIFFUSE)
+#define MYFVF (D3DFVF_XYZRHW | D3DFVF_DIFFUSE)
 
 	// Inner struct to store information about each picture
 	struct MyPicture
 	{
-		LPDIRECT3DTEXTURE9  lpTheTexture;	// The surface that MyPicture encapsulates
-		std::wstring m_SourceFileName;      // The file name of the loaded image
-		Vector2D m_Centre;                  // Cordinates of the "centre" of the image
-                                          // by default this is the centre of the square file
-                                          // but it can be adjusted so that objects "rotate" around
-                                          // some other centre
-		int m_width;                        // Width of the image in pixels
-		int m_height;                       // Height of the image in pixels
+		LPDIRECT3DTEXTURE9 lpTheTexture; // The surface that MyPicture encapsulates
+		std::wstring m_SourceFileName;	 // The file name of the loaded image
+		Vector2D m_Centre;				 // Cordinates of the "centre" of the image
+										 // by default this is the centre of the square file
+										 // but it can be adjusted so that objects "rotate" around
+										 // some other centre
+		int m_width;					 // Width of the image in pixels
+		int m_height;					 // Height of the image in pixels
 
-	   // Public methods
+		// Public methods
 		//  Internal pointer to the texture is set to NULL
 		MyPicture();
 	};
@@ -80,52 +76,52 @@ struct MYVERTEX
 	// Inner struct to store information about each font
 	struct MyFont
 	{
-		LPD3DXFONT m_pFont;		      // Pointer to the font
-		std::wstring m_fontName;		// Name of the font
-		int m_height;			         // Height of the font
-		bool m_bold;			         // If true, font will be bold
-		bool m_italic;			         // If true, font will be italicised
+		LPD3DXFONT m_pFont;		 // Pointer to the font
+		std::wstring m_fontName; // Name of the font
+		int m_height;			 // Height of the font
+		bool m_bold;			 // If true, font will be bold
+		bool m_italic;			 // If true, font will be italicised
 
 		// Sets the pointer to nullptr
 		MyFont();
 	};
 
-	HWND m_Hwnd;								// The handle to the window
-	IDirect3D9* m_lpD3D;					   // Pointer to direct draw
-	IDirect3DDevice9* m_lpD3DDevice;		// Pointer to the D3D device
-	LPD3DXSPRITE m_lpSprite;				// Sprite to draw pictures
+	HWND m_Hwnd;					 // The handle to the window
+	IDirect3D9 *m_lpD3D;			 // Pointer to direct draw
+	IDirect3DDevice9 *m_lpD3DDevice; // Pointer to the D3D device
+	LPD3DXSPRITE m_lpSprite;		 // Sprite to draw pictures
 
-	int m_ScreenWidth;						// Height of the screen
-	int m_ScreenHeight;						// Width of the screen
-	int m_NativeScreenWidth;				// Height of the primary monitor at start
-	int m_NativeScreenHeight;				// Width of the primary monitor at start
+	int m_ScreenWidth;		  // Height of the screen
+	int m_ScreenHeight;		  // Width of the screen
+	int m_NativeScreenWidth;  // Height of the primary monitor at start
+	int m_NativeScreenHeight; // Width of the primary monitor at start
 
-	bool m_CameraActive;					   // If true, drawing will transform using camera settings. Default is true.
+	bool m_CameraActive; // If true, drawing will transform using camera settings. Default is true.
 
-	bool m_bFullScreen;						// True if full screen. False otherwise
-	std::map<PictureIndex, MyPicture> m_MyPictureList;	      // Map of MyPicture objects
-	std::map<std::wstring, PictureIndex> m_FilenameList;		// Map of filenames
-	std::map<FontIndex, MyFont> m_MyFontList;			         // Map of Font objects
-	PictureIndex m_NextPictureIndex;		// The index of the next font to be added	
-	FontIndex m_pNextFont;					// The index of the next font to be added
+	bool m_bFullScreen;									 // True if full screen. False otherwise
+	std::map<PictureIndex, MyPicture> m_MyPictureList;	 // Map of MyPicture objects
+	std::map<std::wstring, PictureIndex> m_FilenameList; // Map of filenames
+	std::map<FontIndex, MyFont> m_MyFontList;			 // Map of Font objects
+	PictureIndex m_NextPictureIndex;					 // The index of the next font to be added
+	FontIndex m_pNextFont;								 // The index of the next font to be added
 
-		// Postcondition:	The primary surface, the buffer, the clipper and DirectDraw have been released.
-		// Returns:			SUCCESS
+	// Postcondition:	The primary surface, the buffer, the clipper and DirectDraw have been released.
+	// Returns:			SUCCESS
 	ErrorType Release();
 
-	static MyDrawEngine* instance;
-		// Instance of this singleton
+	static MyDrawEngine *instance;
+	// Instance of this singleton
 
-		// Parameters:
-		//		hwnd		The handle to the application's window.
+	// Parameters:
+	//		hwnd		The handle to the application's window.
 	MyDrawEngine(HWND hwnd);
 
-		// Singleton destructor - calls "Release()"
-	~MyDrawEngine();	
+	// Singleton destructor - calls "Release()"
+	~MyDrawEngine();
 
 	// Reloads a specified picture - called within ReloadBitmaps
-   // Parameters:
-   //    pic    The index of the required picture
+	// Parameters:
+	//    pic    The index of the required picture
 	ErrorType ReloadPicture(PictureIndex pic);
 
 	// Releases all Bitmaps. Used when resetting the device or
@@ -143,25 +139,25 @@ struct MYVERTEX
 	void ReloadFonts();
 
 public:
-	Camera theCamera;          // Camera objects is used to translate world coordinates to/from
-                              // screen coordinates
+	Camera theCamera; // Camera objects is used to translate world coordinates to/from
+					  // screen coordinates
 
 	// Some standard colours.
 	static const unsigned int BLACK = 0;
-	static const unsigned int RED = D3DCOLOR_ARGB(255,255,0,0);
-	static const unsigned int GREEN = D3DCOLOR_ARGB(255,0,255,0);
-	static const unsigned int BLUE = D3DCOLOR_ARGB(255,0,0,255);
-	static const unsigned int DARKRED = D3DCOLOR_ARGB(255,128,0,0);
-	static const unsigned int DARKGREEN = D3DCOLOR_ARGB(255,0,128,0);
-	static const unsigned int DARKBLUE = D3DCOLOR_ARGB(255,0,0,128);
-	static const unsigned int LIGHTRED = D3DCOLOR_ARGB(255,255,128,128);
-	static const unsigned int LIGHTGREEN = D3DCOLOR_ARGB(255,128,255,128);
-	static const unsigned int LIGHTBLUE = D3DCOLOR_ARGB(255,128,128,255);
-	static const unsigned int WHITE = D3DCOLOR_ARGB(255,255,255,255);
-	static const unsigned int YELLOW = D3DCOLOR_ARGB(255,255,255,0);
-	static const unsigned int CYAN = D3DCOLOR_ARGB(255,0,255,255);
-	static const unsigned int PURPLE = D3DCOLOR_ARGB(255,255,0,255);
-	static const unsigned int GREY = D3DCOLOR_ARGB(255,128,128,128);
+	static const unsigned int RED = D3DCOLOR_ARGB(255, 255, 0, 0);
+	static const unsigned int GREEN = D3DCOLOR_ARGB(255, 0, 255, 0);
+	static const unsigned int BLUE = D3DCOLOR_ARGB(255, 0, 0, 255);
+	static const unsigned int DARKRED = D3DCOLOR_ARGB(255, 128, 0, 0);
+	static const unsigned int DARKGREEN = D3DCOLOR_ARGB(255, 0, 128, 0);
+	static const unsigned int DARKBLUE = D3DCOLOR_ARGB(255, 0, 0, 128);
+	static const unsigned int LIGHTRED = D3DCOLOR_ARGB(255, 255, 128, 128);
+	static const unsigned int LIGHTGREEN = D3DCOLOR_ARGB(255, 128, 255, 128);
+	static const unsigned int LIGHTBLUE = D3DCOLOR_ARGB(255, 128, 128, 255);
+	static const unsigned int WHITE = D3DCOLOR_ARGB(255, 255, 255, 255);
+	static const unsigned int YELLOW = D3DCOLOR_ARGB(255, 255, 255, 0);
+	static const unsigned int CYAN = D3DCOLOR_ARGB(255, 0, 255, 255);
+	static const unsigned int PURPLE = D3DCOLOR_ARGB(255, 255, 0, 255);
+	static const unsigned int GREY = D3DCOLOR_ARGB(255, 128, 128, 128);
 
 	// Public methods ***************************************
 
@@ -183,13 +179,13 @@ public:
 	//	32x32, 64x64, etc.
 	//	Transparency is supported on the alpha channel for file formats
 	//	that support it.
-	PictureIndex LoadPicture(const wchar_t* filename);
+	PictureIndex LoadPicture(const wchar_t *filename);
 
 	// Precondition:
 	//	filename is a NULL-terminated w_string
 	// Postcondition:
 	//	If filename is the name of a valid bitmap that has previously
-	//  been loaded by the MyDrawEngine, the  method will return the 
+	//  been loaded by the MyDrawEngine, the  method will return the
 	//  corresponding picture index. Otherwise, it will
 	//  return a negative number.
 	// Returns:
@@ -201,7 +197,7 @@ public:
 	//	32x32, 64x64, etc.
 	//	Transparency is supported on the alpha channel for file formats
 	//	that support it.
-	PictureIndex FindPicture(const wchar_t* filename);
+	PictureIndex FindPicture(const wchar_t *filename);
 
 	// Postcondition:
 	//  The image referenced by "pic" is released from memory.
@@ -213,7 +209,7 @@ public:
 	void ReleasePicture(PictureIndex pic);
 
 	// Postcondition:
-	//	If FontName is a registered font, A new font will be loaded, and the 
+	//	If FontName is a registered font, A new font will be loaded, and the
 	//  method will return a FontIndex referecing font for use in the
 	//  WriteText, WriteDouble and WriteInt methods.
 	// Else, returns zero
@@ -225,7 +221,7 @@ public:
 	// Notes:
 	//  The default font has a FontIndex of zero. It is an Arial font with
 	//  a height of 24.
-	FontIndex AddFont(const wchar_t* FontName, int height, bool bold, bool italic);
+	FontIndex AddFont(const wchar_t *FontName, int height, bool bold, bool italic);
 
 	// Postcondition:
 	//  The Direct3D device has been reset and SUCCESS has been returned.
@@ -246,7 +242,7 @@ public:
 	// Notes:
 	//  A common error it to request a resolution that the device cannot support.
 	//  This method does not check for valid resolution. It just returns FAILURE.
-	//  If the resolution change fails, the device attempts to return to the previous 
+	//  If the resolution change fails, the device attempts to return to the previous
 	// resolution.
 	// In fullscreen mode, the game will occupy all of the primary monitor, using
 	// the requested resolution
@@ -266,7 +262,7 @@ public:
 	//  If "pic" refers to a valid picture, "height" and "width" are set
 	//  to the height and width of the image.
 	// Othewise, "height" and "width" are unchanged.
-	void GetDimensions(PictureIndex pic, int& height, int& width);
+	void GetDimensions(PictureIndex pic, int &height, int &width);
 
 	// Precondition:	A window for the application has been created
 	// Postcondition:	An instance of MyDrawEngine is created and a pointer to it has been
@@ -275,8 +271,8 @@ public:
 	//					The screen has been put into full-screen, exclusive mode.
 	//					The primary surface and the back buffer have been initialised and cleared.
 	// Parameters:
-	//		width		The pixel width of the screen 
-	//		height		The pixel height of the screen 
+	//		width		The pixel width of the screen
+	//		height		The pixel height of the screen
 	//		hwnd		The handle to the application's window.
 	// Note you should call this static method using MyDrawEngine::Start() before using
 	// any other methods of this class.
@@ -288,33 +284,33 @@ public:
 	// Note that you should call this at the end of your game to avoid a memory leak.
 	static ErrorType Terminate();
 
-		// Precondition:	shutdown() has not been called
-		//					Neither primary nor buffer is locked.
-		// Postcondition:	Primary surface and the back buffer have been flipped.
-		//					(function will wait until flip is possible)
-		// Returns:			SUCCESS
+	// Precondition:	shutdown() has not been called
+	//					Neither primary nor buffer is locked.
+	// Postcondition:	Primary surface and the back buffer have been flipped.
+	//					(function will wait until flip is possible)
+	// Returns:			SUCCESS
 	ErrorType Flip();
 
 	// Postcondition:	A pointer to the instance of MyDrawEngine has been returned.
 	// Call this using "MyDrawEngine enginePtr = MyDrawEngine::GetInstance();"
-	static MyDrawEngine* GetInstance();
+	static MyDrawEngine *GetInstance();
 
-		// Preconditions	thePicture has been initialised to contain an image
-		// Postcondition	The whole image in theSurface will be placed
-		//					on the back buffer. (Subject to clipping.)
-		//					The centre of the image will be placed at the x,y coordinates specified
-		//	Returns			SUCCESS if blit successful. FAILURE otherwise.
-		// Parameters:		position - the screen location of the centre of the picture
-		//					pic - the PictureIndex of the image to be drawn
-		//					scale - the scale of the image. The image will be scaled from its "centre"
-		//						(by default the mathematical centre of the surface)
-		//					angle - the anticlockwise rotation of the image in radians
-		//						the image will be rotated around its centre (by
-		//						default the mathematical centre of the surface)
-		//					transparency - the transparency of the image. 0.0 is opaque. 1.0 is
-		//						fully transparent. Behaviour for transparency values greater
-		//						than 1.0 or less than 0.0 is undefined.
-	ErrorType DrawAt(Vector2D position, PictureIndex pic, float scale=1.0, float angle=0, float transparency=0);
+	// Preconditions	thePicture has been initialised to contain an image
+	// Postcondition	The whole image in theSurface will be placed
+	//					on the back buffer. (Subject to clipping.)
+	//					The centre of the image will be placed at the x,y coordinates specified
+	//	Returns			SUCCESS if blit successful. FAILURE otherwise.
+	// Parameters:		position - the screen location of the centre of the picture
+	//					pic - the PictureIndex of the image to be drawn
+	//					scale - the scale of the image. The image will be scaled from its "centre"
+	//						(by default the mathematical centre of the surface)
+	//					angle - the anticlockwise rotation of the image in radians
+	//						the image will be rotated around its centre (by
+	//						default the mathematical centre of the surface)
+	//					transparency - the transparency of the image. 0.0 is opaque. 1.0 is
+	//						fully transparent. Behaviour for transparency values greater
+	//						than 1.0 or less than 0.0 is undefined.
+	ErrorType DrawAt(Vector2D position, PictureIndex pic, float scale = 1.0, float angle = 0, float transparency = 0);
 
 	// Precondition:	A window for the application has been created
 	//					Direct3D has not already been initialised.
@@ -338,68 +334,66 @@ public:
 	//					FAILURE otherwise  - a message is written to the log file.
 	ErrorType GoFullScreen();
 
+	// Postcondition	A rectangle in the back buffer will be filled with the specified
+	//					colour. (If partially on-screen)
+	// Parameters:		destinationRect - a rectangle specifying the area to be filled.
+	//								the top of the rectangle must be a smaller number than
+	//								the bottom.
+	//								the left side of the rectangle must be a smaller number than
+	//								the right side.
+	//					colour - an integer representing the colour to be used
+	//					angle - an angle to tilt the rectangle, in radians clockwise
+	//							rotation occurs around the centre of the rectangle.
+	// Returns			SUCCESS if fill successful. FAILURE otherwise
+	ErrorType FillRect(Rectangle2D destinationRect, unsigned int colour, float angle = 0);
 
-		// Postcondition	A rectangle in the back buffer will be filled with the specified
-		//					colour. (If partially on-screen)
-		// Parameters:		destinationRect - a rectangle specifying the area to be filled.
-		//								the top of the rectangle must be a smaller number than
-		//								the bottom. 
-		//								the left side of the rectangle must be a smaller number than
-		//								the right side. 
-		//					colour - an integer representing the colour to be used
-		//					angle - an angle to tilt the rectangle, in radians clockwise
-		//							rotation occurs around the centre of the rectangle.
-		// Returns			SUCCESS if fill successful. FAILURE otherwise
-	ErrorType FillRect( Rectangle2D destinationRect, unsigned int colour, float angle=0);
+	// Postcondition	A rectangle in the back buffer will be filled with the specified
+	//					colour. (If partially on-screen). The rectangle will be partially
+	//					transparent with regards to images already on the back buffer.
+	// Parameters:		destinationRect - a rectangle specifying the area to be filled.
+	//								the top of the rectangle must be a smaller number than
+	//								the bottom.
+	//								the left side of the rectangle must be a smaller number than
+	//								the right side.
+	//					colour - an integer representing the colour to be used
+	//					transparency - a number from 0 to 1.0 to indicate how transparent
+	//								the rectangle should be. 0 is opaque. 1 is fully transparent
+	//								(i.e. invisible)
+	//					angle - an angle to tilt the rectangle, in radians clockwise
+	//							rotation occurs around the centre of the rectangle.
+	// Returns			SUCCESS if fill successful. FAILURE otherwise
+	ErrorType BlendRect(Rectangle2D destinationRect, unsigned int colour, float transparency, float angle = 0);
 
-		// Postcondition	A rectangle in the back buffer will be filled with the specified
-		//					colour. (If partially on-screen). The rectangle will be partially
-		//					transparent with regards to images already on the back buffer.
-		// Parameters:		destinationRect - a rectangle specifying the area to be filled.
-		//								the top of the rectangle must be a smaller number than
-		//								the bottom. 
-		//								the left side of the rectangle must be a smaller number than
-		//								the right side. 
-		//					colour - an integer representing the colour to be used
-		//					transparency - a number from 0 to 1.0 to indicate how transparent
-		//								the rectangle should be. 0 is opaque. 1 is fully transparent
-		//								(i.e. invisible)
-		//					angle - an angle to tilt the rectangle, in radians clockwise
-		//							rotation occurs around the centre of the rectangle.
-		// Returns			SUCCESS if fill successful. FAILURE otherwise
-	ErrorType BlendRect( Rectangle2D destinationRect, unsigned int colour, float transparency, float angle=0);
-
-		// Postcondition	A point of the specified colour has been
-		//					plotted at the location specified on on the back buffer.
-		// Returns			SUCCESS
+	// Postcondition	A point of the specified colour has been
+	//					plotted at the location specified on on the back buffer.
+	// Returns			SUCCESS
 	ErrorType DrawPoint(Vector2D point, unsigned int colour);
 
-		// Precondition		point and colour are arrays with size smaller or equal to numPoints
-		// Postcondition	numPoints points of the specified colour has been
-		//					plotted at x1,y1 on the back buffer.
-		// Returns			SUCCESS
+	// Precondition		point and colour are arrays with size smaller or equal to numPoints
+	// Postcondition	numPoints points of the specified colour has been
+	//					plotted at x1,y1 on the back buffer.
+	// Returns			SUCCESS
 	ErrorType DrawPointList(Vector2D point[], unsigned int colour[], unsigned int numPoints);
 
-		// Precondition		The back buffer is locked.
-		// Postcondition	A line between start and end
-		//					has been plotted on the back buffer.
-		// Returns			SUCCESS
-	ErrorType DrawLine(Vector2D start, Vector2D end,  unsigned int colour);
+	// Precondition		The back buffer is locked.
+	// Postcondition	A line between start and end
+	//					has been plotted on the back buffer.
+	// Returns			SUCCESS
+	ErrorType DrawLine(Vector2D start, Vector2D end, unsigned int colour);
 
-
-		// Postcondition	A circle centred on centre with the radius "radius" has been
-		//					filled on the screen with the specified colour
-		//					has been plotted on the back buffer.
-		// Returns			SUCCESS
+	// Postcondition	A circle centred on centre with the radius "radius" has been
+	//					filled on the screen with the specified colour
+	//					has been plotted on the back buffer.
+	// Returns			SUCCESS
 	ErrorType FillCircle(Vector2D centre, float radius, unsigned int colour);
 
-		// Postcondition	The back buffer is cleared (all black)
-		// Returns			SUCCESS if successful FAILURE otherwise.
+	// Postcondition	The back buffer is cleared (all black)
+	// Returns			SUCCESS if successful FAILURE otherwise.
 	ErrorType ClearBackBuffer();
 
 	//	Postcondition:
 	//		The "centre" of the specified rectangle is set to the specified location.
-	//		All future calls to DrawAt will use the centre specified for placing the 
+	//		All future calls to DrawAt will use the centre specified for placing the
 	//		image on screen and for rotation.
 	// Notes:
 	//		By default the centre is the middle of the picture (HEIGHT/2, WIDTH/2)
@@ -412,54 +406,52 @@ public:
 	//		all subsequent drawing operations (DrawAt, FillRect, etc)
 	void UseCamera(bool activate);
 
+	// This method writes text to the screen at the specified coordinates.
+	// Precondition:
+	//  text is a null-terminated string
+	// Postcondition:
+	//	Text is written to the screen at the specified coordinates, using the
+	//  requested font and colour.
+	//  OR FAILURE has been returned. (Usually means an invalid FontIndex)
+	// Parameters:
+	//  x,y Screen coordinates to write the text (these will be the position of the top
+	//		left position of the writing rectangle.
+	//  text - A null terminated string containing the text to be written.
+	//  colour - 32-bit colour for the colour of the text to be written (no transparency).
+	//  fontIndex - the index of the font to be used. 0 uses a default 24-point Arial font.
+	// Returns:
+	//	FAILURE if rendering failed or the fontIndex was invalid.
+	// SUCCESS otherwise
+	// NOTE: x,y version uses raw screen coordinates. position version uses camera if active
+	//    but will not scale
+	ErrorType WriteText(int x, int y, const wchar_t text[], int colour, FontIndex fontIndex = 0);
+	ErrorType WriteText(Vector2D position, const wchar_t text[], int colour, FontIndex fontIndex = 0);
 
-		// This method writes text to the screen at the specified coordinates.
-		// Precondition:
-		//  text is a null-terminated string
-		// Postcondition:
-		//	Text is written to the screen at the specified coordinates, using the
-		//  requested font and colour.
-		//  OR FAILURE has been returned. (Usually means an invalid FontIndex)
-		// Parameters:
-		//  x,y Screen coordinates to write the text (these will be the position of the top
-		//		left position of the writing rectangle.
-		//  text - A null terminated string containing the text to be written.
-		//  colour - 32-bit colour for the colour of the text to be written (no transparency).
-		//  fontIndex - the index of the font to be used. 0 uses a default 24-point Arial font.
-		// Returns:
-		//	FAILURE if rendering failed or the fontIndex was invalid.
-		// SUCCESS otherwise
-		// NOTE: x,y version uses raw screen coordinates. position version uses camera if active
-		//    but will not scale
-	ErrorType WriteText(int x, int y, const wchar_t text[], int colour, FontIndex fontIndex =0);
-	ErrorType WriteText(Vector2D position, const wchar_t text[], int colour, FontIndex fontIndex =0);
-
-
-		// These methods writes a  number to the screen at the specified coordinates.
-		// Precondition:
-		//  text is a null-terminated string
-		// Postcondition:
-		//	Text is written to the screen at the specified coordinates, using the
-		//  requested font and colour.
-		//  OR FAILURE has been returned. (Usually means an invalid FontIndex)
-		// Parameters:
-		//  x,y Screen coordinates to write the text (these will be the position of the top
-		//		left position of the writing rectangle.
-		//  num - The number to the written
-		//  colour - 32-bit colour for the colour of the number to be written (no transparency).
-		//  fontIndex - the index of the font to be used. 0 uses a default 24-point Arial font.
-		// Returns:
-		//	FAILURE if rendering failed or the fontIndex was invalid.
-		// SUCCESS otherwise
-		// NOTE: x,y version uses raw screen coordinates. position version uses camera if active
-		//     but will not scale
-	ErrorType WriteInt(int x, int y, int num, int colour, FontIndex fontIndex=0 );
-	ErrorType WriteDouble(int x, int y, double num, int colour, FontIndex fontIndex=0 );
-	ErrorType WriteInt(Vector2D position, int num, int colour, FontIndex fontIndex=0 );
-	ErrorType WriteDouble(Vector2D position, double num, int colour, FontIndex fontIndex=0 );
+	// These methods writes a  number to the screen at the specified coordinates.
+	// Precondition:
+	//  text is a null-terminated string
+	// Postcondition:
+	//	Text is written to the screen at the specified coordinates, using the
+	//  requested font and colour.
+	//  OR FAILURE has been returned. (Usually means an invalid FontIndex)
+	// Parameters:
+	//  x,y Screen coordinates to write the text (these will be the position of the top
+	//		left position of the writing rectangle.
+	//  num - The number to the written
+	//  colour - 32-bit colour for the colour of the number to be written (no transparency).
+	//  fontIndex - the index of the font to be used. 0 uses a default 24-point Arial font.
+	// Returns:
+	//	FAILURE if rendering failed or the fontIndex was invalid.
+	// SUCCESS otherwise
+	// NOTE: x,y version uses raw screen coordinates. position version uses camera if active
+	//     but will not scale
+	ErrorType WriteInt(int x, int y, int num, int colour, FontIndex fontIndex = 0);
+	ErrorType WriteDouble(int x, int y, double num, int colour, FontIndex fontIndex = 0);
+	ErrorType WriteInt(Vector2D position, int num, int colour, FontIndex fontIndex = 0);
+	ErrorType WriteDouble(Vector2D position, double num, int colour, FontIndex fontIndex = 0);
 
 	// Returns a string describing the directDraw error for most HRESULTs sent to it
-	//static const char* ErrorString(HRESULT err);
+	// static const char* ErrorString(HRESULT err);
 
 	// Returns a bool that returns true if the game is displayed in full screen mode
 	// or false if the game is in windowed mode
@@ -483,17 +475,13 @@ public:
 	// Returns true if the specified point is fully or partially visible from the current camera position
 	// If the camera has been deativated using UseCamera(false), it will report
 	// using raw screen coordinates
-	bool IsOnCamera(const IShape2D& shape)const;
+	bool IsOnCamera(const IShape2D &shape) const;
 
 	// Returns a rectangle describing the area of the world that is visible from the current camera position
 	// If the camera has been deativated using UseCamera(false), it will report
 	// the screen area
 	Rectangle2D GetViewport() const;
 
-
-};	// End of class definition
+}; // End of class definition
 
 // **************************************************************
-
-
-

@@ -13,7 +13,7 @@
 #pragma once
 
 #include <string>
-#include <dsound.h>		// directX draw
+#include <dsound.h> // directX draw
 #include "errortype.h"
 #include <map>
 
@@ -23,7 +23,7 @@ typedef unsigned int MusicIndex;
 #pragma comment(lib, "dsound.lib")
 #pragma comment(lib, "winmm.lib")
 
-const int NUMBUFFERCOPIES = 4;		// The number of copies of each sound buffer. Effectively the number of times the same sound can be played simultaneously
+const int NUMBUFFERCOPIES = 4; // The number of copies of each sound buffer. Effectively the number of times the same sound can be played simultaneously
 
 // Class to load an play .wav files
 class MySoundEngine
@@ -34,7 +34,7 @@ class MySoundEngine
 		// This is a long pointer to the DSound buffer. DirectX
 		// functions can be called on it, once it it initialised.
 		LPDIRECTSOUNDBUFFER lpSoundBufferDuplicates[NUMBUFFERCOPIES];
-		LPDIRECTSOUNDBUFFER& lpSoundBuffer = lpSoundBufferDuplicates[0];
+		LPDIRECTSOUNDBUFFER &lpSoundBuffer = lpSoundBufferDuplicates[0];
 		int m_nextBuffer = 0;
 		bool m_hasDuplicates = false;
 		std::wstring m_sourceFileName;
@@ -48,13 +48,11 @@ class MySoundEngine
 		ErrorType SetVolume(int vol);
 		ErrorType Play(bool looping);
 		ErrorType SetPan(int pan);
-		ErrorType LoadWav(const wchar_t* filename, IDirectSound8* lpds);
+		ErrorType LoadWav(const wchar_t *filename, IDirectSound8 *lpds);
 		ErrorType SetFrequency(int frequency);
-
-
 	};
-	std::map<SoundIndex, MySound> m_MySoundList;	// Map of MyPicture objects
-	std::map<std::wstring, SoundIndex> m_FilenameList;		// Map of filenames
+	std::map<SoundIndex, MySound> m_MySoundList;	   // Map of MyPicture objects
+	std::map<std::wstring, SoundIndex> m_FilenameList; // Map of filenames
 	SoundIndex m_NextSoundIndex;
 
 private:
@@ -75,11 +73,11 @@ private:
 	ErrorType Release();
 
 	// Finds a reference to the specified MySound in the SoundIndex map.
-	// If not found, will return a reference to the empty MySound 
-	MySound& FindSound(SoundIndex);
+	// If not found, will return a reference to the empty MySound
+	MySound &FindSound(SoundIndex);
 
 	IDirectSound8 *lpds;
-	static MySoundEngine* instance;
+	static MySoundEngine *instance;
 
 	MySound emptySound;
 
@@ -88,14 +86,14 @@ public:
 	// hwnd is the handle of the main window
 	// Precondition:
 	//	DirectSound is installed on the computer
-	// Note this function should be called once at the start of the game before using 
+	// Note this function should be called once at the start of the game before using
 	// "MySoundEngine::Start()"
 	// before using any other methods.
 	static ErrorType Start(HWND hwnd);
 
-		// Postcondition:	A pointer to the instance of MyDrawEngine has been returned.
+	// Postcondition:	A pointer to the instance of MyDrawEngine has been returned.
 	// Call this using "MySoundEngine enginePtr = MySoundEngine::GetInstance();"
-	static MySoundEngine* GetInstance();
+	static MySoundEngine *GetInstance();
 
 	// Postcondition:	The instance of MySoundEngine has been terminated.
 	// Returns:			SUCCESS If the instance of MySoundEngine had been started using Start()
@@ -104,7 +102,7 @@ public:
 	static ErrorType Terminate();
 
 	// Returns a string describing the directDraw error for most HRESULTs sent to it
-	static const wchar_t* ErrorString(HRESULT err);
+	static const wchar_t *ErrorString(HRESULT err);
 
 	// Loads a wave file and returns a SoundIndex that can be used to
 	// use that sound in other methods.
@@ -113,7 +111,7 @@ public:
 	// If the file fails to load (bad format or not found), returns -1.
 	// Returns: A SoundIndex to the loaded file or -1.
 	// Parameters: filename - Null terminated string with the filename of the file to load
-	SoundIndex LoadWav(const wchar_t* filename);
+	SoundIndex LoadWav(const wchar_t *filename);
 
 	// Unloads the specified sound from memory
 	// Returns SUCCESS if the sound was found. FAILURE otherwise
@@ -124,23 +122,21 @@ public:
 	// Returns SUCCESS always
 	ErrorType UnloadAllSounds();
 
-
-
-	// Sets the volume of the specified sound. 
+	// Sets the volume of the specified sound.
 	// 0 is full volume -10000 is silent
 	// Returns SUCCESS if the sound was found. FAILURE otherwise
 	// Parameters: sound - the PictureIndex of the sound to set
 	// Notes: settings above -3000 work best
 	ErrorType SetVolume(SoundIndex sound, int volume);
 
-	// Sets the sample frequency of the specified sound. 
+	// Sets the sample frequency of the specified sound.
 	// If this differs from the original frequency, the sound will become
 	// high-pitched and short or deep and long
 	// Returns SUCCESS if the sound was found. FAILURE otherwise
 	// Parameters: sound - the PictureIndex of the sound to set
 	ErrorType SetFrequency(SoundIndex sound, int frequency);
 
-	// Sets the left-right pan of the specified sound. 
+	// Sets the left-right pan of the specified sound.
 	// -10000 for left 0 for centre 10000 for right
 	// Returns SUCCESS if the sound was found. FAILURE otherwise
 	// Parameters: sound - the PictureIndex of the sound to set
@@ -151,7 +147,7 @@ public:
 	// Returns SUCCESS if the sound was found and can play. FAILURE otherwise
 	// Parameters: sound - the PictureIndex of the sound to set
 	// looping - if true, this will cause the sound to loop repeatedly until told to stop
-	ErrorType Play(SoundIndex sound, bool looping=false);
+	ErrorType Play(SoundIndex sound, bool looping = false);
 
 	// Stops playing the specified sound.
 	// Returns SUCCESS if the sound was found. FAILURE otherwise
@@ -160,9 +156,4 @@ public:
 
 	// Stops all sounds
 	void StopAllSounds();
-
 };
-
-
-
-

@@ -6,10 +6,9 @@
 #include "errorlogger.h"
 #include <math.h>
 
-const wchar_t ErrorLogger::Filename[]=L"error.log";
+const wchar_t ErrorLogger::Filename[] = L"error.log";
 ErrorLogger ErrorLogger::instance;
-int ErrorLogger::LineCount=0;
-
+int ErrorLogger::LineCount = 0;
 
 ErrorLogger::ErrorLogger()
 {
@@ -39,11 +38,11 @@ void ErrorLogger::Writeln(const wchar_t text[])
 void ErrorLogger::Write(const wchar_t text[])
 {
 #ifdef LOGGING
-	if(LineCount<MAXLINES)
+	if (LineCount < MAXLINES)
 	{
 		OutputDebugString(text);
 		instance.file << text;
-		if(++LineCount == MAXLINES)
+		if (++LineCount == MAXLINES)
 		{
 			OutputDebugString(L"\nErrorLogger limit reached. Who taught you to progam?");
 			instance.file << L"\nErrorLogger limit reached. Who taught you to progam?";
@@ -71,8 +70,7 @@ void ErrorLogger::Write(double num)
 {
 #ifdef LOGGING
 	wchar_t buffer[32];
-	swprintf_s( buffer,32, L"%.8g", num );
+	swprintf_s(buffer, 32, L"%.8g", num);
 	Write(buffer);
 #endif
 }
-

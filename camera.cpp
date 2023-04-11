@@ -8,8 +8,7 @@
 #include "mydrawengine.h"
 #include "camera.h"
 
-
-// Sets the camera with an intial position at 0,0 with 
+// Sets the camera with an intial position at 0,0 with
 // a scale to make the screen have a height of 2000 using world coordinates.
 // So the top of the screen is 1000. Bottom of the screen is -1000.
 // Left and right will depend on screen aspect
@@ -23,7 +22,7 @@ Camera::Camera()
 Vector2D Camera::Transform(Vector2D objectPosition) const
 {
 	objectPosition.YValue = -objectPosition.YValue;
-	objectPosition = m_zoom*(objectPosition-m_worldPosition) + m_screenCentre;
+	objectPosition = m_zoom * (objectPosition - m_worldPosition) + m_screenCentre;
 	return objectPosition;
 }
 
@@ -39,7 +38,7 @@ Vector2D Camera::ReverseTransform(Vector2D screenPosition) const
 // Returns the product of the size and the current scale
 float Camera::Transform(float size) const
 {
-	return size*m_zoom;
+	return size * m_zoom;
 }
 
 // Returns a circle on the screen from the given world rectangle
@@ -58,7 +57,6 @@ Rectangle2D Camera::Transform(Rectangle2D rectangle) const
 	return answer;
 }
 
-
 // Returns a segment on the screen from the given world rectangle
 // using the current camera settings
 Segment2D Camera::Transform(Segment2D segment) const
@@ -68,29 +66,29 @@ Segment2D Camera::Transform(Segment2D segment) const
 	return answer;
 }
 
-// Sets the camera with an intial position at 0,0 with 
+// Sets the camera with an intial position at 0,0 with
 // a scale to make the screen have a height of 2000 using world coordinates.
 // So the top of the screen is 1000. Bottom of the screen is -1000.
 // Left and right will depend on screen aspect
 void Camera::Reset()
 {
-	MyDrawEngine* pDrawEngine = MyDrawEngine::GetInstance();
+	MyDrawEngine *pDrawEngine = MyDrawEngine::GetInstance();
 	int height = 0;
-	int width =0;
+	int width = 0;
 
-	if(pDrawEngine)			// Draw engine is initialised
+	if (pDrawEngine) // Draw engine is initialised
 	{
 		height = pDrawEngine->GetScreenHeight();
-		width = pDrawEngine->GetScreenWidth();	
+		width = pDrawEngine->GetScreenWidth();
 	}
-	else					// Use windows instead
+	else // Use windows instead
 	{
-		width=GetSystemMetrics(SM_CXSCREEN);
+		width = GetSystemMetrics(SM_CXSCREEN);
 		height = GetSystemMetrics(SM_CYSCREEN);
 	}
 
-	m_screenCentre.set(width/2.0f, height/2.0f);
-	m_zoom = height/2000.0f;
+	m_screenCentre.set(width / 2.0f, height / 2.0f);
+	m_zoom = height / 2000.0f;
 }
 
 // Places the centre of the camera to the specified position
