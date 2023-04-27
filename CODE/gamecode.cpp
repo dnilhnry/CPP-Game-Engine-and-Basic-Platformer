@@ -161,11 +161,11 @@ ErrorType Game::PauseMenu()
 	pInputs->SampleKeyboard();
 
 	// Move choice up and down
-	if (pInputs->NewKeyPressed(DIK_UP))
+	if (pInputs->NewKeyPressed(DIK_UP) || pInputs->NewKeyPressed(DIK_W))
 	{
 		m_menuOption--;
 	}
-	if (pInputs->NewKeyPressed(DIK_DOWN))
+	if (pInputs->NewKeyPressed(DIK_DOWN) || pInputs->NewKeyPressed(DIK_S))
 	{
 		m_menuOption++;
 	}
@@ -179,7 +179,7 @@ ErrorType Game::PauseMenu()
 	}
 
 	// If player chooses an option ....
-	if (pInputs->NewKeyPressed(DIK_RETURN))
+	if (pInputs->NewKeyPressed(DIK_RETURN) || pInputs->NewKeyPressed(DIK_SPACE))
 	{
 		if (m_menuOption == 0) // Resume
 		{
@@ -219,11 +219,11 @@ ErrorType Game::MainMenu()
 	MyInputs *pInputs = MyInputs::GetInstance();
 
 	pInputs->SampleKeyboard();
-	if (pInputs->NewKeyPressed(DIK_UP))
+	if (pInputs->NewKeyPressed(DIK_UP) || pInputs->NewKeyPressed(DIK_W))
 	{
 		m_menuOption--;
 	}
-	if (pInputs->NewKeyPressed(DIK_DOWN))
+	if (pInputs->NewKeyPressed(DIK_DOWN) || pInputs->NewKeyPressed(DIK_S))
 	{
 		m_menuOption++;
 	}
@@ -237,7 +237,7 @@ ErrorType Game::MainMenu()
 	}
 
 	// User selects an option
-	if (pInputs->NewKeyPressed(DIK_RETURN))
+	if (pInputs->NewKeyPressed(DIK_RETURN) || pInputs->NewKeyPressed(DIK_SPACE))
 	{
 		if (m_menuOption == 0) // Play
 		{
@@ -258,12 +258,20 @@ ErrorType Game::MainMenu()
 // The game !!! *********************************************************************************
 // **********************************************************************************************
 
+// variable to display image
+PictureIndex image;
+
+
 // Called at the start of the game - when changing state from MENU to RUNNING
 // Use this to initialise the core game
 ErrorType Game::StartOfGame()
 {
 	// Code to set up your game *********************************************
 	// **********************************************************************
+
+	// init for displaying image
+	MyDrawEngine* pDE = MyDrawEngine::GetInstance();
+	image = pDE->LoadPicture(L"assets/smiley.png");
 
 	gt.mark();
 	gt.mark();
@@ -290,6 +298,11 @@ ErrorType Game::Update()
 
 	// Your code goes here *************************************************
 	// *********************************************************************
+
+	// display image
+	Vector2D pos(300, 300);
+	MyDrawEngine* pDE = MyDrawEngine::GetInstance();
+	pDE->DrawAt(pos, image);
 
 	gt.mark();
 
