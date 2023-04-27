@@ -1,15 +1,33 @@
 ﻿  camera.cpp
-C:\Users\Daniel\OneDrive\Desktop\Uni\YR3\KF6017\Assignment\KF6017-Project\CODE\mydrawengine.h(15,10): fatal  error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
   ErrorLogger.cpp
   gamecode.cpp
-C:\Users\Daniel\OneDrive\Desktop\Uni\YR3\KF6017\Assignment\KF6017-Project\CODE\mydrawengine.h(15,10): fatal  error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
   gametimer.cpp
   mydrawengine.cpp
-C:\Users\Daniel\OneDrive\Desktop\Uni\YR3\KF6017\Assignment\KF6017-Project\CODE\mydrawengine.h(15,10): fatal  error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
   myinputs.cpp
   mysoundengine.cpp
   Shapes.cpp
   vector2D.cpp
   wincode.cpp
-C:\Users\Daniel\OneDrive\Desktop\Uni\YR3\KF6017\Assignment\KF6017-Project\CODE\mydrawengine.h(15,10): fatal  error C1083: Cannot open include file: 'd3dx9.h': No such file or directory
   Generating Code...
+mydrawengine.obj : error LNK2019: unresolved external symbol Direct3DCreate9 referenced in function "public: enum ErrorType __cdecl MyDrawEngine::StartWindow(void)" (?StartWindow@MyDrawEngine@@QEAA?AW4ErrorType@@XZ)
+mydrawengine.obj : error LNK2019: unresolved external symbol D3DXMatrixTransformation2D referenced in function "public: enum ErrorType __cdecl MyDrawEngine::DrawAt(class Vector2D,int,float,float,float)" (?DrawAt@MyDrawEngine@@QEAA?AW4ErrorType@@VVector2D@@HMMM@Z)
+mydrawengine.obj : error LNK2019: unresolved external symbol D3DXCreateSprite referenced in function "public: enum ErrorType __cdecl MyDrawEngine::ResetDevice(void)" (?ResetDevice@MyDrawEngine@@QEAA?AW4ErrorType@@XZ)
+mydrawengine.obj : error LNK2019: unresolved external symbol D3DXCreateFontW referenced in function "public: int __cdecl MyDrawEngine::AddFont(wchar_t const *,int,bool,bool)" (?AddFont@MyDrawEngine@@QEAAHPEB_WH_N1@Z)
+mydrawengine.obj : error LNK2019: unresolved external symbol D3DXCreateTextureFromFileExW referenced in function "public: int __cdecl MyDrawEngine::LoadPicture(wchar_t const *)" (?LoadPicture@MyDrawEngine@@QEAAHPEB_W@Z)
+myinputs.obj : error LNK2019: unresolved external symbol DirectInput8Create referenced in function "private: __cdecl MyInputs::MyInputs(struct HINSTANCE__ *,struct HWND__ *)" (??0MyInputs@@AEAA@PEAUHINSTANCE__@@PEAUHWND__@@@Z)
+myinputs.obj : error LNK2001: unresolved external symbol IID_IDirectInput8W
+myinputs.obj : error LNK2001: unresolved external symbol GUID_SysMouse
+myinputs.obj : error LNK2001: unresolved external symbol GUID_SysKeyboard
+myinputs.obj : error LNK2001: unresolved external symbol GUID_Sine
+myinputs.obj : error LNK2001: unresolved external symbol GUID_Spring
+myinputs.obj : error LNK2001: unresolved external symbol c_dfDIMouse
+myinputs.obj : error LNK2001: unresolved external symbol c_dfDIKeyboard
+myinputs.obj : error LNK2001: unresolved external symbol c_dfDIJoystick
+mysoundengine.obj : error LNK2019: unresolved external symbol DirectSoundCreate8 referenced in function "private: __cdecl MySoundEngine::MySoundEngine(struct HWND__ *)" (??0MySoundEngine@@AEAA@PEAUHWND__@@@Z)
+mysoundengine.obj : error LNK2001: unresolved external symbol DSDEVID_DefaultPlayback
+C:\Users\Daniel\OneDrive\Desktop\Uni\YR3\KF6017\Assignment\KF6017-Project\\Lib\d3d9.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\Daniel\OneDrive\Desktop\Uni\YR3\KF6017\Assignment\KF6017-Project\\Lib\d3dx9.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\Daniel\OneDrive\Desktop\Uni\YR3\KF6017\Assignment\KF6017-Project\\Lib\dxguid.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\Daniel\OneDrive\Desktop\Uni\YR3\KF6017\Assignment\KF6017-Project\\Lib\dsound.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\Daniel\OneDrive\Desktop\Uni\YR3\KF6017\Assignment\KF6017-Project\\Lib\dinput8.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\Daniel\OneDrive\Desktop\Uni\YR3\KF6017\Assignment\KF6017-Project\x64\Debug\CODE.exe : fatal error LNK1120: 16 unresolved externals
