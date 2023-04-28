@@ -26,7 +26,6 @@ Game Game::instance; // Singleton instance
 // It will run either Update( ), MainMenu() or PauseMenu() depending on the
 // game state
 ErrorType Game::Main()
-
 {
 	// Flip and clear the back buffer
 	MyDrawEngine *pTheDrawEngine = MyDrawEngine::GetInstance();
@@ -137,6 +136,9 @@ void Game::Shutdown()
 // which is currently a basic placeholder
 ErrorType Game::PauseMenu()
 {
+	MySoundEngine* pSE = MySoundEngine::GetInstance();
+	pSE->StopAllSounds();
+
 	// Code for a basic pause menu
 
 	MyDrawEngine::GetInstance()->WriteText(450, 220, L"Paused", MyDrawEngine::WHITE);
@@ -199,6 +201,9 @@ ErrorType Game::PauseMenu()
 // which is currently a basic placeholder
 ErrorType Game::MainMenu()
 {
+	MySoundEngine* pSE = MySoundEngine::GetInstance();
+	pSE->StopAllSounds();
+
 	MyDrawEngine::GetInstance()->WriteText(450, 220, L"Main menu", MyDrawEngine::WHITE);
 
 	const int NUMOPTIONS = 2;
@@ -258,8 +263,24 @@ ErrorType Game::MainMenu()
 // The game !!! *********************************************************************************
 // **********************************************************************************************
 
-// variable to display image
-PictureIndex image;
+// required variables
+PictureIndex backgroundImage;
+PictureIndex playerSmiley;
+PictureIndex playerScared;
+PictureIndex playerConfused;
+PictureIndex playerDead;
+
+SoundIndex backgroundMusic;
+SoundIndex playerBounce;
+SoundIndex playerPoint;
+SoundIndex playerWin;
+SoundIndex playerDeath;
+
+Vector2D backgroundPos;
+Vector2D playerPos;
+Vector2D playerGravity;
+Vector2D playerXVelocity;
+Vector2D playerYVelocity;
 
 
 // Called at the start of the game - when changing state from MENU to RUNNING
@@ -269,9 +290,34 @@ ErrorType Game::StartOfGame()
 	// Code to set up your game *********************************************
 	// **********************************************************************
 
-	// init for displaying image
+	// get all pointers to engines 
 	MyDrawEngine* pDE = MyDrawEngine::GetInstance();
-	image = pDE->LoadPicture(L"assets/smiley.png");
+	MySoundEngine* pSE = MySoundEngine::GetInstance();
+
+
+	// load pictures
+	backgroundImage = pDE->LoadPicture(L"assets/background/image/800600white.png");
+
+	playerSmiley = pDE->LoadPicture(L"assets/character/image/smiley.png");
+	playerScared = pDE->LoadPicture(L"assets/character/image/scared.png");
+	playerConfused = pDE->LoadPicture(L"assets/character/image/confused.png");
+	playerDead = pDE->LoadPicture(L"assets/character/image/dead.png");
+
+
+	// load sounds
+	// backgroundMusic = pSE->LoadWav(L"assets/background/sound/backgroundMusic.wav"); DOES NOT EXIST YET
+	playerBounce = pSE->LoadWav(L"assets/character/sound/bounce.wav");
+	playerPoint = pSE->LoadWav(L"assets/character/sound/point.wav");
+	playerWin = pSE->LoadWav(L"assets/character/sound/win.wav");
+	playerDeath = pSE->LoadWav(L"assets/character/sound/death.wav");
+
+	backgroundPos = Vector2D(0, 0);
+	playerPos = Vector2D(0, 0);
+
+	playerGravity = Vector2D(0, -10);
+	playerXVelocity = Vector2D(0, 0);
+	playerYVelocity = Vector2D(0, 0);
+
 
 	gt.mark();
 	gt.mark();
@@ -299,10 +345,44 @@ ErrorType Game::Update()
 	// Your code goes here *************************************************
 	// *********************************************************************
 
-	// display image
-	Vector2D pos(300, 300);
+	// get all pointers to engines
 	MyDrawEngine* pDE = MyDrawEngine::GetInstance();
-	pDE->DrawAt(pos, image);
+	MySoundEngine* pSE = MySoundEngine::GetInstance();
+	MyInputs* pInputs = MyInputs::GetInstance();
+	pInputs->SampleKeyboard();
+
+
+	//pDE->DrawAt(backgroundPos, backgroundImage);
+
+	if (pInputs->KeyPressed(DIK_W) || pInputs->KeyPressed(DIK_UP))
+	{
+		playerYVelocity = Vector2D(0, 15);
+	}
+	if (pInputs->KeyPressed(DIK_A) || pInputs->KeyPressed(DIK_LEFT))
+	{
+		playerXVelocity = Vector2D(-5, 0);
+	}
+	if (pInputs->KeyPressed(DIK_D) || pInputs->KeyPressed(DIK_RIGHT))
+	{
+		playerXVelocity = Vector2D(5, 0);
+	}
+	playerPos = playerPos + playerGravity + playerXVelocity + playerYVelocity;
+	pDE->DrawAt(playerPos, playerSmiley);
+	playerXVelocity = Vector2D(0, 0);
+	playerYVelocity = Vector2D(0, 0);
+
+	if (pInputs->KeyPressed(DIK_S) || pInputs->KeyPressed(DIK_DOWN))
+	{
+		pSE->Play(playerBounce);
+	}
+	if (pInputs->KeyPressed(DIK_SPACE))
+	{
+		pSE->Play(playerDeath);
+	}
+	if (pInputs->KeyPressed(DIK_RETURN))
+	{
+		pSE->Play(playerWin);
+	}
 
 	gt.mark();
 
