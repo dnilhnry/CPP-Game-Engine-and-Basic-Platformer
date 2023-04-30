@@ -37,9 +37,8 @@
 
 #stuff
 .vsidx
-.recipe
-.CppClean
-.tlog
 .VC
 .ipch
 .vs
+.Build.CppClean.log
+.exe.recipe
