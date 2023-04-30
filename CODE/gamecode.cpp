@@ -9,6 +9,7 @@
 #include "errorlogger.h"
 #include <math.h>
 #include "shapes.h"
+#include "camera.h"
 
 Game::Game()
 {
@@ -277,7 +278,7 @@ SoundIndex playerWin;
 SoundIndex playerDeath;
 
 Vector2D backgroundPos;
-Vector2D playerPos;
+Vector2D playerPosition;
 Vector2D gravity;
 Vector2D playerXVelocity;
 Vector2D playerYVelocity;
@@ -288,22 +289,24 @@ Vector2D playerYAcceleration;
 // Use this to initialise the core game
 ErrorType Game::StartOfGame()
 {
-	// Code to set up your game *********************************************
+	// Code to setup your game *********************************************
 	// **********************************************************************
 
 	// get all pointers to engines 
 	MyDrawEngine* pDE = MyDrawEngine::GetInstance();
 	MySoundEngine* pSE = MySoundEngine::GetInstance();
 
+	// setup camera
+	pDE->UseCamera(true);
+	pDE->theCamera.PlaceAt(Vector2D(0, 0));
+	pDE->theCamera.SetZoom(1);
 
-	// load pictures
-	backgroundImage = pDE->LoadPicture(L"assets/background/image/800600white.png");
 
+	// load images
 	playerSmiley = pDE->LoadPicture(L"assets/character/image/smiley.png");
 	playerScared = pDE->LoadPicture(L"assets/character/image/scared.png");
 	playerConfused = pDE->LoadPicture(L"assets/character/image/confused.png");
 	playerDead = pDE->LoadPicture(L"assets/character/image/dead.png");
-
 
 	// load sounds
 	// backgroundMusic = pSE->LoadWav(L"assets/background/sound/backgroundMusic.wav"); DOES NOT EXIST YET
@@ -312,10 +315,12 @@ ErrorType Game::StartOfGame()
 	playerWin = pSE->LoadWav(L"assets/character/sound/win.wav");
 	playerDeath = pSE->LoadWav(L"assets/character/sound/death.wav");
 
-	backgroundPos = Vector2D(0, 0);
-	playerPos = Vector2D(0, 0);
 
-	gravity = Vector2D(0, -10);
+	// setup physics
+	gravity = Vector2D(0, -100);
+
+	// setup player physics
+	playerPosition = Vector2D(0, 0);
 	playerXVelocity = Vector2D(0, 0);
 	playerYVelocity = Vector2D(0, 0);
 	playerYAcceleration = Vector2D(0, 0);
@@ -347,54 +352,79 @@ ErrorType Game::Update()
 	// Your code goes here *************************************************
 	// *********************************************************************
 
-	// get all pointers to engines
+	// get all pointers to engines + enable input
 	MyDrawEngine* pDE = MyDrawEngine::GetInstance();
 	MySoundEngine* pSE = MySoundEngine::GetInstance();
 	MyInputs* pInputs = MyInputs::GetInstance();
 	pInputs->SampleKeyboard();
 
-
-	// WORK OUT HOW TO ZOOM CAMERA + LOCK CAMERA MOVEMENT CHARACTER POSITION
-
-	//pDE->DrawAt(backgroundPos, backgroundImage);
 	
 	// gravity against solid surface
-	gravity = Vector2D(0, -10);
-	if (playerPos.GetY() <= -500)
+	if (playerPosition.YValue <= 0)
 	{
-		gravity = Vector2D(0, 0);
+		playerYAcceleration = -gravity;
 		playerYVelocity = Vector2D(0, 0);
 	}
-	pDE->DrawLine(Vector2D(-800, -532), Vector2D(800, -532), MyDrawEngine::WHITE);
+	pDE->DrawLine(Vector2D(-384, -32), Vector2D(384, -32), MyDrawEngine::WHITE);
+	pDE->DrawLine(Vector2D(-384, -40), Vector2D(384, -40), MyDrawEngine::WHITE);
+	pDE->DrawLine(Vector2D(-384, -48), Vector2D(384, -48), MyDrawEngine::WHITE);
+
+	pDE->DrawLine(Vector2D(-384, 16), Vector2D(-256, 16), MyDrawEngine::WHITE);
+	pDE->DrawLine(Vector2D(-384, 24), Vector2D(-256, 24), MyDrawEngine::WHITE);
+	pDE->DrawLine(Vector2D(-384, 32), Vector2D(-256, 32), MyDrawEngine::WHITE);
+
+	pDE->DrawLine(Vector2D(-256, 80), Vector2D(-128, 80), MyDrawEngine::WHITE);
+	pDE->DrawLine(Vector2D(-256, 88), Vector2D(-128, 88), MyDrawEngine::WHITE);
+	pDE->DrawLine(Vector2D(-256, 96), Vector2D(-128, 96), MyDrawEngine::WHITE);
+
+	pDE->DrawLine(Vector2D(-128, 144), Vector2D(0, 144), MyDrawEngine::WHITE);
+	pDE->DrawLine(Vector2D(-128, 152), Vector2D(0, 152), MyDrawEngine::WHITE);
+	pDE->DrawLine(Vector2D(-128, 160), Vector2D(0, 160), MyDrawEngine::WHITE);
+
+	pDE->DrawLine(Vector2D(0, 208), Vector2D(128, 208), MyDrawEngine::WHITE);
+	pDE->DrawLine(Vector2D(0, 216), Vector2D(128, 216), MyDrawEngine::WHITE);
+	pDE->DrawLine(Vector2D(0, 224), Vector2D(128, 224), MyDrawEngine::WHITE);
+	
 
 	// jump
 	if (pInputs->KeyPressed(DIK_W) || pInputs->KeyPressed(DIK_UP) || pInputs->KeyPressed(DIK_SPACE))
 	{
 		// only jump if colliding with top of surface
-		if (playerPos.GetY() <= -500)
+		if (playerPosition.YValue <= 0)
 		{
-			playerYAcceleration = Vector2D(0, 1000);
+			playerYAcceleration = Vector2D(0, 10000);
 		}
 	}
 
 	// move left
 	if (pInputs->KeyPressed(DIK_A) || pInputs->KeyPressed(DIK_LEFT))
 	{
-		playerXVelocity = Vector2D(-50, 0);
+		playerXVelocity = Vector2D(-200, 0);
 	}
 
 	// move right
 	if (pInputs->KeyPressed(DIK_D) || pInputs->KeyPressed(DIK_RIGHT))
 	{
-		playerXVelocity = Vector2D(50, 0);
+		playerXVelocity = Vector2D(200, 0);
 	}
 
 	// apply acceleration to velocity -> apply velocity to position
+	// if player reaches X boundries teleport to other side
+	// camera Y position follows players Y position - 192px
 	// print character at position
 	// reset acceleration and velocity
 	playerYVelocity = playerYVelocity + (playerYAcceleration + gravity) * gt.mdFrameTime;
-	playerPos = playerPos + (playerXVelocity + playerYVelocity) * gt.mdFrameTime;
-	pDE->DrawAt(playerPos, playerSmiley);
+	playerPosition = playerPosition + (playerXVelocity + playerYVelocity) * gt.mdFrameTime;
+	if (playerPosition.XValue <= -353)
+	{
+		playerPosition = playerPosition + Vector2D(704, 0);
+	}
+	if (playerPosition.XValue >= 353)
+	{
+		playerPosition = playerPosition + Vector2D(-704, 0);
+	}
+	pDE->theCamera.PlaceAt(Vector2D(0, -(playerPosition.YValue + 192)));
+	pDE->DrawAt(playerPosition, playerSmiley);
 	playerXVelocity = Vector2D(0, 0);
 	playerYAcceleration = Vector2D(0, 0);
 
@@ -412,6 +442,13 @@ ErrorType Game::Update()
 	{
 		pSE->Play(playerWin);
 	}
+
+
+	// draw game area box 768x576 - 64x64 tiles fit 12x9
+	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((pDE->GetScreenWidth() / 2) - 385, (pDE->GetScreenHeight() / 2) - 289)), pDE->theCamera.ReverseTransform(Vector2D((pDE->GetScreenWidth() / 2) - 385, (pDE->GetScreenHeight() / 2) + 289)), MyDrawEngine::DARKBLUE);
+	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((pDE->GetScreenWidth() / 2) + 385, (pDE->GetScreenHeight() / 2) - 289)), pDE->theCamera.ReverseTransform(Vector2D((pDE->GetScreenWidth() / 2) + 385, (pDE->GetScreenHeight() / 2) + 289)), MyDrawEngine::DARKBLUE);
+	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((pDE->GetScreenWidth() / 2) - 385, (pDE->GetScreenHeight() / 2) - 289)), pDE->theCamera.ReverseTransform(Vector2D((pDE->GetScreenWidth() / 2) + 385, (pDE->GetScreenHeight() / 2) - 289)), MyDrawEngine::DARKBLUE);
+	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((pDE->GetScreenWidth() / 2) - 385, (pDE->GetScreenHeight() / 2) + 289)), pDE->theCamera.ReverseTransform(Vector2D((pDE->GetScreenWidth() / 2) + 385, (pDE->GetScreenHeight() / 2) + 289)), MyDrawEngine::DARKBLUE);
 
 
 	gt.mark();

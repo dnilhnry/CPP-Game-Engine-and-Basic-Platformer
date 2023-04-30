@@ -1,0 +1,3 @@
+768x576 game area - 64x64 tiles means 12x9
+
+WHILE MAKING LEVELS NO MORE THAN 12 TILES WIDE 

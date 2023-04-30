@@ -92,11 +92,29 @@
     <ClInclude Include="ErrorLogger.h">
       <Filter>Engine\Header Files\Main</Filter>
     </ClInclude>
-    <ClInclude Include="camera.h">
-      <Filter>Engine\Header Files\Main</Filter>
-    </ClInclude>
     <ClInclude Include="objecttypes.h">
       <Filter>Game\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>Game\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="platform.h">
+      <Filter>Game\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="trappedPlatform.h">
+      <Filter>Game\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="trap.h">
+      <Filter>Game\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="destroyed.h">
+      <Filter>Game\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="exit.h">
+      <Filter>Game\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>Engine\Header Files\Sub Engines\Visual</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -127,8 +145,26 @@
     <ClCompile Include="ErrorLogger.cpp">
       <Filter>Engine\Source Files\Main</Filter>
     </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>Game\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="platform.cpp">
+      <Filter>Game\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="trappedPlatform.cpp">
+      <Filter>Game\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="trap.cpp">
+      <Filter>Game\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="destroyed.cpp">
+      <Filter>Game\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="exit.cpp">
+      <Filter>Game\Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="camera.cpp">
-      <Filter>Engine\Source Files\Main</Filter>
+      <Filter>Engine\Source Files\Sub Engines\Visual</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
