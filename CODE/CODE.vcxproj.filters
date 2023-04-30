@@ -1,80 +1,134 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{521ac31f-7ad9-4875-a82b-6d8816f0d65b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
+    <Filter Include="Engine\Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="Engine\Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{45195214-7072-4092-ac63-2ff14ab375db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Header Files">
+      <UniqueIdentifier>{77c779c7-6051-42e2-9e49-449ead088a04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Source Files">
+      <UniqueIdentifier>{b72753dd-31d0-4f48-9938-4246cc7746bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Source Files\Main">
+      <UniqueIdentifier>{a24a4ba4-8092-49d5-ab47-ec9cec3b65a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Header Files\Main">
+      <UniqueIdentifier>{4ccb5647-7e1d-4da5-b10f-d340725fa3a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Header Files\ECS">
+      <UniqueIdentifier>{d2cd2af9-8b7c-4de4-ad86-1d36b2ee1e1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Source Files\ECS">
+      <UniqueIdentifier>{49ff1ba3-0675-4d18-bb35-182e97c8555d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Header Files\Sub Engines">
+      <UniqueIdentifier>{3666dd2d-9616-4005-97c7-34f37b38f700}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Header Files\Sub Engines\Maths">
+      <UniqueIdentifier>{12a7d454-c742-4b95-83ef-2537495c9901}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Header Files\Sub Engines\Audio">
+      <UniqueIdentifier>{326771a1-9f88-47f1-b1e7-8738935f7d40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Header Files\Sub Engines\Input">
+      <UniqueIdentifier>{86ce191e-3a18-469e-9b19-789bc5949024}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Header Files\Sub Engines\Visual">
+      <UniqueIdentifier>{8540819b-c3fc-4bf5-9e0e-c2df6452f816}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Source Files\Sub Engines">
+      <UniqueIdentifier>{faaf9c13-83c2-4b6f-a81d-8078414bd12a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Source Files\Sub Engines\Maths">
+      <UniqueIdentifier>{03b671b4-8396-4146-9884-5782df4f3040}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Source Files\Sub Engines\Audio">
+      <UniqueIdentifier>{42d774cd-6192-4c22-91fc-23648f707c81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Source Files\Sub Engines\Input">
+      <UniqueIdentifier>{76556f86-4b51-4d7a-8e3a-942a64aff786}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Source Files\Sub Engines\Visual">
+      <UniqueIdentifier>{a70fc88a-a7e3-472c-815d-908ecdfd5cb3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="errortype.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="gamecode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="gametimer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mydrawengine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="myinputs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mysoundengine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="objecttypes.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="vector2D.h">
+      <Filter>Engine\Header Files\Sub Engines\Maths</Filter>
     </ClInclude>
     <ClInclude Include="Shapes.h">
-      <Filter>Header Files</Filter>
+      <Filter>Engine\Header Files\Sub Engines\Visual</Filter>
     </ClInclude>
-    <ClInclude Include="vector2D.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="myinputs.h">
+      <Filter>Engine\Header Files\Sub Engines\Input</Filter>
     </ClInclude>
-    <ClInclude Include="camera.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="mydrawengine.h">
+      <Filter>Engine\Header Files\Sub Engines\Visual</Filter>
+    </ClInclude>
+    <ClInclude Include="mysoundengine.h">
+      <Filter>Engine\Header Files\Sub Engines\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="gametimer.h">
+      <Filter>Engine\Header Files\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="gamecode.h">
+      <Filter>Engine\Header Files\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="errortype.h">
+      <Filter>Engine\Header Files\Main</Filter>
     </ClInclude>
     <ClInclude Include="ErrorLogger.h">
-      <Filter>Header Files</Filter>
+      <Filter>Engine\Header Files\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>Engine\Header Files\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="objecttypes.h">
+      <Filter>Game\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="wincode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ErrorLogger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gamecode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gametimer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="mydrawengine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="myinputs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="mysoundengine.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="vector2D.cpp">
+      <Filter>Engine\Source Files\Sub Engines\Maths</Filter>
     </ClCompile>
     <ClCompile Include="Shapes.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Engine\Source Files\Sub Engines\Visual</Filter>
     </ClCompile>
-    <ClCompile Include="vector2D.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="mydrawengine.cpp">
+      <Filter>Engine\Source Files\Sub Engines\Visual</Filter>
+    </ClCompile>
+    <ClCompile Include="mysoundengine.cpp">
+      <Filter>Engine\Source Files\Sub Engines\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="myinputs.cpp">
+      <Filter>Engine\Source Files\Sub Engines\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="wincode.cpp">
+      <Filter>Engine\Source Files\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="gametimer.cpp">
+      <Filter>Engine\Source Files\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="gamecode.cpp">
+      <Filter>Engine\Source Files\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="ErrorLogger.cpp">
+      <Filter>Engine\Source Files\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>Engine\Source Files\Main</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

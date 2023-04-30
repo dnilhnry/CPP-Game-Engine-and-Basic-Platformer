@@ -6,7 +6,7 @@
 
 enum ObjectType
 {
-    UNKNOWN,
-    SHIP,
-    PING
+    PLAYER,
+    PLATFORM,
+    DESTOYED
 };

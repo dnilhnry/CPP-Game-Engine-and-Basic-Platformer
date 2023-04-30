@@ -30,6 +30,16 @@ void Vector2D::set(const Vector2D &copyVector)
 	YValue = copyVector.YValue;
 }
 
+float Vector2D::GetX()
+{
+	return XValue;
+}
+
+float Vector2D::GetY()
+{
+	return YValue;
+}
+
 float Vector2D::magnitude() const
 {
 	return float(sqrt(XValue * XValue + YValue * YValue));

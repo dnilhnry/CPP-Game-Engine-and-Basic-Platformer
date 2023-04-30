@@ -21,6 +21,10 @@ public:
 
 	Vector2D(const Vector2D &copyVector);
 
+	float GetX();
+
+	float GetY();
+
 	// Returns a unit vector in the direction of the current vector
 	Vector2D unitVector() const;
 

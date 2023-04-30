@@ -14,4 +14,7 @@ ENTER / SPACE to select
 Game Controls:   
 A / LEFT-ARROW to move left   
 D / RIGHT-ARROW to move right   
-ESC to pause
+ESC to pause        
+
+If you build the program and get an error related to d3dx9_43.dll, see below:       
+https://www.drivereasy.com/knowledge/solved-d3dx9-43-dll-missing-on-windows-10-7-8

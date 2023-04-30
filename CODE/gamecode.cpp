@@ -278,9 +278,10 @@ SoundIndex playerDeath;
 
 Vector2D backgroundPos;
 Vector2D playerPos;
-Vector2D playerGravity;
+Vector2D gravity;
 Vector2D playerXVelocity;
 Vector2D playerYVelocity;
+Vector2D playerYAcceleration;
 
 
 // Called at the start of the game - when changing state from MENU to RUNNING
@@ -314,9 +315,10 @@ ErrorType Game::StartOfGame()
 	backgroundPos = Vector2D(0, 0);
 	playerPos = Vector2D(0, 0);
 
-	playerGravity = Vector2D(0, -10);
+	gravity = Vector2D(0, -10);
 	playerXVelocity = Vector2D(0, 0);
 	playerYVelocity = Vector2D(0, 0);
+	playerYAcceleration = Vector2D(0, 0);
 
 
 	gt.mark();
@@ -352,25 +354,52 @@ ErrorType Game::Update()
 	pInputs->SampleKeyboard();
 
 
-	//pDE->DrawAt(backgroundPos, backgroundImage);
+	// WORK OUT HOW TO ZOOM CAMERA + LOCK CAMERA MOVEMENT CHARACTER POSITION
 
-	if (pInputs->KeyPressed(DIK_W) || pInputs->KeyPressed(DIK_UP))
+	//pDE->DrawAt(backgroundPos, backgroundImage);
+	
+	// gravity against solid surface
+	gravity = Vector2D(0, -10);
+	if (playerPos.GetY() <= -500)
 	{
-		playerYVelocity = Vector2D(0, 15);
+		gravity = Vector2D(0, 0);
+		playerYVelocity = Vector2D(0, 0);
 	}
+	pDE->DrawLine(Vector2D(-800, -532), Vector2D(800, -532), MyDrawEngine::WHITE);
+
+	// jump
+	if (pInputs->KeyPressed(DIK_W) || pInputs->KeyPressed(DIK_UP) || pInputs->KeyPressed(DIK_SPACE))
+	{
+		// only jump if colliding with top of surface
+		if (playerPos.GetY() <= -500)
+		{
+			playerYAcceleration = Vector2D(0, 1000);
+		}
+	}
+
+	// move left
 	if (pInputs->KeyPressed(DIK_A) || pInputs->KeyPressed(DIK_LEFT))
 	{
-		playerXVelocity = Vector2D(-5, 0);
+		playerXVelocity = Vector2D(-50, 0);
 	}
+
+	// move right
 	if (pInputs->KeyPressed(DIK_D) || pInputs->KeyPressed(DIK_RIGHT))
 	{
-		playerXVelocity = Vector2D(5, 0);
+		playerXVelocity = Vector2D(50, 0);
 	}
-	playerPos = playerPos + playerGravity + playerXVelocity + playerYVelocity;
+
+	// apply acceleration to velocity -> apply velocity to position
+	// print character at position
+	// reset acceleration and velocity
+	playerYVelocity = playerYVelocity + (playerYAcceleration + gravity) * gt.mdFrameTime;
+	playerPos = playerPos + (playerXVelocity + playerYVelocity) * gt.mdFrameTime;
 	pDE->DrawAt(playerPos, playerSmiley);
 	playerXVelocity = Vector2D(0, 0);
-	playerYVelocity = Vector2D(0, 0);
+	playerYAcceleration = Vector2D(0, 0);
 
+
+	// sound test
 	if (pInputs->KeyPressed(DIK_S) || pInputs->KeyPressed(DIK_DOWN))
 	{
 		pSE->Play(playerBounce);
@@ -383,6 +412,7 @@ ErrorType Game::Update()
 	{
 		pSE->Play(playerWin);
 	}
+
 
 	gt.mark();
 
