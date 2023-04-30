@@ -36,7 +36,6 @@
 *.png
 
 #stuff
-.vsidx
-.VC
-.ipch
-.vs
+**.vs/
+**Build/
+*.log
