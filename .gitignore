@@ -34,3 +34,12 @@
 # Assets
 *.wav
 *.png
+
+#stuff
+.vsidx
+.recipe
+.CppClean
+.tlog
+.VC
+.ipch
+.vs
