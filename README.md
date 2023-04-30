@@ -3,7 +3,7 @@
 GIT REPO MAY NOT CONTAIN:  
 LIBRARY FILES - https://1drv.ms/f/s!Apz1W_lnp_J4j4oOVa-ddpLHCtJRKQ    
 ASSET FILES - https://1drv.ms/f/s!Apz1W_lnp_J4j49HnkU5etn7EbAzkg    
-APPLICATION FILE - the executeable needs to be built - I only tested win32 on windows 10/11    
+APPLICATION FILE - the executeable needs to be built - I only tested win32 on Windows 10/11    
 
 
 Menu Controls:   
@@ -12,6 +12,7 @@ S / DOWN-ARROW to move down
 ENTER / SPACE to select   
 
 Game Controls:   
+W / UP-ARROW / SPACE to jump    
 A / LEFT-ARROW to move left   
 D / RIGHT-ARROW to move right   
 ESC to pause        
