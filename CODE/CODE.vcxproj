@@ -145,38 +145,33 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
-    <ClInclude Include="destroyed.h" />
+    <ClInclude Include="Components.h" />
+    <ClInclude Include="ImageComponent.h" />
+    <ClInclude Include="InputComponent.h" />
+    <ClInclude Include="SoundComponent.h" />
+    <ClInclude Include="TransformComponent.h" />
+    <ClInclude Include="ECS.h" />
     <ClInclude Include="ErrorLogger.h" />
     <ClInclude Include="errortype.h" />
-    <ClInclude Include="exit.h" />
     <ClInclude Include="gamecode.h" />
     <ClInclude Include="gametimer.h" />
     <ClInclude Include="mydrawengine.h" />
     <ClInclude Include="myinputs.h" />
     <ClInclude Include="mysoundengine.h" />
     <ClInclude Include="objecttypes.h" />
-    <ClInclude Include="platform.h" />
-    <ClInclude Include="player.h" />
     <ClInclude Include="Shapes.h" />
-    <ClInclude Include="trap.h" />
-    <ClInclude Include="trappedPlatform.h" />
     <ClInclude Include="vector2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
-    <ClCompile Include="destroyed.cpp" />
+    <ClCompile Include="ECS.cpp" />
     <ClCompile Include="ErrorLogger.cpp" />
-    <ClCompile Include="exit.cpp" />
     <ClCompile Include="gamecode.cpp" />
     <ClCompile Include="gametimer.cpp" />
     <ClCompile Include="mydrawengine.cpp" />
     <ClCompile Include="myinputs.cpp" />
     <ClCompile Include="mysoundengine.cpp" />
-    <ClCompile Include="platform.cpp" />
-    <ClCompile Include="player.cpp" />
     <ClCompile Include="Shapes.cpp" />
-    <ClCompile Include="trap.cpp" />
-    <ClCompile Include="trappedPlatform.cpp" />
     <ClCompile Include="vector2D.cpp" />
     <ClCompile Include="wincode.cpp" />
   </ItemGroup>

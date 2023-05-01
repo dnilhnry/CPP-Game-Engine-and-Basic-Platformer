@@ -95,26 +95,26 @@
     <ClInclude Include="objecttypes.h">
       <Filter>Game\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>Game\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="platform.h">
-      <Filter>Game\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="trappedPlatform.h">
-      <Filter>Game\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="trap.h">
-      <Filter>Game\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="destroyed.h">
-      <Filter>Game\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="exit.h">
-      <Filter>Game\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="camera.h">
       <Filter>Engine\Header Files\Sub Engines\Visual</Filter>
+    </ClInclude>
+    <ClInclude Include="ECS.h">
+      <Filter>Engine\Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformComponent.h">
+      <Filter>Engine\Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageComponent.h">
+      <Filter>Engine\Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="Components.h">
+      <Filter>Engine\Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundComponent.h">
+      <Filter>Engine\Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="InputComponent.h">
+      <Filter>Engine\Header Files\ECS</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -145,26 +145,11 @@
     <ClCompile Include="ErrorLogger.cpp">
       <Filter>Engine\Source Files\Main</Filter>
     </ClCompile>
-    <ClCompile Include="player.cpp">
-      <Filter>Game\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="platform.cpp">
-      <Filter>Game\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="trappedPlatform.cpp">
-      <Filter>Game\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="trap.cpp">
-      <Filter>Game\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="destroyed.cpp">
-      <Filter>Game\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="exit.cpp">
-      <Filter>Game\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="camera.cpp">
       <Filter>Engine\Source Files\Sub Engines\Visual</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS.cpp">
+      <Filter>Engine\Source Files\ECS</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

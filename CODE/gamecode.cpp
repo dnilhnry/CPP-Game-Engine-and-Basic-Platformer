@@ -10,6 +10,7 @@
 #include <math.h>
 #include "shapes.h"
 #include "camera.h"
+#include "Components.h"
 
 Game::Game()
 {
@@ -265,7 +266,6 @@ ErrorType Game::MainMenu()
 // **********************************************************************************************
 
 // required variables
-PictureIndex backgroundImage;
 PictureIndex playerSmiley;
 PictureIndex playerScared;
 PictureIndex playerConfused;
@@ -277,7 +277,6 @@ SoundIndex playerPoint;
 SoundIndex playerWin;
 SoundIndex playerDeath;
 
-Vector2D backgroundPos;
 Vector2D playerPosition;
 Vector2D gravity;
 Vector2D playerXVelocity;
@@ -285,12 +284,23 @@ Vector2D playerYVelocity;
 Vector2D playerYAcceleration;
 
 
+// ECS Stuff
+Manager manager;
+auto& player(manager.addEntity());
+
 // Called at the start of the game - when changing state from MENU to RUNNING
 // Use this to initialise the core game
 ErrorType Game::StartOfGame()
 {
 	// Code to setup your game *********************************************
 	// **********************************************************************
+
+	// ECS Test
+
+	player.addComponent<TransformComponent>(Vector2D(0,0),0,1,true,10000,200,-100);
+	player.addComponent<ImageComponent>(L"assets/character/image/smiley.png");
+	player.addComponent<InputComponent>();
+
 
 	// get all pointers to engines 
 	MyDrawEngine* pDE = MyDrawEngine::GetInstance();
@@ -302,32 +312,35 @@ ErrorType Game::StartOfGame()
 	pDE->theCamera.SetZoom(1);
 
 
-	// load images
-	playerSmiley = pDE->LoadPicture(L"assets/character/image/smiley.png");
-	playerScared = pDE->LoadPicture(L"assets/character/image/scared.png");
-	playerConfused = pDE->LoadPicture(L"assets/character/image/confused.png");
-	playerDead = pDE->LoadPicture(L"assets/character/image/dead.png");
+	//// load images
+	//playerSmiley = pDE->LoadPicture(L"assets/character/image/smiley.png");
+	//playerScared = pDE->LoadPicture(L"assets/character/image/scared.png");
+	//playerConfused = pDE->LoadPicture(L"assets/character/image/confused.png");
+	//playerDead = pDE->LoadPicture(L"assets/character/image/dead.png");
 
-	// load sounds
-	// backgroundMusic = pSE->LoadWav(L"assets/background/sound/backgroundMusic.wav"); DOES NOT EXIST YET
-	playerBounce = pSE->LoadWav(L"assets/character/sound/bounce.wav");
-	playerPoint = pSE->LoadWav(L"assets/character/sound/point.wav");
-	playerWin = pSE->LoadWav(L"assets/character/sound/win.wav");
-	playerDeath = pSE->LoadWav(L"assets/character/sound/death.wav");
+	//// load sounds
+	//// backgroundMusic = pSE->LoadWav(L"assets/background/sound/backgroundMusic.wav"); DOES NOT EXIST YET
+	//playerBounce = pSE->LoadWav(L"assets/character/sound/bounce.wav");
+	//playerPoint = pSE->LoadWav(L"assets/character/sound/point.wav");
+	//playerWin = pSE->LoadWav(L"assets/character/sound/win.wav");
+	//playerDeath = pSE->LoadWav(L"assets/character/sound/death.wav");
 
 
-	// setup physics
-	gravity = Vector2D(0, -100);
+	//// setup physics
+	//gravity = Vector2D(0, -100);
 
-	// setup player physics
-	playerPosition = Vector2D(0, 0);
-	playerXVelocity = Vector2D(0, 0);
-	playerYVelocity = Vector2D(0, 0);
-	playerYAcceleration = Vector2D(0, 0);
+	//// setup player physics
+	//playerPosition = Vector2D(0, 0);
+	//playerXVelocity = Vector2D(0, 0);
+	//playerYVelocity = Vector2D(0, 0);
+	//playerYAcceleration = Vector2D(0, 0);
 
 
 	gt.mark();
 	gt.mark();
+
+	// ECS STUFF
+	player.getComponent<TransformComponent>().setFrameTime(gt.mdFrameTime);
 
 	return SUCCESS;
 }
@@ -358,12 +371,13 @@ ErrorType Game::Update()
 	MyInputs* pInputs = MyInputs::GetInstance();
 	pInputs->SampleKeyboard();
 
-	
+	// ECS STUFF
+	manager.update();
+
 	// gravity against solid surface
-	if (playerPosition.YValue <= 0)
+	if (player.getComponent<TransformComponent>().getPosition().YValue <= 0)
 	{
-		playerYAcceleration = -gravity;
-		playerYVelocity = Vector2D(0, 0);
+		player.getComponent<TransformComponent>().stableGround();
 	}
 	pDE->DrawLine(Vector2D(-384, -32), Vector2D(384, -32), MyDrawEngine::WHITE);
 	pDE->DrawLine(Vector2D(-384, -40), Vector2D(384, -40), MyDrawEngine::WHITE);
@@ -386,63 +400,66 @@ ErrorType Game::Update()
 	pDE->DrawLine(Vector2D(0, 224), Vector2D(128, 224), MyDrawEngine::WHITE);
 	
 
-	// jump
-	if (pInputs->KeyPressed(DIK_W) || pInputs->KeyPressed(DIK_UP) || pInputs->KeyPressed(DIK_SPACE))
-	{
-		// only jump if colliding with top of surface
-		if (playerPosition.YValue <= 0)
-		{
-			playerYAcceleration = Vector2D(0, 10000);
-		}
-	}
+	//// jump
+	//if (pInputs->KeyPressed(DIK_W) || pInputs->KeyPressed(DIK_UP) || pInputs->KeyPressed(DIK_SPACE))
+	//{
+	//	// only jump if colliding with top of surface
+	//	if (playerPosition.YValue <= 0)
+	//	{
+	//		playerYAcceleration = Vector2D(0, 10000);
+	//	}
+	//}
 
-	// move left
-	if (pInputs->KeyPressed(DIK_A) || pInputs->KeyPressed(DIK_LEFT))
-	{
-		playerXVelocity = Vector2D(-200, 0);
-	}
+	//// move left
+	//if (pInputs->KeyPressed(DIK_A) || pInputs->KeyPressed(DIK_LEFT))
+	//{
+	//	playerXVelocity = Vector2D(-200, 0);
+	//}
 
-	// move right
-	if (pInputs->KeyPressed(DIK_D) || pInputs->KeyPressed(DIK_RIGHT))
-	{
-		playerXVelocity = Vector2D(200, 0);
-	}
+	//// move right
+	//if (pInputs->KeyPressed(DIK_D) || pInputs->KeyPressed(DIK_RIGHT))
+	//{
+	//	playerXVelocity = Vector2D(200, 0);
+	//}
 
-	// apply acceleration to velocity -> apply velocity to position
-	// if player reaches X boundries teleport to other side
-	// camera Y position follows players Y position - 192px
-	// print character at position
-	// reset acceleration and velocity
-	playerYVelocity = playerYVelocity + (playerYAcceleration + gravity) * gt.mdFrameTime;
-	playerPosition = playerPosition + (playerXVelocity + playerYVelocity) * gt.mdFrameTime;
-	if (playerPosition.XValue <= -353)
-	{
-		playerPosition = playerPosition + Vector2D(704, 0);
-	}
-	if (playerPosition.XValue >= 353)
-	{
-		playerPosition = playerPosition + Vector2D(-704, 0);
-	}
-	pDE->theCamera.PlaceAt(Vector2D(0, -(playerPosition.YValue + 192)));
-	pDE->DrawAt(playerPosition, playerSmiley);
-	playerXVelocity = Vector2D(0, 0);
-	playerYAcceleration = Vector2D(0, 0);
+	//// apply acceleration to velocity -> apply velocity to position
+	//// if player reaches X boundries teleport to other side
+	//// camera Y position follows players Y position - 192px
+	//// print character at position
+	//// reset acceleration and velocity
+	//playerYVelocity = playerYVelocity + (playerYAcceleration + gravity) * gt.mdFrameTime;
+	//playerPosition = playerPosition + (playerXVelocity + playerYVelocity) * gt.mdFrameTime;
+	//if (playerPosition.XValue <= -353)
+	//{
+	//	playerPosition = playerPosition + Vector2D(704, 0);
+	//}
+	//if (playerPosition.XValue >= 353)
+	//{
+	//	playerPosition = playerPosition + Vector2D(-704, 0);
+	//}
+	//pDE->theCamera.PlaceAt(Vector2D(0, -(playerPosition.YValue + 192)));
+	//pDE->DrawAt(playerPosition, playerSmiley);
+	//playerXVelocity = Vector2D(0, 0);
+	//playerYAcceleration = Vector2D(0, 0);
 
 
-	// sound test
-	if (pInputs->KeyPressed(DIK_S) || pInputs->KeyPressed(DIK_DOWN))
-	{
-		pSE->Play(playerBounce);
-	}
-	if (pInputs->KeyPressed(DIK_SPACE))
-	{
-		pSE->Play(playerDeath);
-	}
-	if (pInputs->KeyPressed(DIK_RETURN))
-	{
-		pSE->Play(playerWin);
-	}
+	//// sound test
+	//if (pInputs->KeyPressed(DIK_S) || pInputs->KeyPressed(DIK_DOWN))
+	//{
+	//	pSE->Play(playerBounce);
+	//}
+	//if (pInputs->KeyPressed(DIK_SPACE))
+	//{
+	//	pSE->Play(playerDeath);
+	//}
+	//if (pInputs->KeyPressed(DIK_RETURN))
+	//{
+	//	pSE->Play(playerWin);
+	//}
 
+	// ECS STUFF
+	pDE->theCamera.PlaceAt(Vector2D(0, -(player.getComponent<TransformComponent>().getPosition().YValue + 192)));
+	manager.draw();
 
 	// draw game area box 768x576 - 64x64 tiles fit 12x9
 	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((pDE->GetScreenWidth() / 2) - 385, (pDE->GetScreenHeight() / 2) - 289)), pDE->theCamera.ReverseTransform(Vector2D((pDE->GetScreenWidth() / 2) - 385, (pDE->GetScreenHeight() / 2) + 289)), MyDrawEngine::DARKBLUE);
@@ -452,6 +469,8 @@ ErrorType Game::Update()
 
 
 	gt.mark();
+	// ECS STUFF
+	player.getComponent<TransformComponent>().setFrameTime(gt.mdFrameTime);
 
 	// *********************************************************************
 	// *********************************************************************
