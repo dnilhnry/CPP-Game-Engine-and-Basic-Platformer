@@ -58,12 +58,11 @@ public:
 		{
 			setVelocity();
 			setAcceleration();
-			// jump condition is NOT working
-			/*if (!(acceleration.YValue + gravity) == 0)
+			if (!(acceleration.YValue + gravity) == 0)
 			{
 				jumpReady = false;
-			}*/
-			velocity = velocity + (acceleration + Vector2D(0, gravity)) * frameTime;
+			}
+			velocity = velocity + (acceleration + Vector2D(0, gravity));
 			position = position + velocity * frameTime;
 			if (position.XValue <= -353)
 			{
@@ -204,13 +203,11 @@ public:
 
 	void jump()
 	{
-		// jump condition is NOT working
-		/*if (jumpReady == true)
+		if (jumpReady == true)
 		{
 			jumpReady = false;
 			setAccelerationY(jumpSpeed);
-		}*/
-		setAccelerationY(jumpSpeed);
+		}
 	}
 
 	void moveLeft()
@@ -225,8 +222,7 @@ public:
 
 	void stableGround()
 	{
-		// jump condition is NOT working
-		// jumpReady = true;
+		jumpReady = true;
 		accelerationY = accelerationY - gravity;
 	}
 
