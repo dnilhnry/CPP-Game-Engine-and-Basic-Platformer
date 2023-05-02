@@ -3,7 +3,6 @@
 #include "Components.h"
 #include "mysoundengine.h"
 #include "AssetManager.h"
-#include "EntityTypes.h"
 
 class SoundComponent : public Component
 {
@@ -17,11 +16,10 @@ private:
 	bool looping;
 
 public:
-	SoundComponent(MySoundEngine* se, AssetManager* am, EntityType type)
+	SoundComponent(MySoundEngine* se, AssetManager* am)
 	{
 		pSE = se;
 		pAM = am;
-		EntityType entityType = type;
 	}
 
 	void setSound(const char* s, bool l)
@@ -45,6 +43,8 @@ public:
 
 	void init() override
 	{
+		entityType = entity->getEntityType();
+		looping = false;
 	}
 
 	void update() override

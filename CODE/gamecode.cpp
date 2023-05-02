@@ -275,7 +275,7 @@ AssetManager assetManager;
 
 // ECS manager + entities
 Manager entityManager;
-auto& player(entityManager.addEntity());
+auto& player(entityManager.addEntity(Character));
 
 // Called at the start of the game - when changing state from MENU to RUNNING
 // Use this to initialise the core game
@@ -314,9 +314,9 @@ ErrorType Game::StartOfGame()
 
 	// player enitity + components
 	player.addComponent<TransformComponent>(Vector2D(0, 0), 0, 1, true, 200, 10000, -100);
-	player.addComponent<ImageComponent>(pDE, assetManager, Character);
+	player.addComponent<ImageComponent>(pDE, &assetManager);
 	player.getComponent<ImageComponent>().setImage("playerSmiley");
-	player.addComponent<SoundComponent>(pSE, assetManager, Character);
+	player.addComponent<SoundComponent>(pSE, &assetManager);
 	player.addComponent<InputComponent>(pInputs);
 
 

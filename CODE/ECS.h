@@ -7,6 +7,9 @@
 #include <bitset>
 #include <array>
 
+#include "EntityTypes.h"
+
+
 class Component;
 class Entity;
 class Manager;
@@ -52,6 +55,8 @@ class Entity
 private:
 	Manager& manager;
 	bool active = true;
+	EntityType entityType;
+
 	std::vector<std::unique_ptr<Component>> components;
 
 	ComponentArray componentArray;
@@ -59,7 +64,7 @@ private:
 	GroupBitset groupBitset;
 
 public:
-	Entity(Manager& mManager) : manager(mManager) {}
+	Entity(Manager& mManager, EntityType type) : manager(mManager) { entityType = type; }
 
 	void update()
 	{
@@ -108,6 +113,12 @@ public:
 		auto ptr(componentArray[getComponentTypeID<T>()]);
 		return *static_cast<T*>(ptr);
 	}
+
+	EntityType getEntityType() const
+	{
+		return entityType;
+	}
+
 };
 
 class Manager
@@ -152,9 +163,9 @@ public:
 		return groupedEntities[mGroup];
 	}
 
-	Entity& addEntity()
+	Entity& addEntity(EntityType type)
 	{
-		Entity* e = new Entity(*this);
+		Entity* e = new Entity(*this, type);
 		std::unique_ptr<Entity> uPtr{ e };
 		entities.emplace_back(std::move(uPtr));
 		return *e;

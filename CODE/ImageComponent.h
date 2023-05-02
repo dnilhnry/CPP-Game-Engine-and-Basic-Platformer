@@ -4,7 +4,6 @@
 #include "mydrawengine.h"
 #include "AssetManager.h"
 #include "vector2D.h"
-#include "EntityTypes.h"
 
 class ImageComponent : public Component
 {
@@ -22,11 +21,10 @@ private:
 	float transparency;
 
 public:
-	ImageComponent(MyDrawEngine* de, AssetManager* am, EntityType type)
+	ImageComponent(MyDrawEngine* de, AssetManager* am)
 	{
 		pDE = de;
 		pAM = am;
-		entityType = type;
 	}
 
 	void setImage(const char* i)
@@ -49,7 +47,7 @@ public:
 
 	void init() override
 	{
-		MyDrawEngine* pDE = MyDrawEngine::GetInstance();
+		entityType = entity->getEntityType();
 		pTC = &entity->getComponent<TransformComponent>();
 		position = pTC->getPosition();
 		angle = pTC->getRotation();
