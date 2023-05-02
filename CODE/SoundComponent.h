@@ -10,21 +10,18 @@ private:
 	SoundIndex sound;
 
 public:
-	SoundComponent() = default;
-
-	SoundComponent(const wchar_t* path)
+	SoundComponent(MySoundEngine* se)
 	{
-		setSound(path);
+		pSE = se;
 	}
 
-	void setSound(const wchar_t* path)
+	void setSound(SoundIndex s)
 	{
-		sound = pSE->LoadWav(path);
+		sound = s;
 	}
 
 	void init() override
 	{
-		MySoundEngine* pSE = MySoundEngine::GetInstance();
 	}
 
 	void update() override

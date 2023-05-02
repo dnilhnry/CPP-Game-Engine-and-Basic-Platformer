@@ -30,9 +30,8 @@ Game Game::instance; // Singleton instance
 ErrorType Game::Main()
 {
 	// Flip and clear the back buffer
-	MyDrawEngine *pTheDrawEngine = MyDrawEngine::GetInstance();
-	pTheDrawEngine->Flip();
-	pTheDrawEngine->ClearBackBuffer();
+	pDE->Flip();
+	pDE->ClearBackBuffer();
 
 	ErrorType err = SUCCESS;
 
@@ -104,16 +103,19 @@ ErrorType Game::Setup(bool bFullScreen, HWND hwnd, HINSTANCE hinstance)
 		ErrorLogger::Writeln(L"Failed to start MyDrawEngine");
 		return FAILURE;
 	}
+	pDE = MyDrawEngine::GetInstance();
 	if (FAILED(MySoundEngine::Start(hwnd)))
 	{
 		ErrorLogger::Writeln(L"Failed to start MySoundEngine");
 		return FAILURE;
 	}
+	pSE = MySoundEngine::GetInstance();
 	if (FAILED(MyInputs::Start(hinstance, hwnd)))
 	{
 		ErrorLogger::Writeln(L"Failed to start MyInputs");
 		return FAILURE;
 	}
+	pInputs	= MyInputs::GetInstance();
 	return (SUCCESS);
 }
 
@@ -138,12 +140,11 @@ void Game::Shutdown()
 // which is currently a basic placeholder
 ErrorType Game::PauseMenu()
 {
-	MySoundEngine* pSE = MySoundEngine::GetInstance();
 	pSE->StopAllSounds();
 
 	// Code for a basic pause menu
 
-	MyDrawEngine::GetInstance()->WriteText(450, 220, L"Paused", MyDrawEngine::WHITE);
+	pDE->WriteText(450, 220, L"Paused", MyDrawEngine::WHITE);
 
 	const int NUMOPTIONS = 2;
 	wchar_t options[NUMOPTIONS][11] = {L"Resume", L"Main menu"};
@@ -156,10 +157,8 @@ ErrorType Game::PauseMenu()
 		{
 			colour = MyDrawEngine::WHITE; // Current selection is white
 		}
-		MyDrawEngine::GetInstance()->WriteText(450, 300 + 50 * i, options[i], colour);
+		pDE->WriteText(450, 300 + 50 * i, options[i], colour);
 	}
-
-	MyInputs *pInputs = MyInputs::GetInstance();
 
 	// Get user input
 	pInputs->SampleKeyboard();
@@ -203,10 +202,9 @@ ErrorType Game::PauseMenu()
 // which is currently a basic placeholder
 ErrorType Game::MainMenu()
 {
-	MySoundEngine* pSE = MySoundEngine::GetInstance();
 	pSE->StopAllSounds();
 
-	MyDrawEngine::GetInstance()->WriteText(450, 220, L"Main menu", MyDrawEngine::WHITE);
+	pDE->WriteText(450, 220, L"Main menu", MyDrawEngine::WHITE);
 
 	const int NUMOPTIONS = 2;
 	wchar_t options[NUMOPTIONS][15] = {L"Start game", L"Exit"};
@@ -219,13 +217,12 @@ ErrorType Game::MainMenu()
 		{
 			colour = MyDrawEngine::WHITE;
 		}
-		MyDrawEngine::GetInstance()->WriteText(450, 300 + 50 * i, options[i], colour);
+		pDE->WriteText(450, 300 + 50 * i, options[i], colour);
 	}
 
 	// Get keyboard input
-	MyInputs *pInputs = MyInputs::GetInstance();
-
 	pInputs->SampleKeyboard();
+
 	if (pInputs->NewKeyPressed(DIK_UP) || pInputs->NewKeyPressed(DIK_W))
 	{
 		m_menuOption--;
@@ -265,7 +262,7 @@ ErrorType Game::MainMenu()
 // The game !!! *********************************************************************************
 // **********************************************************************************************
 
-// required variables
+// required variables - move all to asset manager
 PictureIndex playerSmiley;
 PictureIndex playerScared;
 PictureIndex playerConfused;
@@ -277,16 +274,17 @@ SoundIndex playerPoint;
 SoundIndex playerWin;
 SoundIndex playerDeath;
 
-Vector2D playerPosition;
-Vector2D gravity;
-Vector2D playerXVelocity;
-Vector2D playerYVelocity;
-Vector2D playerYAcceleration;
+
+// game area
+float gameAreaWidth;
+float gameAreaHeight;
+float midX;
+float midY;
 
 
-// ECS Stuff
-Manager manager;
-auto& player(manager.addEntity());
+// ECS manager + entities
+Manager entityManager;
+auto& player(entityManager.addEntity());
 
 // Called at the start of the game - when changing state from MENU to RUNNING
 // Use this to initialise the core game
@@ -295,22 +293,29 @@ ErrorType Game::StartOfGame()
 	// Code to setup your game *********************************************
 	// **********************************************************************
 
-	// ECS Test
+	// player enitity + components
+	player.addComponent<TransformComponent>(Vector2D(0, 0), 0, 1, true, 200, 10000, -100);
+	playerSmiley = pDE->LoadPicture(L"assets/character/image/smiley.png");
+	player.addComponent<ImageComponent>(pDE);
+	player.getComponent<ImageComponent>().setImage(playerSmiley);
+	player.addComponent<SoundComponent>(pSE);
+	player.addComponent<InputComponent>(pInputs);
 
-	player.addComponent<TransformComponent>(Vector2D(0,0),0,1,true,10000,200,-100);
-	player.addComponent<ImageComponent>(L"assets/character/image/smiley.png");
-	player.addComponent<InputComponent>();
 
-
-	// get all pointers to engines 
-	MyDrawEngine* pDE = MyDrawEngine::GetInstance();
-	MySoundEngine* pSE = MySoundEngine::GetInstance();
-
-	// setup camera
+	// setup camera + game area
 	pDE->UseCamera(true);
 	pDE->theCamera.PlaceAt(Vector2D(0, 0));
-	pDE->theCamera.SetZoom(1);
+	pDE->theCamera.SetZoom(pDE->GetScreenHeight() / 800.0f);
 
+	gameAreaWidth = 770;
+	gameAreaHeight = 578;
+	gameAreaWidth = pDE->theCamera.Transform(gameAreaWidth);
+	gameAreaHeight = pDE->theCamera.Transform(gameAreaHeight);
+	midX = pDE->GetScreenWidth() / 2.0f;
+	midY = pDE->GetScreenHeight() / 2.0f;
+
+
+	// CREATE ASSET MANAGER
 
 	//// load images
 	//playerSmiley = pDE->LoadPicture(L"assets/character/image/smiley.png");
@@ -326,20 +331,9 @@ ErrorType Game::StartOfGame()
 	//playerDeath = pSE->LoadWav(L"assets/character/sound/death.wav");
 
 
-	//// setup physics
-	//gravity = Vector2D(0, -100);
-
-	//// setup player physics
-	//playerPosition = Vector2D(0, 0);
-	//playerXVelocity = Vector2D(0, 0);
-	//playerYVelocity = Vector2D(0, 0);
-	//playerYAcceleration = Vector2D(0, 0);
-
-
 	gt.mark();
 	gt.mark();
 
-	// ECS STUFF
 	player.getComponent<TransformComponent>().setFrameTime(gt.mdFrameTime);
 
 	return SUCCESS;
@@ -351,6 +345,7 @@ ErrorType Game::StartOfGame()
 // Gameplay programmer will develop this to create an actual game
 ErrorType Game::Update()
 {
+	pInputs->SampleKeyboard();
 	// Check for entry to pause menu
 	static bool escapepressed = true;
 	if (KEYPRESSED(VK_ESCAPE))
@@ -365,20 +360,18 @@ ErrorType Game::Update()
 	// Your code goes here *************************************************
 	// *********************************************************************
 
-	// get all pointers to engines + enable input
-	MyDrawEngine* pDE = MyDrawEngine::GetInstance();
-	MySoundEngine* pSE = MySoundEngine::GetInstance();
-	MyInputs* pInputs = MyInputs::GetInstance();
-	pInputs->SampleKeyboard();
+	// check if entities need to be removed
+	// update remaining entities
+	entityManager.refresh();
+	entityManager.update();
 
-	// ECS STUFF
-	manager.update();
-
-	// gravity against solid surface
+	// gravity against "solid" surface
 	if (player.getComponent<TransformComponent>().getPosition().YValue <= 0)
 	{
 		player.getComponent<TransformComponent>().stableGround();
 	}
+
+	// example level layout
 	pDE->DrawLine(Vector2D(-384, -32), Vector2D(384, -32), MyDrawEngine::WHITE);
 	pDE->DrawLine(Vector2D(-384, -40), Vector2D(384, -40), MyDrawEngine::WHITE);
 	pDE->DrawLine(Vector2D(-384, -48), Vector2D(384, -48), MyDrawEngine::WHITE);
@@ -398,78 +391,30 @@ ErrorType Game::Update()
 	pDE->DrawLine(Vector2D(0, 208), Vector2D(128, 208), MyDrawEngine::WHITE);
 	pDE->DrawLine(Vector2D(0, 216), Vector2D(128, 216), MyDrawEngine::WHITE);
 	pDE->DrawLine(Vector2D(0, 224), Vector2D(128, 224), MyDrawEngine::WHITE);
+
+	pDE->DrawLine(Vector2D(128, 272), Vector2D(256, 272), MyDrawEngine::WHITE);
+	pDE->DrawLine(Vector2D(128, 280), Vector2D(256, 280), MyDrawEngine::WHITE);
+	pDE->DrawLine(Vector2D(128, 288), Vector2D(256, 288), MyDrawEngine::WHITE);
+
+	pDE->DrawLine(Vector2D(256, 336), Vector2D(384, 336), MyDrawEngine::WHITE);
+	pDE->DrawLine(Vector2D(256, 344), Vector2D(384, 344), MyDrawEngine::WHITE);
+	pDE->DrawLine(Vector2D(256, 352), Vector2D(384, 352), MyDrawEngine::WHITE);
 	
 
-	//// jump
-	//if (pInputs->KeyPressed(DIK_W) || pInputs->KeyPressed(DIK_UP) || pInputs->KeyPressed(DIK_SPACE))
-	//{
-	//	// only jump if colliding with top of surface
-	//	if (playerPosition.YValue <= 0)
-	//	{
-	//		playerYAcceleration = Vector2D(0, 10000);
-	//	}
-	//}
-
-	//// move left
-	//if (pInputs->KeyPressed(DIK_A) || pInputs->KeyPressed(DIK_LEFT))
-	//{
-	//	playerXVelocity = Vector2D(-200, 0);
-	//}
-
-	//// move right
-	//if (pInputs->KeyPressed(DIK_D) || pInputs->KeyPressed(DIK_RIGHT))
-	//{
-	//	playerXVelocity = Vector2D(200, 0);
-	//}
-
-	//// apply acceleration to velocity -> apply velocity to position
-	//// if player reaches X boundries teleport to other side
-	//// camera Y position follows players Y position - 192px
-	//// print character at position
-	//// reset acceleration and velocity
-	//playerYVelocity = playerYVelocity + (playerYAcceleration + gravity) * gt.mdFrameTime;
-	//playerPosition = playerPosition + (playerXVelocity + playerYVelocity) * gt.mdFrameTime;
-	//if (playerPosition.XValue <= -353)
-	//{
-	//	playerPosition = playerPosition + Vector2D(704, 0);
-	//}
-	//if (playerPosition.XValue >= 353)
-	//{
-	//	playerPosition = playerPosition + Vector2D(-704, 0);
-	//}
-	//pDE->theCamera.PlaceAt(Vector2D(0, -(playerPosition.YValue + 192)));
-	//pDE->DrawAt(playerPosition, playerSmiley);
-	//playerXVelocity = Vector2D(0, 0);
-	//playerYAcceleration = Vector2D(0, 0);
-
-
-	//// sound test
-	//if (pInputs->KeyPressed(DIK_S) || pInputs->KeyPressed(DIK_DOWN))
-	//{
-	//	pSE->Play(playerBounce);
-	//}
-	//if (pInputs->KeyPressed(DIK_SPACE))
-	//{
-	//	pSE->Play(playerDeath);
-	//}
-	//if (pInputs->KeyPressed(DIK_RETURN))
-	//{
-	//	pSE->Play(playerWin);
-	//}
-
-	// ECS STUFF
+	// position camera to follow player so player is 192px below center of screen
+	// draw all entities
 	pDE->theCamera.PlaceAt(Vector2D(0, -(player.getComponent<TransformComponent>().getPosition().YValue + 192)));
-	manager.draw();
+	entityManager.draw();
 
-	// draw game area box 768x576 - 64x64 tiles fit 12x9
-	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((pDE->GetScreenWidth() / 2) - 385, (pDE->GetScreenHeight() / 2) - 289)), pDE->theCamera.ReverseTransform(Vector2D((pDE->GetScreenWidth() / 2) - 385, (pDE->GetScreenHeight() / 2) + 289)), MyDrawEngine::DARKBLUE);
-	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((pDE->GetScreenWidth() / 2) + 385, (pDE->GetScreenHeight() / 2) - 289)), pDE->theCamera.ReverseTransform(Vector2D((pDE->GetScreenWidth() / 2) + 385, (pDE->GetScreenHeight() / 2) + 289)), MyDrawEngine::DARKBLUE);
-	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((pDE->GetScreenWidth() / 2) - 385, (pDE->GetScreenHeight() / 2) - 289)), pDE->theCamera.ReverseTransform(Vector2D((pDE->GetScreenWidth() / 2) + 385, (pDE->GetScreenHeight() / 2) - 289)), MyDrawEngine::DARKBLUE);
-	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((pDE->GetScreenWidth() / 2) - 385, (pDE->GetScreenHeight() / 2) + 289)), pDE->theCamera.ReverseTransform(Vector2D((pDE->GetScreenWidth() / 2) + 385, (pDE->GetScreenHeight() / 2) + 289)), MyDrawEngine::DARKBLUE);
+	// draw game area box 770x578 (interior measurement = 768x576)  - 64x64 tiles fit 12x9
+	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D(midX - gameAreaWidth / 2.0f, midY - gameAreaHeight / 2.0f)), pDE->theCamera.ReverseTransform(Vector2D(midX - gameAreaWidth / 2.0f, midY + gameAreaHeight / 2.0f)), MyDrawEngine::DARKBLUE);
+	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D(midX + gameAreaWidth / 2.0f, midY - gameAreaHeight / 2.0f)), pDE->theCamera.ReverseTransform(Vector2D(midX + gameAreaWidth / 2.0f, midY + gameAreaHeight / 2.0f)), MyDrawEngine::DARKBLUE);
+	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D(midX - gameAreaWidth / 2.0f, midY - gameAreaHeight / 2.0f)), pDE->theCamera.ReverseTransform(Vector2D(midX + gameAreaWidth / 2.0f, midY - gameAreaHeight / 2.0f)), MyDrawEngine::DARKBLUE);
+	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D(midX - gameAreaWidth / 2.0f, midY + gameAreaHeight / 2.0f)), pDE->theCamera.ReverseTransform(Vector2D(midX + gameAreaWidth / 2.0f, midY + gameAreaHeight / 2.0f)), MyDrawEngine::DARKBLUE);
 
 
 	gt.mark();
-	// ECS STUFF
+
 	player.getComponent<TransformComponent>().setFrameTime(gt.mdFrameTime);
 
 	// *********************************************************************

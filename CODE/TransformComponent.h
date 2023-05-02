@@ -42,40 +42,41 @@ public:
 
 	void init() override
 	{
-		position = Vector2D(0, 0);
-		angle = 0;
-		scale = 1;
-
-		physics = false;
 		velocity = Vector2D(0, 0);
 		acceleration = Vector2D(0, 0);
-		movementSpeed = 0;
-		jumpSpeed = 0;
-		gravity = 0;
 		jumpReady = false;
-		frameTime = false;
+		frameTime = 0;
 	}
 
 	void update() override
 	{
 		if (physics == false)
 		{
-
+			// do nothing
 		}
 		if (physics == true)
 		{
 			setVelocity();
 			setAcceleration();
-			if (!(acceleration.YValue + gravity) == 0)
+			// jump condition is NOT working
+			/*if (!(acceleration.YValue + gravity) == 0)
 			{
 				jumpReady = false;
-			}
+			}*/
 			velocity = velocity + (acceleration + Vector2D(0, gravity)) * frameTime;
 			position = position + velocity * frameTime;
-			setVelocityX(0);
-			// setVelocityY(0);
-			setAccelerationX(0);
-			setAccelerationY(0);
+			if (position.XValue <= -353)
+			{
+				position = position + Vector2D(704, 0);
+			}
+			if (position.XValue >= 353)
+			{
+				position = position + Vector2D(-704, 0);
+			}
+			setVelocityX(0.0f);
+			setVelocityY(0.0f);
+			setAccelerationX(0.0f);
+			setAccelerationY(0.0f);
 		}
 	}
 
@@ -137,7 +138,7 @@ public:
 
 	void setVelocityY(float y)
 	{
-		velocityX = y;
+		velocityY = y;
 	}
 
 	void setAcceleration()
@@ -158,7 +159,7 @@ public:
 
 	void setAccelerationY(float y)
 	{
-		accelerationX = y;
+		accelerationY = y;
 	}
 
 	float getMovementSpeed()
@@ -191,13 +192,25 @@ public:
 		gravity = g;
 	}
 
+	double getFrameTime()
+	{
+		return frameTime;
+	}
+
+	void setFrameTime(double t)
+	{
+		frameTime = t;
+	}
+
 	void jump()
 	{
-		if (jumpReady == true)
+		// jump condition is NOT working
+		/*if (jumpReady == true)
 		{
 			jumpReady = false;
 			setAccelerationY(jumpSpeed);
-		}
+		}*/
+		setAccelerationY(jumpSpeed);
 	}
 
 	void moveLeft()
@@ -212,19 +225,9 @@ public:
 
 	void stableGround()
 	{
-		jumpReady = true;
-		setAccelerationY(-gravity);
-		setVelocityY(0);
-	}
-
-	double getFrameTime()
-	{
-		return frameTime;
-	}
-
-	void setFrameTime(double t)
-	{
-		frameTime = t;
+		// jump condition is NOT working
+		// jumpReady = true;
+		accelerationY = accelerationY - gravity;
 	}
 
 };

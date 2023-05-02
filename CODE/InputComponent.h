@@ -10,10 +10,14 @@ private:
 	TransformComponent* transformComponent;
 
 public:
+
+	InputComponent(MyInputs* i)
+	{
+		pInputs = i;
+	}
 	
 	void init() override
 	{
-		pInputs = MyInputs::GetInstance();
 		transformComponent = &entity->getComponent<TransformComponent>();
 	}
 

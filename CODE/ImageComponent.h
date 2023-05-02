@@ -13,18 +13,23 @@ private:
 	Vector2D position;
 	float angle;
 	float scale;
-	float transparency = 1;
+	float transparency;
 
 public:
 
-	ImageComponent(const wchar_t* path)
+	ImageComponent(MyDrawEngine* de)
 	{
-		setImage(path);
+		pDE = de;
 	}
 
-	void setImage(const wchar_t* path)
+	/*void setImage(const wchar_t* path)
 	{
 		image = pDE->LoadPicture(path);
+	}*/
+
+	void setImage(PictureIndex i)
+	{
+		image = i;
 	}
 
 	void init() override
@@ -34,6 +39,7 @@ public:
 		position = transformComponent->getPosition();
 		angle = transformComponent->getRotation();
 		scale = transformComponent->getScale();
+		transparency = 0.0f;
 	}
 
 	void update() override
@@ -47,6 +53,5 @@ public:
 	{
 		pDE->DrawAt(position, image, scale, angle, transparency);
 	}
-
 
 };

@@ -31,7 +31,7 @@ inline ComponentID getComponentTypeID() noexcept
 constexpr std::size_t maxComponents = 32;
 constexpr std::size_t maxGroups = 32;
 
-using ComponentBitSet = std::bitset<maxComponents>;
+using ComponentBitset = std::bitset<maxComponents>;
 using GroupBitset = std::bitset<maxGroups>;
 
 using ComponentArray = std::array<Component*, maxComponents>;
@@ -55,7 +55,7 @@ private:
 	std::vector<std::unique_ptr<Component>> components;
 
 	ComponentArray componentArray;
-	ComponentBitSet componentBitset;
+	ComponentBitset componentBitset;
 	GroupBitset groupBitset;
 
 public:
@@ -103,8 +103,7 @@ public:
 		return *c;
 	}
 
-	template <typename T>
-	T& getComponent() const
+	template <typename T> T& getComponent() const
 	{
 		auto ptr(componentArray[getComponentTypeID<T>()]);
 		return *static_cast<T*>(ptr);

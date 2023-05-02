@@ -63,6 +63,12 @@
     <Filter Include="Engine\Source Files\Sub Engines\Visual">
       <UniqueIdentifier>{a70fc88a-a7e3-472c-815d-908ecdfd5cb3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Header Files\Sub Engines\Manager">
+      <UniqueIdentifier>{ea7087e5-c29c-41db-b981-848be6636b9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Source Files\Sub Engines\Manager">
+      <UniqueIdentifier>{129d7d1d-b229-4213-8065-c1abe151925e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vector2D.h">

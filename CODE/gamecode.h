@@ -8,6 +8,8 @@
 #include "errortype.h"
 #include "windows.h"
 #include "mydrawengine.h"
+#include "mysoundengine.h"
+#include "myinputs.h"
 #include "gametimer.h"
 
 // This is a hack for reading keyboard in situations where you don't want to
@@ -47,6 +49,10 @@ private:
 
 public:
    static Game instance; // Singleton instance
+   
+   MyDrawEngine* pDE; // Pointer to the draw engine
+   MySoundEngine* pSE; // Pointer to the sound engine
+   MyInputs* pInputs; // Pointer to input system
 
    // Starts the game engines - Draw Engine, Sound Engine, Input Engine - singletons
    // This is called soon after the program runs
