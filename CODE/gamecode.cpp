@@ -315,7 +315,7 @@ ErrorType Game::StartOfGame()
 	midY = pDE->GetScreenHeight() / 2.0f;
 
 
-	// CREATE ASSET MANAGER
+	// CREATE ASSET MANAGER - create a map for every group and media type: backgroundSoundMap, characterImageMap, world... etc
 
 	//// load images
 	//playerSmiley = pDE->LoadPicture(L"assets/character/image/smiley.png");
@@ -402,6 +402,8 @@ ErrorType Game::Update()
 	
 
 	// position camera to follow player so player is 192px below center of screen
+	// new cam pos = -2/3 * 576 * levelHeight(rows*64) 
+	// could do levelHeight(rows*64) - 12*64 and do if levelHeight < first6*64 or > last6*64 = 192/-192
 	// draw all entities
 	pDE->theCamera.PlaceAt(Vector2D(0, -(player.getComponent<TransformComponent>().getPosition().YValue + 192)));
 	entityManager.draw();
