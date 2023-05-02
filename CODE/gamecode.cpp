@@ -1,16 +1,18 @@
 // GameCode.cpp
 
+#include <time.h>
+#include <math.h>
+
 #include "gamecode.h"
 #include "mydrawengine.h"
 #include "mysoundengine.h"
 #include "myinputs.h"
-#include <time.h>
 #include "gametimer.h"
 #include "errorlogger.h"
-#include <math.h>
 #include "shapes.h"
 #include "camera.h"
 #include "Components.h"
+#include "AssetManager.h"
 
 Game::Game()
 {
@@ -262,25 +264,14 @@ ErrorType Game::MainMenu()
 // The game !!! *********************************************************************************
 // **********************************************************************************************
 
-// required variables - move all to asset manager
-PictureIndex playerSmiley;
-PictureIndex playerScared;
-PictureIndex playerConfused;
-PictureIndex playerDead;
-
-SoundIndex backgroundMusic;
-SoundIndex playerBounce;
-SoundIndex playerPoint;
-SoundIndex playerWin;
-SoundIndex playerDeath;
-
-
 // game area
 float gameAreaWidth;
 float gameAreaHeight;
 float midX;
 float midY;
 
+// Asset Manager + Level Manager (TODO)
+AssetManager assetManager;
 
 // ECS manager + entities
 Manager entityManager;
@@ -293,12 +284,39 @@ ErrorType Game::StartOfGame()
 	// Code to setup your game *********************************************
 	// **********************************************************************
 
+	// load assets
+	assetManager.init(pDE, pSE);
+	
+	assetManager.LoadCharacterImage(L"assets/character/image/smiley.png", "playerSmiley");
+	assetManager.LoadCharacterImage(L"assets/character/image/scared.png", "playerScared");
+	assetManager.LoadCharacterImage(L"assets/character/image/confused.png", "playerConfused");
+	assetManager.LoadCharacterImage(L"assets/character/image/dead.png", "playerDead");
+
+	assetManager.LoadCharacterSound(L"assets/character/sound/bounce.wav", "playerBounce");
+	assetManager.LoadCharacterSound(L"assets/character/sound/point.wav", "playerPoint");
+	assetManager.LoadCharacterSound(L"assets/character/sound/win.wav", "playerWin");
+	assetManager.LoadCharacterSound(L"assets/character/sound/death.wav", "playerDeath");
+
+	// assetManager.LoadBackgroundImage(L"assets/background/image/background.png", "backgroundImage0");
+
+	// assetManager.LoadBackgroundMusic(L"assets/background/music/level0.wav", "backgroundMusic0");
+
+	assetManager.LoadWorldImage(L"assets/world/image/platform.png", "platform");
+	assetManager.LoadWorldImage(L"assets/world/image/trappedPlatform.png", "trappedPlatform");
+	assetManager.LoadWorldImage(L"assets/world/image/trap.png", "trap");
+	assetManager.LoadWorldImage(L"assets/world/image/destroyed.png", "destroyed");
+	assetManager.LoadWorldImage(L"assets/world/image/destroyedEdge.png", "destroyedEdge");
+	assetManager.LoadWorldImage(L"assets/world/image/exit.png", "exit");
+	assetManager.LoadWorldImage(L"assets/world/image/point.png", "point");
+
+	// assetManager.LoadWorldSound(L"assets/world/image/TODO0.wav", "TODO0");
+
+
 	// player enitity + components
 	player.addComponent<TransformComponent>(Vector2D(0, 0), 0, 1, true, 200, 10000, -100);
-	playerSmiley = pDE->LoadPicture(L"assets/character/image/smiley.png");
-	player.addComponent<ImageComponent>(pDE);
-	player.getComponent<ImageComponent>().setImage(playerSmiley);
-	player.addComponent<SoundComponent>(pSE);
+	player.addComponent<ImageComponent>(pDE, assetManager, Character);
+	player.getComponent<ImageComponent>().setImage("playerSmiley");
+	player.addComponent<SoundComponent>(pSE, assetManager, Character);
 	player.addComponent<InputComponent>(pInputs);
 
 
@@ -345,8 +363,10 @@ ErrorType Game::StartOfGame()
 // Gameplay programmer will develop this to create an actual game
 ErrorType Game::Update()
 {
+	// check for input
 	pInputs->SampleKeyboard();
-	// Check for entry to pause menu
+
+	// if ESC pressed -> pause game
 	static bool escapepressed = true;
 	if (KEYPRESSED(VK_ESCAPE))
 	{
@@ -355,7 +375,9 @@ ErrorType Game::Update()
 		escapepressed = true;
 	}
 	else
+	{
 		escapepressed = false;
+	}
 
 	// Your code goes here *************************************************
 	// *********************************************************************

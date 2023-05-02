@@ -2,51 +2,66 @@
 
 #include "Components.h"
 #include "mydrawengine.h"
+#include "AssetManager.h"
 #include "vector2D.h"
+#include "EntityTypes.h"
 
 class ImageComponent : public Component
 {
 private:
 	MyDrawEngine* pDE;
-	PictureIndex image;
-	TransformComponent* transformComponent;
+	AssetManager* pAM;
+	TransformComponent* pTC;
+
+	EntityType entityType;
+
 	Vector2D position;
+	PictureIndex image;
 	float angle;
 	float scale;
 	float transparency;
 
 public:
-
-	ImageComponent(MyDrawEngine* de)
+	ImageComponent(MyDrawEngine* de, AssetManager* am, EntityType type)
 	{
 		pDE = de;
+		pAM = am;
+		entityType = type;
 	}
 
-	/*void setImage(const wchar_t* path)
+	void setImage(const char* i)
 	{
-		image = pDE->LoadPicture(path);
-	}*/
-
-	void setImage(PictureIndex i)
-	{
-		image = i;
+		switch (entityType)
+		{
+		case Character:
+			image = pAM->GetCharacterImage(i);
+			break;
+		case Background:
+			image = pAM->GetBackgroundImage(i);
+			break;
+		case World:
+			image = pAM->GetWorldImage(i);
+			break;
+		default:
+			break;
+		}
 	}
 
 	void init() override
 	{
 		MyDrawEngine* pDE = MyDrawEngine::GetInstance();
-		transformComponent = &entity->getComponent<TransformComponent>();
-		position = transformComponent->getPosition();
-		angle = transformComponent->getRotation();
-		scale = transformComponent->getScale();
+		pTC = &entity->getComponent<TransformComponent>();
+		position = pTC->getPosition();
+		angle = pTC->getRotation();
+		scale = pTC->getScale();
 		transparency = 0.0f;
 	}
 
 	void update() override
 	{
-		position = transformComponent->getPosition();
-		angle = transformComponent->getRotation();
-		scale = transformComponent->getScale();
+		position = pTC->getPosition();
+		angle = pTC->getRotation();
+		scale = pTC->getScale();
 	}
 
 	void draw() override

@@ -12,26 +12,11 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Game">
-      <UniqueIdentifier>{45195214-7072-4092-ac63-2ff14ab375db}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Header Files">
-      <UniqueIdentifier>{77c779c7-6051-42e2-9e49-449ead088a04}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Source Files">
-      <UniqueIdentifier>{b72753dd-31d0-4f48-9938-4246cc7746bd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Source Files\Main">
       <UniqueIdentifier>{a24a4ba4-8092-49d5-ab47-ec9cec3b65a6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Header Files\Main">
       <UniqueIdentifier>{4ccb5647-7e1d-4da5-b10f-d340725fa3a2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Header Files\ECS">
-      <UniqueIdentifier>{d2cd2af9-8b7c-4de4-ad86-1d36b2ee1e1a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Source Files\ECS">
-      <UniqueIdentifier>{49ff1ba3-0675-4d18-bb35-182e97c8555d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Header Files\Sub Engines">
       <UniqueIdentifier>{3666dd2d-9616-4005-97c7-34f37b38f700}</UniqueIdentifier>
@@ -45,9 +30,6 @@
     <Filter Include="Engine\Header Files\Sub Engines\Input">
       <UniqueIdentifier>{86ce191e-3a18-469e-9b19-789bc5949024}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Header Files\Sub Engines\Visual">
-      <UniqueIdentifier>{8540819b-c3fc-4bf5-9e0e-c2df6452f816}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Source Files\Sub Engines">
       <UniqueIdentifier>{faaf9c13-83c2-4b6f-a81d-8078414bd12a}</UniqueIdentifier>
     </Filter>
@@ -60,14 +42,23 @@
     <Filter Include="Engine\Source Files\Sub Engines\Input">
       <UniqueIdentifier>{76556f86-4b51-4d7a-8e3a-942a64aff786}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Source Files\Sub Engines\Visual">
-      <UniqueIdentifier>{a70fc88a-a7e3-472c-815d-908ecdfd5cb3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Header Files\Sub Engines\Manager">
       <UniqueIdentifier>{ea7087e5-c29c-41db-b981-848be6636b9e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Source Files\Sub Engines\Manager">
       <UniqueIdentifier>{129d7d1d-b229-4213-8065-c1abe151925e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Header Files\Sub Engines\Video">
+      <UniqueIdentifier>{8540819b-c3fc-4bf5-9e0e-c2df6452f816}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Source Files\Sub Engines\Video">
+      <UniqueIdentifier>{a70fc88a-a7e3-472c-815d-908ecdfd5cb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Source Files\Sub Engines\Manager\ECS">
+      <UniqueIdentifier>{49ff1ba3-0675-4d18-bb35-182e97c8555d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Header Files\Sub Engines\Manager\ECS">
+      <UniqueIdentifier>{d2cd2af9-8b7c-4de4-ad86-1d36b2ee1e1a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -75,13 +66,13 @@
       <Filter>Engine\Header Files\Sub Engines\Maths</Filter>
     </ClInclude>
     <ClInclude Include="Shapes.h">
-      <Filter>Engine\Header Files\Sub Engines\Visual</Filter>
+      <Filter>Engine\Header Files\Sub Engines\Video</Filter>
     </ClInclude>
     <ClInclude Include="myinputs.h">
       <Filter>Engine\Header Files\Sub Engines\Input</Filter>
     </ClInclude>
     <ClInclude Include="mydrawengine.h">
-      <Filter>Engine\Header Files\Sub Engines\Visual</Filter>
+      <Filter>Engine\Header Files\Sub Engines\Video</Filter>
     </ClInclude>
     <ClInclude Include="mysoundengine.h">
       <Filter>Engine\Header Files\Sub Engines\Audio</Filter>
@@ -98,29 +89,32 @@
     <ClInclude Include="ErrorLogger.h">
       <Filter>Engine\Header Files\Main</Filter>
     </ClInclude>
-    <ClInclude Include="objecttypes.h">
-      <Filter>Game\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="camera.h">
-      <Filter>Engine\Header Files\Sub Engines\Visual</Filter>
+      <Filter>Engine\Header Files\Sub Engines\Video</Filter>
     </ClInclude>
     <ClInclude Include="ECS.h">
-      <Filter>Engine\Header Files\ECS</Filter>
+      <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
     </ClInclude>
     <ClInclude Include="TransformComponent.h">
-      <Filter>Engine\Header Files\ECS</Filter>
+      <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
     </ClInclude>
     <ClInclude Include="ImageComponent.h">
-      <Filter>Engine\Header Files\ECS</Filter>
+      <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
     </ClInclude>
     <ClInclude Include="Components.h">
-      <Filter>Engine\Header Files\ECS</Filter>
+      <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
     </ClInclude>
     <ClInclude Include="SoundComponent.h">
-      <Filter>Engine\Header Files\ECS</Filter>
+      <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
     </ClInclude>
     <ClInclude Include="InputComponent.h">
-      <Filter>Engine\Header Files\ECS</Filter>
+      <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetManager.h">
+      <Filter>Engine\Header Files\Sub Engines\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityTypes.h">
+      <Filter>Engine\Header Files\Sub Engines\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -128,10 +122,10 @@
       <Filter>Engine\Source Files\Sub Engines\Maths</Filter>
     </ClCompile>
     <ClCompile Include="Shapes.cpp">
-      <Filter>Engine\Source Files\Sub Engines\Visual</Filter>
+      <Filter>Engine\Source Files\Sub Engines\Video</Filter>
     </ClCompile>
     <ClCompile Include="mydrawengine.cpp">
-      <Filter>Engine\Source Files\Sub Engines\Visual</Filter>
+      <Filter>Engine\Source Files\Sub Engines\Video</Filter>
     </ClCompile>
     <ClCompile Include="mysoundengine.cpp">
       <Filter>Engine\Source Files\Sub Engines\Audio</Filter>
@@ -152,10 +146,13 @@
       <Filter>Engine\Source Files\Main</Filter>
     </ClCompile>
     <ClCompile Include="camera.cpp">
-      <Filter>Engine\Source Files\Sub Engines\Visual</Filter>
+      <Filter>Engine\Source Files\Sub Engines\Video</Filter>
     </ClCompile>
     <ClCompile Include="ECS.cpp">
-      <Filter>Engine\Source Files\ECS</Filter>
+      <Filter>Engine\Source Files\Sub Engines\Manager\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetManager.cpp">
+      <Filter>Engine\Source Files\Sub Engines\Manager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
