@@ -9,6 +9,7 @@ enum EntityType
 
 enum WorldType
 {
+	NOTworld,
 	Platform,
 	TrappedPlatform,
 	Trap,

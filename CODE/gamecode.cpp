@@ -265,6 +265,7 @@ ErrorType Game::MainMenu()
 // **********************************************************************************************
 
 // game area
+float playerY;
 float gameAreaWidth;
 float gameAreaHeight;
 float midX;
@@ -325,28 +326,13 @@ ErrorType Game::StartOfGame()
 	pDE->theCamera.PlaceAt(Vector2D(0, 0));
 	pDE->theCamera.SetZoom(pDE->GetScreenHeight() / 800.0f);
 
+	playerY = 0;
 	gameAreaWidth = 770;
 	gameAreaHeight = 578;
 	gameAreaWidth = pDE->theCamera.Transform(gameAreaWidth);
 	gameAreaHeight = pDE->theCamera.Transform(gameAreaHeight);
 	midX = pDE->GetScreenWidth() / 2.0f;
 	midY = pDE->GetScreenHeight() / 2.0f;
-
-
-	// CREATE ASSET MANAGER - create a map for every group and media type: backgroundSoundMap, characterImageMap, world... etc
-
-	//// load images
-	//playerSmiley = pDE->LoadPicture(L"assets/character/image/smiley.png");
-	//playerScared = pDE->LoadPicture(L"assets/character/image/scared.png");
-	//playerConfused = pDE->LoadPicture(L"assets/character/image/confused.png");
-	//playerDead = pDE->LoadPicture(L"assets/character/image/dead.png");
-
-	//// load sounds
-	//// backgroundMusic = pSE->LoadWav(L"assets/background/sound/backgroundMusic.wav"); DOES NOT EXIST YET
-	//playerBounce = pSE->LoadWav(L"assets/character/sound/bounce.wav");
-	//playerPoint = pSE->LoadWav(L"assets/character/sound/point.wav");
-	//playerWin = pSE->LoadWav(L"assets/character/sound/win.wav");
-	//playerDeath = pSE->LoadWav(L"assets/character/sound/death.wav");
 
 
 	gt.mark();
@@ -387,6 +373,8 @@ ErrorType Game::Update()
 	entityManager.refresh();
 	entityManager.update();
 
+	playerY = player.getComponent<TransformComponent>().getPosition().YValue;
+
 	// gravity against "solid" surface
 	if (player.getComponent<TransformComponent>().getPosition().YValue <= 0)
 	{
@@ -423,14 +411,23 @@ ErrorType Game::Update()
 	pDE->DrawLine(Vector2D(256, 352), Vector2D(384, 352), MyDrawEngine::WHITE);
 	
 
-	// position camera to follow player so player is 192px below center of screen
-	// new cam pos = -2/3 * 576 * levelHeight(rows*64) 
-	// could do levelHeight(rows*64) - 12*64 and do if levelHeight < first6*64 or > last6*64 = 192/-192
+	// position camera to follow player so player
 	// draw all entities
-	pDE->theCamera.PlaceAt(Vector2D(0, -(player.getComponent<TransformComponent>().getPosition().YValue + 192)));
+	if (playerY < 440)
+	{
+		pDE->theCamera.PlaceAt(Vector2D(0, -(playerY + 192)));
+	}
+	else if (playerY >= 440 && playerY <= 1320)
+	{
+		pDE->theCamera.PlaceAt(Vector2D(0, -( playerY + (((-2/3 * 576) / 880) * playerY + 384)) ));
+	}
+	else if (playerY > 1320)
+	{
+		pDE->theCamera.PlaceAt(Vector2D(0, -(playerY - 192)));
+	}
 	entityManager.draw();
 
-	// draw game area box 770x578 (interior measurement = 768x576)  - 64x64 tiles fit 12x9
+	// draw game area box 770x578 (interior measurement = 768x576) - 64x64 tiles fit 12x9
 	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D(midX - gameAreaWidth / 2.0f, midY - gameAreaHeight / 2.0f)), pDE->theCamera.ReverseTransform(Vector2D(midX - gameAreaWidth / 2.0f, midY + gameAreaHeight / 2.0f)), MyDrawEngine::DARKBLUE);
 	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D(midX + gameAreaWidth / 2.0f, midY - gameAreaHeight / 2.0f)), pDE->theCamera.ReverseTransform(Vector2D(midX + gameAreaWidth / 2.0f, midY + gameAreaHeight / 2.0f)), MyDrawEngine::DARKBLUE);
 	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D(midX - gameAreaWidth / 2.0f, midY - gameAreaHeight / 2.0f)), pDE->theCamera.ReverseTransform(Vector2D(midX + gameAreaWidth / 2.0f, midY - gameAreaHeight / 2.0f)), MyDrawEngine::DARKBLUE);
