@@ -12,6 +12,7 @@ S / DOWN-ARROW to move down
 ENTER / SPACE to select   
 
 Game Controls:   
+ENTER to start    
 W / UP-ARROW / SPACE to jump    
 A / LEFT-ARROW to move left   
 D / RIGHT-ARROW to move right   
