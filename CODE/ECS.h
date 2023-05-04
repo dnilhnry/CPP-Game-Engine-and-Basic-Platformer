@@ -12,10 +12,9 @@
 
 class Component;
 class Entity;
-class Manager;
+class EntityManager;
 
 using ComponentID = std::size_t;
-using Group = std::size_t;
 
 inline ComponentID getNewComponentTypeID()
 {
@@ -23,8 +22,7 @@ inline ComponentID getNewComponentTypeID()
 	return lastID++;
 }
 
-template <typename T>
-inline ComponentID getComponentTypeID() noexcept
+template <typename T> inline ComponentID getComponentTypeID() noexcept
 {
 	static_assert(std::is_base_of<Component, T>::value, "");
 	static ComponentID typeID = getNewComponentTypeID();
@@ -32,10 +30,8 @@ inline ComponentID getComponentTypeID() noexcept
 }
 
 constexpr std::size_t maxComponents = 32;
-constexpr std::size_t maxGroups = 32;
 
 using ComponentBitset = std::bitset<maxComponents>;
-using GroupBitset = std::bitset<maxGroups>;
 
 using ComponentArray = std::array<Component*, maxComponents>;
 
@@ -46,6 +42,7 @@ public:
 
 	virtual void init() {}
 	virtual void update() {}
+	virtual void update(double frameTime) {}
 	virtual void draw() {}
 	virtual ~Component() {}
 };
@@ -53,41 +50,42 @@ public:
 class Entity
 {
 private:
-	Manager& manager;
+	EntityManager& entityManager;
 	bool active = true;
+	int id;
 	EntityType entityType;
+	WorldType worldType;
 
 	std::vector<std::unique_ptr<Component>> components;
 
 	ComponentArray componentArray;
 	ComponentBitset componentBitset;
-	GroupBitset groupBitset;
 
 public:
-	Entity(Manager& mManager, EntityType type) : manager(mManager) { entityType = type; }
-
-	void update()
+	Entity(EntityManager& em, int i, EntityType et) : entityManager(em)
 	{
-		for (auto& c : components) { c->update(); }
-	}
-	void draw()
-	{
-		for (auto& c : components) { c->draw(); }
-	}
-
-	bool isActive() const { return active; }
-	void destroy() { active = false; }
-
-	bool hasGroup(Group mGroup)
-	{
-		return groupBitset[mGroup];
+		id = i;
+		entityType = et;
+		if (entityType != World)
+		{
+			worldType = NOTworld;
+		}
 	}
 
-	void addGroup(Group mGroup);
-	void delGroup(Group mGroup)
+	Entity(EntityManager& em, int i, EntityType et, WorldType wt ) : entityManager(em)
 	{
-		groupBitset[mGroup] = false;
+		id = i;
+		entityType = et;
+		worldType = wt;
 	}
+
+	void update(double frameTime);
+
+	void draw();
+
+	bool isActive() const;
+
+	void deleteEntity();
 
 	template <typename T> bool hasComponent() const
 	{
@@ -114,60 +112,33 @@ public:
 		return *static_cast<T*>(ptr);
 	}
 
-	EntityType getEntityType() const
-	{
-		return entityType;
-	}
+	int getID() const;
+
+	EntityType getEntityType() const;
+
+	void setWorldType(WorldType wt);
+
+	WorldType getWorldType();
 
 };
 
-class Manager
+class EntityManager
 {
 private:
 	std::vector<std::unique_ptr<Entity>> entities;
-	std::array<std::vector<Entity*>, maxGroups> groupedEntities;
 
 public:
-	void update()
-	{
-		for (auto& e : entities) { e->update(); }
-	}
+	void update(double frameTime);
 
-	void draw()
-	{
-		for (auto& e : entities) { e->draw(); }
-	}
+	void draw();
 
-	void refresh()
-	{
-		for (auto i(0u); i < maxGroups; i++)
-		{
-			auto& v(groupedEntities[i]);
-			v.erase(std::remove_if(std::begin(v), std::end(v), [i](Entity* mEntity)
-				{ return !mEntity->isActive() || !mEntity->hasGroup(i); }
-			), std::end(v));
-		}
+	void deleteAll();
 
-		entities.erase(std::remove_if(std::begin(entities), std::end(entities), [](const std::unique_ptr<Entity>& mEntity)
-			{ return !mEntity->isActive(); }
-		), std::end(entities));
-	}
+	void refresh();
 
-	void AddToGroup(Entity* mEntity, Group mGroup)
-	{
-		groupedEntities[mGroup].emplace_back(mEntity);
-	}
+	Entity& addEntity(int i, EntityType et);
+	Entity& addEntity(int i, EntityType et, WorldType wt);
 
-	std::vector<Entity*>& getGroup(Group mGroup)
-	{
-		return groupedEntities[mGroup];
-	}
+	Entity& getEntity(int i);
 
-	Entity& addEntity(EntityType type)
-	{
-		Entity* e = new Entity(*this, type);
-		std::unique_ptr<Entity> uPtr{ e };
-		entities.emplace_back(std::move(uPtr));
-		return *e;
-	}
 };

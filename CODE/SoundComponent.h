@@ -22,6 +22,25 @@ public:
 		pAM = am;
 	}
 
+	void setSound(const char* s)
+	{
+		switch (entityType)
+		{
+		case Character:
+			sound = pAM->GetCharacterSound(s);
+			break;
+		case Background:
+			sound = pAM->GetBackgroundSound(s);
+			break;
+		case World:
+			sound = pAM->GetWorldSound(s);
+			break;
+		default:
+			break;
+		}
+		looping = false;
+	}
+
 	void setSound(const char* s, bool l)
 	{
 		switch (entityType)
@@ -53,7 +72,10 @@ public:
 
 	void play()
 	{
-		pSE->Play(sound, looping);
+		if (sound != NULL || sound != -1)
+		{
+			pSE->Play(sound, looping);
+		}
 	}
 
 };

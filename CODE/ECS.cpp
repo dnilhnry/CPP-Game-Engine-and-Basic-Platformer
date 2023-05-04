@@ -1,7 +1,104 @@
 #include "ECS.h"
 
-void Entity::addGroup(Group mGroup)
+
+// Entity
+//--------------------------------------------------------------
+
+void Entity::update(double frameTime)
 {
-	groupBitset[mGroup] = true;
-	manager.AddToGroup(this, mGroup);
+	for (auto& c : components) { c->update(frameTime); }
 }
+
+void Entity::draw()
+{
+	for (auto& c : components) { c->draw(); }
+}
+
+bool Entity::isActive() const
+{
+	return active;
+}
+
+void Entity::deleteEntity()
+{
+	active = false;
+}
+
+int Entity::getID() const
+{
+	return id;
+}
+
+EntityType Entity::getEntityType() const
+{
+	return entityType;
+}
+
+void Entity::setWorldType(WorldType wt)
+{
+	worldType = wt;
+}
+
+WorldType Entity::getWorldType()
+{
+	return worldType;
+}
+
+//--------------------------------------------------------------
+
+// EntityManager
+//--------------------------------------------------------------
+
+void EntityManager::update(double frameTime)
+{
+	for (auto& e : entities) { e->update(frameTime); }
+}
+
+void EntityManager::draw()
+{
+	for (auto& e : entities) { e->draw(); }
+}
+
+void EntityManager::deleteAll()
+{
+	for (auto& e : entities)
+	{
+		e->deleteEntity();
+	}
+}
+
+void EntityManager::refresh()
+{
+	entities.erase(std::remove_if(std::begin(entities), std::end(entities), [](const std::unique_ptr<Entity>& e)
+		{ return !e->isActive(); }
+	), std::end(entities));
+}
+
+Entity& EntityManager::addEntity(int i, EntityType et)
+{
+	Entity* e = new Entity(*this, i, et);
+	std::unique_ptr<Entity> uPtr{ e };
+	entities.emplace_back(std::move(uPtr));
+	return *e;
+}
+
+Entity& EntityManager::addEntity(int i, EntityType et, WorldType wt)
+{
+	Entity* e = new Entity(*this, i, et, wt);
+	std::unique_ptr<Entity> uPtr{ e };
+	entities.emplace_back(std::move(uPtr));
+	return *e;
+}
+
+Entity& EntityManager::getEntity(int i)
+{
+	for (auto& e : entities)
+	{
+		if (e->getID() == i)
+		{
+			return *e;
+		}
+	}
+}
+
+//--------------------------------------------------------------

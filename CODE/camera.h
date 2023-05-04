@@ -37,9 +37,13 @@ public:
 	// using the current camera settings
 	Circle2D Transform(Circle2D circle) const;
 
-	// Returns a circle on the screen from the given world circle
+	// Returns a rectangle on the screen from the given world rectangle
 	// using the current camera settings
 	Rectangle2D Transform(Rectangle2D rectangle) const;
+
+	// Returns a rectangle on the screen from the given screen rectangle
+	// using the current camera settings
+	Rectangle2D ReverseTransform(Rectangle2D rectangle) const;
 
 	// Returns a segment on the screen from the given world segment
 	// using the current camera settings

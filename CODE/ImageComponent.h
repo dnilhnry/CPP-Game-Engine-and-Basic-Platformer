@@ -64,7 +64,10 @@ public:
 
 	void draw() override
 	{
-		pDE->DrawAt(position, image, scale, angle, transparency);
+		if (image != NULL || image != -1)
+		{
+			pDE->DrawAt(position, image, scale, angle, transparency);
+		}
 	}
 
 };

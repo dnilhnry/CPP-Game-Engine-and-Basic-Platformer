@@ -144,12 +144,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="Components.h" />
     <ClInclude Include="EntityTypes.h" />
     <ClInclude Include="ImageComponent.h" />
     <ClInclude Include="InputComponent.h" />
+    <ClInclude Include="LevelManager.h" />
+    <ClInclude Include="Levels.h" />
+    <ClInclude Include="ModifyComponent.h" />
+    <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="SoundComponent.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="ECS.h" />
@@ -170,6 +176,7 @@
     <ClCompile Include="ErrorLogger.cpp" />
     <ClCompile Include="gamecode.cpp" />
     <ClCompile Include="gametimer.cpp" />
+    <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="mydrawengine.cpp" />
     <ClCompile Include="myinputs.cpp" />
     <ClCompile Include="mysoundengine.cpp" />

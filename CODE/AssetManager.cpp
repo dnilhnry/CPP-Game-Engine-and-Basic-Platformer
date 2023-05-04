@@ -59,3 +59,13 @@ SoundIndex AssetManager::GetWorldSound(const char* name)
 {
 	return worldSoundsMap.at(name);
 }
+
+void AssetManager::clearAll()
+{
+	characterImagesMap.clear();
+	characterSoundsMap.clear();
+	backgroundImagesMap.clear();
+	backgroundSoundMap.clear();
+	worldImagesMap.clear();
+	worldSoundsMap.clear();
+}

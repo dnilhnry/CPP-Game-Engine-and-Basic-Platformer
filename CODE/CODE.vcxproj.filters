@@ -116,6 +116,24 @@
     <ClInclude Include="EntityTypes.h">
       <Filter>Engine\Header Files\Sub Engines\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="LevelManager.h">
+      <Filter>Engine\Header Files\Sub Engines\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationComponent.h">
+      <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="Levels.h">
+      <Filter>Engine\Header Files\Sub Engines\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="ModifyComponent.h">
+      <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsComponent.h">
+      <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionComponent.h">
+      <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vector2D.cpp">
@@ -152,6 +170,9 @@
       <Filter>Engine\Source Files\Sub Engines\Manager\ECS</Filter>
     </ClCompile>
     <ClCompile Include="AssetManager.cpp">
+      <Filter>Engine\Source Files\Sub Engines\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelManager.cpp">
       <Filter>Engine\Source Files\Sub Engines\Manager</Filter>
     </ClCompile>
   </ItemGroup>

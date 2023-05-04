@@ -13,6 +13,8 @@
 #include "camera.h"
 #include "Components.h"
 #include "AssetManager.h"
+#include "LevelManager.h"
+#include "Levels.h"
 
 Game::Game()
 {
@@ -42,6 +44,9 @@ ErrorType Game::Main()
 	case MENU:
 		err = MainMenu(); // Menu at start of game
 		break;
+	case LEVEL:
+		err = LevelMenu(); // Menu for level select
+		break;
 	case PAUSED:
 		err = PauseMenu(); // Player has paused the game
 		break;
@@ -68,6 +73,9 @@ void Game::ChangeState(GameState newState)
 	case MENU:
 		// Not needed
 		break;
+	case LEVEL:
+		// Not needed
+		break;
 	case PAUSED:
 		// Not needed
 		break;
@@ -84,6 +92,9 @@ void Game::ChangeState(GameState newState)
 	switch (m_currentState)
 	{
 	case MENU:
+		// Not needed
+		break;
+	case LEVEL:
 		// Not needed
 		break;
 	case PAUSED:
@@ -149,7 +160,7 @@ ErrorType Game::PauseMenu()
 	pDE->WriteText(450, 220, L"Paused", MyDrawEngine::WHITE);
 
 	const int NUMOPTIONS = 2;
-	wchar_t options[NUMOPTIONS][11] = {L"Resume", L"Main menu"};
+	wchar_t options[NUMOPTIONS][11] = { L"Resume", L"Main menu" };
 
 	// Display menu options
 	for (int i = 0; i < NUMOPTIONS; i++)
@@ -193,6 +204,76 @@ ErrorType Game::PauseMenu()
 		if (m_menuOption == 1) // Quit
 		{
 			EndOfGame();	   // Clear up the game
+			ChangeState(MENU); // Go back to the menu
+		}
+	}
+
+	return SUCCESS;
+}
+
+// Called each frame when in the level state. Manages the level selector menu
+ErrorType Game::LevelMenu()
+{
+	pSE->StopAllSounds();
+
+	// Code for a basic  menu
+
+	pDE->WriteText(450, 220, L"Level Select", MyDrawEngine::WHITE);
+
+	const int NUMOPTIONS = 4;
+	wchar_t options[NUMOPTIONS][15] = { L"Level 0", L"Level 1", L"Level 2", L"Main Menu" };
+
+	// Display the options
+	for (int i = 0; i < NUMOPTIONS; i++)
+	{
+		int colour = MyDrawEngine::GREY;
+		if (i == m_menuOption)
+		{
+			colour = MyDrawEngine::WHITE;
+		}
+		pDE->WriteText(450, 300 + 50 * i, options[i], colour);
+	}
+
+	// Get keyboard input
+	pInputs->SampleKeyboard();
+
+	if (pInputs->NewKeyPressed(DIK_UP) || pInputs->NewKeyPressed(DIK_W))
+	{
+		m_menuOption--;
+	}
+	if (pInputs->NewKeyPressed(DIK_DOWN) || pInputs->NewKeyPressed(DIK_S))
+	{
+		m_menuOption++;
+	}
+	if (m_menuOption < 0)
+	{
+		m_menuOption = 0;
+	}
+	else if (m_menuOption >= NUMOPTIONS)
+	{
+		m_menuOption = NUMOPTIONS - 1;
+	}
+
+	// User selects an option
+	if (pInputs->NewKeyPressed(DIK_RETURN) || pInputs->NewKeyPressed(DIK_SPACE))
+	{
+		if (m_menuOption == 0) // Play
+		{
+			StartOfGame(Level0);		  // Level select
+			ChangeState(RUNNING); // Move to level select
+		}
+		if (m_menuOption == 1) // Play
+		{
+			StartOfGame(Level1);		  // Level select
+			ChangeState(RUNNING); // Move to level select
+		}
+		if (m_menuOption == 2) // Play
+		{
+			StartOfGame(Level2);		  // Level select
+			ChangeState(RUNNING); // Move to level select
+		}
+		if (m_menuOption == 3) // Menu
+		{
 			ChangeState(MENU); // Go back to the menu
 		}
 	}
@@ -247,12 +328,13 @@ ErrorType Game::MainMenu()
 	{
 		if (m_menuOption == 0) // Play
 		{
-			StartOfGame();		  // Initialise the game
-			ChangeState(RUNNING); // Run it
+			LevelMenu();		  // Level select
+			ChangeState(LEVEL); // Move to level select
 		}
 
 		if (m_menuOption == 1) // Quit
 		{
+			EndOfGame();
 			ChangeState(GAMEOVER);
 		}
 	}
@@ -270,17 +352,22 @@ float gameAreaWidth;
 float gameAreaHeight;
 float midX;
 float midY;
+Rectangle2D topRectangle;
+Rectangle2D bottomRectangle;
 
-// Asset Manager + Level Manager (TODO)
+// Asset Manager + Level Manager
 AssetManager assetManager;
+LevelManager levelManager;
 
-// ECS manager + entities
-Manager entityManager;
-auto& player(entityManager.addEntity(Character));
+// ECS manager + vital entites
+EntityManager entityManager;
+Entity* background;
+Entity* player;
 
-// Called at the start of the game - when changing state from MENU to RUNNING
+
+// Called at the start of the game - when changing state from LEVEL to RUNNING
 // Use this to initialise the core game
-ErrorType Game::StartOfGame()
+ErrorType Game::StartOfGame(Levels selectedLevel)
 {
 	// Code to setup your game *********************************************
 	// **********************************************************************
@@ -313,32 +400,51 @@ ErrorType Game::StartOfGame()
 	// assetManager.LoadWorldSound(L"assets/world/image/TODO0.wav", "TODO0");
 
 
+	// load level
+	levelManager.init(selectedLevel);
+	levelManager.loadLevel(&entityManager, pDE, &assetManager);
+
+
+	//background entity + components
+	Entity& newBackground = entityManager.getEntity(-1);
+	background = &newBackground;
+	background->addComponent<TransformComponent>(Vector2D(0, 0), 0, 1);
+	background->addComponent<ImageComponent>(pDE, &assetManager);
+	background->addComponent<SoundComponent>(pSE, &assetManager);
+
+
 	// player enitity + components
-	player.addComponent<TransformComponent>(Vector2D(0, 0), 0, 1, true, 200, 10000, -100);
-	player.addComponent<ImageComponent>(pDE, &assetManager);
-	player.getComponent<ImageComponent>().setImage("playerSmiley");
-	player.addComponent<SoundComponent>(pSE, &assetManager);
-	player.addComponent<InputComponent>(pInputs);
+	Entity& newPlayer = entityManager.getEntity(0);
+	player = &newPlayer;
+	player->addComponent<InputComponent>(pInputs);
+	player->addComponent<TransformComponent>(Vector2D(0, 1), 0, 1);
+	player->addComponent<ImageComponent>(pDE, &assetManager);
+	player->addComponent<SoundComponent>(pSE, &assetManager);
+	// player->addComponent<AnimationComponent>();
+	player->addComponent<PhysicsComponent>(256, 10240, -128);
+	// player->addComponent<CollisionComponent>();
 
 
 	// setup camera + game area
 	pDE->UseCamera(true);
-	pDE->theCamera.PlaceAt(Vector2D(0, 0));
+	pDE->theCamera.PlaceAt(Vector2D(0, player->getComponent<TransformComponent>().getPosition().YValue + 192));
 	pDE->theCamera.SetZoom(pDE->GetScreenHeight() / 800.0f);
 
-	playerY = 0;
-	gameAreaWidth = 770;
-	gameAreaHeight = 578;
+	playerY = player->getComponent<TransformComponent>().getPosition().YValue;
+	gameAreaWidth = 768;
+	gameAreaHeight = 576;
 	gameAreaWidth = pDE->theCamera.Transform(gameAreaWidth);
 	gameAreaHeight = pDE->theCamera.Transform(gameAreaHeight);
 	midX = pDE->GetScreenWidth() / 2.0f;
 	midY = pDE->GetScreenHeight() / 2.0f;
+	topRectangle.PlaceAt(Vector2D((midX - gameAreaWidth / 2.0f)-0.5f, ((midY - gameAreaHeight / 2.0f)-1.5f)), Vector2D((midX + gameAreaWidth / 2.0f)+0.5f, -pDE->GetScreenHeight()));
+	bottomRectangle.PlaceAt(Vector2D((midX - gameAreaWidth / 2.0f)-0.5f, ((midY + gameAreaHeight / 2.0f)+1.5f)), Vector2D((midX + gameAreaWidth / 2.0f)+0.5f, pDE->GetScreenHeight()));
 
 
 	gt.mark();
 	gt.mark();
 
-	player.getComponent<TransformComponent>().setFrameTime(gt.mdFrameTime);
+	player->getComponent<TransformComponent>().setFrameTime(gt.mdFrameTime);
 
 	return SUCCESS;
 }
@@ -373,46 +479,11 @@ ErrorType Game::Update()
 	entityManager.refresh();
 	entityManager.update();
 
-	playerY = player.getComponent<TransformComponent>().getPosition().YValue;
 
-	// gravity against "solid" surface
-	if (player.getComponent<TransformComponent>().getPosition().YValue <= 0)
-	{
-		player.getComponent<TransformComponent>().stableGround();
-	}
-
-	// example level layout
-	pDE->DrawLine(Vector2D(-384, -32), Vector2D(384, -32), MyDrawEngine::WHITE);
-	pDE->DrawLine(Vector2D(-384, -40), Vector2D(384, -40), MyDrawEngine::WHITE);
-	pDE->DrawLine(Vector2D(-384, -48), Vector2D(384, -48), MyDrawEngine::WHITE);
-
-	pDE->DrawLine(Vector2D(-384, 16), Vector2D(-256, 16), MyDrawEngine::WHITE);
-	pDE->DrawLine(Vector2D(-384, 24), Vector2D(-256, 24), MyDrawEngine::WHITE);
-	pDE->DrawLine(Vector2D(-384, 32), Vector2D(-256, 32), MyDrawEngine::WHITE);
-
-	pDE->DrawLine(Vector2D(-256, 80), Vector2D(-128, 80), MyDrawEngine::WHITE);
-	pDE->DrawLine(Vector2D(-256, 88), Vector2D(-128, 88), MyDrawEngine::WHITE);
-	pDE->DrawLine(Vector2D(-256, 96), Vector2D(-128, 96), MyDrawEngine::WHITE);
-
-	pDE->DrawLine(Vector2D(-128, 144), Vector2D(0, 144), MyDrawEngine::WHITE);
-	pDE->DrawLine(Vector2D(-128, 152), Vector2D(0, 152), MyDrawEngine::WHITE);
-	pDE->DrawLine(Vector2D(-128, 160), Vector2D(0, 160), MyDrawEngine::WHITE);
-
-	pDE->DrawLine(Vector2D(0, 208), Vector2D(128, 208), MyDrawEngine::WHITE);
-	pDE->DrawLine(Vector2D(0, 216), Vector2D(128, 216), MyDrawEngine::WHITE);
-	pDE->DrawLine(Vector2D(0, 224), Vector2D(128, 224), MyDrawEngine::WHITE);
-
-	pDE->DrawLine(Vector2D(128, 272), Vector2D(256, 272), MyDrawEngine::WHITE);
-	pDE->DrawLine(Vector2D(128, 280), Vector2D(256, 280), MyDrawEngine::WHITE);
-	pDE->DrawLine(Vector2D(128, 288), Vector2D(256, 288), MyDrawEngine::WHITE);
-
-	pDE->DrawLine(Vector2D(256, 336), Vector2D(384, 336), MyDrawEngine::WHITE);
-	pDE->DrawLine(Vector2D(256, 344), Vector2D(384, 344), MyDrawEngine::WHITE);
-	pDE->DrawLine(Vector2D(256, 352), Vector2D(384, 352), MyDrawEngine::WHITE);
-	
 
 	// position camera to follow player so player
 	// draw all entities
+	playerY = player->getComponent<TransformComponent>().getPosition().YValue;
 	if (playerY < 440)
 	{
 		pDE->theCamera.PlaceAt(Vector2D(0, -(playerY + 192)));
@@ -427,16 +498,32 @@ ErrorType Game::Update()
 	}
 	entityManager.draw();
 
-	// draw game area box 770x578 (interior measurement = 768x576) - 64x64 tiles fit 12x9
-	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D(midX - gameAreaWidth / 2.0f, midY - gameAreaHeight / 2.0f)), pDE->theCamera.ReverseTransform(Vector2D(midX - gameAreaWidth / 2.0f, midY + gameAreaHeight / 2.0f)), MyDrawEngine::DARKBLUE);
-	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D(midX + gameAreaWidth / 2.0f, midY - gameAreaHeight / 2.0f)), pDE->theCamera.ReverseTransform(Vector2D(midX + gameAreaWidth / 2.0f, midY + gameAreaHeight / 2.0f)), MyDrawEngine::DARKBLUE);
-	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D(midX - gameAreaWidth / 2.0f, midY - gameAreaHeight / 2.0f)), pDE->theCamera.ReverseTransform(Vector2D(midX + gameAreaWidth / 2.0f, midY - gameAreaHeight / 2.0f)), MyDrawEngine::DARKBLUE);
-	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D(midX - gameAreaWidth / 2.0f, midY + gameAreaHeight / 2.0f)), pDE->theCamera.ReverseTransform(Vector2D(midX + gameAreaWidth / 2.0f, midY + gameAreaHeight / 2.0f)), MyDrawEngine::DARKBLUE);
+	// draw game area box 768x576 - 64x64 tiles fit 12x9
+	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D(midX - gameAreaWidth / 2.0f, (midY - gameAreaHeight / 2.0f)-1)), pDE->theCamera.ReverseTransform(Vector2D(midX + gameAreaWidth / 2.0f, (midY - gameAreaHeight / 2.0f)-1)), MyDrawEngine::DARKBLUE); // TOP
+	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f)-1, midY - gameAreaHeight / 2.0f)), pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f)-1, midY + gameAreaHeight / 2.0f)), MyDrawEngine::DARKBLUE); // LEFT
+	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((midX + gameAreaWidth / 2.0f)+1, midY - gameAreaHeight / 2.0f)), pDE->theCamera.ReverseTransform(Vector2D((midX + gameAreaWidth / 2.0f)+1, midY + gameAreaHeight / 2.0f)), MyDrawEngine::DARKBLUE); // RIGHT
+	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D(midX - gameAreaWidth / 2.0f, (midY + gameAreaHeight / 2.0f)+1)), pDE->theCamera.ReverseTransform(Vector2D(midX + gameAreaWidth / 2.0f, (midY + gameAreaHeight / 2.0f)+1)), MyDrawEngine::DARKBLUE); // BOTTOM
+	pDE->FillRect(pDE->theCamera.ReverseTransform(topRectangle), MyDrawEngine::BLACK, 0.0f);
+	pDE->FillRect(pDE->theCamera.ReverseTransform(bottomRectangle), MyDrawEngine::BLACK, 0.0f);
+	
 
+	// welcome message
+	const wchar_t welcomeMessage[] = L"Press Enter To Start";
+	if (player->getComponent<InputComponent>().getFirstInput() == false)
+	{
+		pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D(midX+64, midY + gameAreaHeight / 2.0f)), welcomeMessage, MyDrawEngine::WHITE);
+		// something to delay the gameplay starting
+	}
+
+	// write fps to screen
+	const wchar_t FPSlabel[] = L"FPS:";
+	int FPS = (1 / gt.mdFrameTime);
+	pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f)-80, midY - gameAreaHeight / 2.25f)), FPSlabel, MyDrawEngine::WHITE);
+	pDE->WriteInt(pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f)-40, midY - gameAreaHeight / 2.25f)), FPS, MyDrawEngine::WHITE);
 
 	gt.mark();
 
-	player.getComponent<TransformComponent>().setFrameTime(gt.mdFrameTime);
+	player->getComponent<TransformComponent>().setFrameTime(gt.mdFrameTime);
 
 	// *********************************************************************
 	// *********************************************************************
@@ -454,5 +541,11 @@ ErrorType Game::EndOfGame()
 	// Add code here to tidy up ********************************************
 	// *********************************************************************
 
+	// clear all entities
+	entityManager.deleteAll();
+	entityManager.refresh();
+	assetManager.clearAll();
+	
+	
 	return SUCCESS;
 }

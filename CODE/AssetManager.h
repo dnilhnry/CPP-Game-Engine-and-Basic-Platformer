@@ -26,6 +26,12 @@ public:
 	{
 		pDE = de;
 		pSE = se;
+		characterImagesMap.insert({ "empty", -1 });
+		characterSoundsMap.insert({ "empty", -1 });
+		backgroundImagesMap.insert({ "empty", -1 });
+		backgroundSoundMap.insert({ "empty", -1 });
+		worldImagesMap.insert({ "empty", -1 });
+		worldSoundsMap.insert({ "empty", -1 });
 	}
 
 	void LoadCharacterImage(const wchar_t* path, const char* name);
@@ -51,5 +57,7 @@ public:
 	void LoadWorldSound(const wchar_t* path, const char* name);
 
 	SoundIndex GetWorldSound(const char* name);
+
+	void clearAll();
 
 };

@@ -12,6 +12,9 @@
 #include "myinputs.h"
 #include "gametimer.h"
 
+#include "Levels.h" // added to allow for level loading
+
+
 // This is a hack for reading keyboard in situations where you don't want to
 // use a full input system.
 // Note that this makes the class windows-specific, but it already includes
@@ -29,6 +32,7 @@ private:
    enum GameState
    {
       MENU,
+      LEVEL, // added to allow for level loading
       PAUSED,
       RUNNING,
       GAMEOVER
@@ -71,13 +75,16 @@ public:
    // which is currently a basic placeholder
    ErrorType PauseMenu();
 
+   // Called each frame when in the menu state. Manages the level select menu,
+   ErrorType LevelMenu();
+
    // Called each frame when in the menu state. Manages the main menu,
    // which is currently a basic placeholder.
    ErrorType MainMenu();
 
    // Called at the start of the game - when changing state from MENU to RUNNING
    // Use this to initialise the core game
-   ErrorType StartOfGame();
+   ErrorType StartOfGame(Levels currentLevel); // added property to load selected level
 
    // Called each frame when in the RUNNING state.
    // Checks for user pressing escape (which puts the game in the PAUSED state)

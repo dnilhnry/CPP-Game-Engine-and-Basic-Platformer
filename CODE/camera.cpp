@@ -57,6 +57,15 @@ Rectangle2D Camera::Transform(Rectangle2D rectangle) const
 	return answer;
 }
 
+// Returns a rectangle on the screen from the given screen rectangle
+// using the current camera settings
+Rectangle2D Camera::ReverseTransform(Rectangle2D rectangle) const
+{
+	Rectangle2D answer;
+	answer.PlaceAt(ReverseTransform(rectangle.GetBottomLeft()), ReverseTransform(rectangle.GetTopRight()));
+	return answer;
+}
+
 // Returns a segment on the screen from the given world rectangle
 // using the current camera settings
 Segment2D Camera::Transform(Segment2D segment) const

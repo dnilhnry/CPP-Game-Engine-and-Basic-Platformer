@@ -7,38 +7,52 @@ class InputComponent : public Component
 {
 private:
 	MyInputs* pInputs;
-	TransformComponent* transformComponent;
+	PhysicsComponent* pPC;
+
+	bool firstInput;
 
 public:
 
 	InputComponent(MyInputs* i)
 	{
 		pInputs = i;
+		firstInput = false;
 	}
-	
-	void init() override
+
+	void setPhysicsComponent(PhysicsComponent* pc)
 	{
-		transformComponent = &entity->getComponent<TransformComponent>();
+		pPC = pc;
+	}
+
+	bool getFirstInput()
+	{
+		return firstInput;
 	}
 
 	void update() override
 	{
 		pInputs->SampleKeyboard();
-
-		if (pInputs->KeyPressed(DIK_W) || pInputs->KeyPressed(DIK_UP) || pInputs->KeyPressed(DIK_SPACE))
+		if (pInputs->KeyPressed(DIK_RETURN))
 		{
-			transformComponent->jump();
+			firstInput = true;
 		}
-
-		if (pInputs->KeyPressed(DIK_A) || pInputs->KeyPressed(DIK_LEFT))
+		if (firstInput == true)
 		{
-			transformComponent->moveLeft();
-		}
+			if (pInputs->KeyPressed(DIK_W) || pInputs->KeyPressed(DIK_UP) || pInputs->KeyPressed(DIK_SPACE))
+			{
+				pPC->jump();
+			}
 
-		if (pInputs->KeyPressed(DIK_D) || pInputs->KeyPressed(DIK_RIGHT))
-		{
-			transformComponent->moveRight();
+			if (pInputs->KeyPressed(DIK_A) || pInputs->KeyPressed(DIK_LEFT))
+			{
+				pPC->moveLeft();
+			}
+
+			if (pInputs->KeyPressed(DIK_D) || pInputs->KeyPressed(DIK_RIGHT))
+			{
+				pPC->moveRight();
+			}
 		}
-	}	
+	}
 
 };
