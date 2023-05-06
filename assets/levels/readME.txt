@@ -1,6 +1,6 @@
 768x576 game area - 64x64 tiles - therefore 12x9 visible tiles
 
-WHILE MAKING LEVELS NO MORE THAN 12 TILES WIDE
+THERE MUST ALWAYS BE 12 CHARACTERS PER ROW - use " "(space character) for no objects
 ROW 1 MUST = "============"
 ROW 2 - ROW 27 = level obstacles
 ROW 28 MUST = "------------"
