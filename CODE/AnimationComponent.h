@@ -62,39 +62,14 @@ public:
 	}
 
 	// player animations
-	void playerAnimation()
-	{
-		float playerYVelocity = pPC->getVelocity().YValue;
-		if (playerYVelocity < 1 && playerYVelocity > -1)
-		{
-			pIC->setImage("playerConfused");
-		}
-		else if (playerYVelocity <= -1)
-		{
-			pIC->setImage("playerScared");
-		}
-		else if (playerYVelocity >= 1)
-		{
-			pIC->setImage("playerSmiley");
-		}
-	}
+	void playerAnimation();
 
-	void playerWin()
-	{
-		pIC->setImage("playerSmiley");
-		setActive(false);
-	}
+	void playerWin();
 
-	void playerLose()
-	{
-		pIC->setImage("playerDead");
-		setActive(false);
-	}
+	void playerLose();
+
 
 	// platform animations
-	void platformAnimation()
-	{
-		pTC->addRotation(3.142f);
-	}
+	void platformAnimation();
 
 };

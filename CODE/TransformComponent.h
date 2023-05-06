@@ -19,49 +19,22 @@ public:
 		scale = s;
 	}
 
-	Vector2D getPosition()
-	{
-		return position;
-	}
+	Vector2D getPosition();
 
-	void setPosition(Vector2D newPosition)
-	{
-		position = newPosition;
-	}
+	void setPosition(Vector2D newPosition);
 
-	void addPosition(Vector2D newPosition)
-	{
-		position = position + newPosition;
-	}
+	void addPosition(Vector2D newPosition);
 
-	float getRotation()
-	{
-		return angle;
-	}
+	float getRotation();
 
-	void setRotation(float newAngle)
-	{
-		angle = newAngle;
-	}
+	void setRotation(float newAngle);
 
-	void addRotation(float newAngle)
-	{
-		angle = angle + newAngle;
-	}
+	void addRotation(float newAngle);
 
-	float getScale()
-	{
-		return scale;
-	}
+	float getScale();
 
-	void setScale(float newScale)
-	{
-		scale = newScale;
-	}
+	void setScale(float newScale);
 
-	void addScale(float newScale)
-	{
-		scale = scale + newScale;
-	}
+	void addScale(float newScale);
 
 };

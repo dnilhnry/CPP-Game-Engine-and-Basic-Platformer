@@ -77,103 +77,40 @@ public:
 		}
 	}
 
-	void setVelocity()
-	{
-		velocity = Vector2D(velocityX, velocityY);
-	}
+	void setVelocity();
 
-	Vector2D getVelocity()
-	{
-		return velocity;
-	}
+	Vector2D getVelocity();
 
-	void setVelocityX(float x)
-	{
-		velocityX = x;
-	}
+	void setVelocityX(float x);
 
-	void setVelocityY(float y)
-	{
-		velocityY = y;
-	}
+	void setVelocityY(float y);
 
-	void setAcceleration()
-	{
-		acceleration = Vector2D(accelerationX, accelerationY);
-	}
+	void setAcceleration();
 
-	Vector2D getAcceleration()
-	{
-		return acceleration;
-	}
+	Vector2D getAcceleration();
 
-	void setAccelerationX(float x)
-	{
-		accelerationX = x;
-	}
+	void setAccelerationX(float x);
 
-	void setAccelerationY(float y)
-	{
-		accelerationY = y;
-	}
+	void setAccelerationY(float y);
 
-	float getMovementSpeed()
-	{
-		return movementSpeed;
-	}
+	float getMovementSpeed();
 
-	void setMovementSpeed(float s)
-	{
-		movementSpeed = s;
-	}
+	void setMovementSpeed(float s);
 
-	float getJumpSpeed()
-	{
-		return jumpSpeed;
-	}
+	float getJumpSpeed();
 
-	void setJumpSpeed(float s)
-	{
-		jumpSpeed = s;
-	}
+	void setJumpSpeed(float s);
 
-	float getGravity()
-	{
-		return gravity;
-	}
+	float getGravity();
 
-	void setGravity(float g)
-	{
-		gravity = g;
-	}
+	void setGravity(float g);
 
-	void jump()
-	{
-		// could be better
-		// https://gamedev.stackexchange.com/questions/121389/how-i-can-make-better-jump-to-my-game-c-sfml
+	void jump();
 
-		if (jumpReady == true)
-		{
-			jumpReady = false;
-			setAccelerationY(jumpSpeed);
-		}
-	}
+	void moveLeft();
 
-	void moveLeft()
-	{
-		setVelocityX(-movementSpeed);
-	}
+	void moveRight();
 
-	void moveRight()
-	{
-		setVelocityX(movementSpeed);
-	}
-
-	void stableGround()
-	{
-		jumpReady = true;
-		accelerationY = accelerationY - gravity;
-		velocityY = 0.0f;
-	}
+	void stableGround();
 
 };

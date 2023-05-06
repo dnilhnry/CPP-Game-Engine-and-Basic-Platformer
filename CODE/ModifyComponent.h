@@ -20,7 +20,6 @@ private:
 	double currentTime = 0.0;
 	int runTime = 10;
 
-
 public:
 	ModifyComponent(int r)
 	{
@@ -82,33 +81,10 @@ public:
 		}
 	}
 
-	void toDestroyedEdge()
-	{
-		if (entity->hasComponent<AnimationComponent>() == true)
-		{
-			entity->getComponent<AnimationComponent>().setActive(false);
-			entity->getComponent<TransformComponent>().setRotation(0.0f);
-		}
-		entity->setWorldType(DestroyedEdge);
-		Vector2D position = pTC->getPosition();
-		pIC->setImage("destroyedEdge");
-		pCC->setActive(true);
-	}
+	void toDestroyedEdge();
 
-	void toDestroyed()
-	{
-		entity->setWorldType(Destroyed);
-		Vector2D position = pTC->getPosition();
-		pIC->setImage("destroyed");
-		pCC->setActive(false);
-	}
+	void toDestroyed();
 
-	void pointDestroyedEdge()
-	{
-		entity->setWorldType(DestroyedEdge);
-		pTC->addPosition(Vector2D(0, 16));
-		pIC->setImage("destroyedEdge");
-		pCC->setActive(true);
-	}
+	void pointDestroyedEdge();
 
 };

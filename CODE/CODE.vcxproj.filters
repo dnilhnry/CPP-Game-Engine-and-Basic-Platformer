@@ -178,5 +178,32 @@
     <ClCompile Include="LevelManager.cpp">
       <Filter>Engine\Source Files\Sub Engines\Manager</Filter>
     </ClCompile>
+    <ClCompile Include="TransformComponent.cpp">
+      <Filter>Engine\Source Files\Sub Engines\Manager\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationComponent.cpp">
+      <Filter>Engine\Source Files\Sub Engines\Manager\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionComponent.cpp">
+      <Filter>Engine\Source Files\Sub Engines\Manager\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="GameComponent.cpp">
+      <Filter>Engine\Source Files\Sub Engines\Manager\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageComponent.cpp">
+      <Filter>Engine\Source Files\Sub Engines\Manager\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="InputComponent.cpp">
+      <Filter>Engine\Source Files\Sub Engines\Manager\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="ModifyComponent.cpp">
+      <Filter>Engine\Source Files\Sub Engines\Manager\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsComponent.cpp">
+      <Filter>Engine\Source Files\Sub Engines\Manager\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundComponent.cpp">
+      <Filter>Engine\Source Files\Sub Engines\Manager\ECS</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

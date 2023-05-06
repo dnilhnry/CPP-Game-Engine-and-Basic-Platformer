@@ -16,24 +16,12 @@ public:
 		lose = false;
 	}
 
-	void setWin(bool w)
-	{
-		win = w;
-	}
+	void setWin(bool w);
 
-	bool getWin()
-	{
-		return win;
-	}
+	bool getWin();
 
-	void setLose(bool l)
-	{
-		lose = l;
-	}
+	void setLose(bool l);
 
-	bool getLose()
-	{
-		return lose;
-	}
+	bool getLose();
 
 };

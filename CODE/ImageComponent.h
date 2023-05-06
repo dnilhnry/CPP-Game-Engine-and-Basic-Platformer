@@ -20,19 +20,11 @@ private:
 	float scale;
 	float transparency;
 
-
 public:
 	ImageComponent(MyDrawEngine* de, AssetManager* am)
 	{
 		pDE = de;
 		pAM = am;
-	}
-
-	void update() override
-	{
-		position = pTC->getPosition();
-		angle = pTC->getRotation();
-		scale = pTC->getScale();
 	}
 
 	void init() override
@@ -45,33 +37,15 @@ public:
 		transparency = 0.0f;
 	}
 
-	void setImage(const char* i)
+	void update() override
 	{
-		switch (entityType)
-		{
-		case Character:
-			image = pAM->GetCharacterImage(i);
-			break;
-		case Background:
-			image = pAM->GetBackgroundImage(i);
-			break;
-		case World:
-			image = pAM->GetWorldImage(i);
-			break;
-		default:
-			break;
-		}
+		position = pTC->getPosition();
+		angle = pTC->getRotation();
+		scale = pTC->getScale();
 	}
 
-	void draw()
-	{
-		if (isActive() == true)
-		{
-			if (image != -1 && image != NULL)
-			{
-				pDE->DrawAt(position, image, scale, angle, transparency);
-			}
-		}
-	}
+	void setImage(const char* i);
+
+	void draw();
 
 };
