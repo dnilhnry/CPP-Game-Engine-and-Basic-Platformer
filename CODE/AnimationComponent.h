@@ -68,15 +68,15 @@ public:
 	void playerAnimation()
 	{
 		float playerYVelocity = pPC->getVelocity().YValue;
-		if (playerYVelocity == 0)
+		if (playerYVelocity < 1 && playerYVelocity > -1)
 		{
 			pIC->setImage("playerConfused");
 		}
-		else if (playerYVelocity < 0)
+		else if (playerYVelocity <= -1)
 		{
 			pIC->setImage("playerScared");
 		}
-		else if (playerYVelocity > 0)
+		else if (playerYVelocity >= 1)
 		{
 			pIC->setImage("playerSmiley");
 		}

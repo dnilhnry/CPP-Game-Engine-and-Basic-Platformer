@@ -170,6 +170,7 @@ public:
 	{
 		jumpReady = true;
 		accelerationY = accelerationY - gravity;
+		velocityY = 0.0f;
 	}
 
 };

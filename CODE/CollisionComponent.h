@@ -17,10 +17,11 @@ private:
 	SoundComponent* pSC;
 	AnimationComponent* pAC;
 	
+	bool collisionActive;
 	Vector2D position;
+	const char* collisionShape;
 	Rectangle2D collisionBox;
 	Circle2D collisionCircle;
-	bool collisionActive;
 
 public:
 	void init() override
@@ -32,6 +33,7 @@ public:
 
 		if (entityType == Character)
 		{
+			collisionShape = "circle";
 			collisionCircle = Circle2D(Vector2D(pTC->getPosition().XValue, pTC->getPosition().YValue), 30);
 			pGC = &entity->getComponent<GameComponent>();
 			pPC = &entity->getComponent<PhysicsComponent>();
@@ -43,21 +45,25 @@ public:
 		{
 			if (worldType == Empty)
 			{
+				collisionShape = "box";
 				collisionBox = Rectangle2D();
 				collisionBox.PlaceAt(Vector2D(pTC->getPosition().XValue - 32, pTC->getPosition().YValue - 32), Vector2D(pTC->getPosition().XValue + 32, pTC->getPosition().YValue + 32));
 			}
 			if (worldType == Platform)
 			{
+				collisionShape = "box";
 				collisionBox = Rectangle2D();
 				collisionBox.PlaceAt(Vector2D(pTC->getPosition().XValue - 32, pTC->getPosition().YValue - 8), Vector2D(pTC->getPosition().XValue + 32, pTC->getPosition().YValue + 8));
 			}
 			if (worldType == TrappedPlatform)
 			{
+				collisionShape = "box";
 				collisionBox = Rectangle2D();
 				collisionBox.PlaceAt(Vector2D(pTC->getPosition().XValue - 32, pTC->getPosition().YValue - 8), Vector2D(pTC->getPosition().XValue + 32, pTC->getPosition().YValue + 8));
 			}
 			if (worldType == Trap)
 			{
+				collisionShape = "box";
 				collisionBox = Rectangle2D();
 				if (pTC->getRotation() == 0)
 				{
@@ -70,21 +76,25 @@ public:
 			}
 			if (worldType == DestroyedEdge)
 			{
+				collisionShape = "box";
 				collisionBox = Rectangle2D();
 				collisionBox.PlaceAt(Vector2D(pTC->getPosition().XValue - 32, pTC->getPosition().YValue - 32), Vector2D(pTC->getPosition().XValue + 32, pTC->getPosition().YValue + 32));
 			}
 			if (worldType == Destroyed)
 			{
+				collisionShape = "box";
 				collisionBox = Rectangle2D();
 				collisionBox.PlaceAt(Vector2D(pTC->getPosition().XValue - 32, pTC->getPosition().YValue - 32), Vector2D(pTC->getPosition().XValue + 32, pTC->getPosition().YValue + 32));
 			}
 			if (worldType == Exit)
 			{
+				collisionShape = "box";
 				collisionBox = Rectangle2D();
 				collisionBox.PlaceAt(Vector2D(pTC->getPosition().XValue - 32, pTC->getPosition().YValue - 32), Vector2D(pTC->getPosition().XValue + 32, pTC->getPosition().YValue + 32));
 			}
 			if (worldType == Point)
 			{
+				collisionShape = "circle";
 				collisionCircle = Circle2D(Vector2D(pTC->getPosition().XValue, pTC->getPosition().YValue), 8);
 			}
 		}
@@ -94,48 +104,78 @@ public:
 	{
 		if (entityType == Character)
 		{
-			collisionCircle = Circle2D(Vector2D(pTC->getPosition().XValue, pTC->getPosition().YValue), 32);
+			position = pTC->getPosition();
+			collisionCircle.PlaceAt(position, 32);
 		}
 	}
 
 	void checkCollision(std::vector<Entity*>& collidersVector)
 	{
-		for (auto& entity : collidersVector)
+		for (auto& otherEntity : collidersVector)
 		{
+			CollisionComponent* pOtherCC = &otherEntity->getComponent<CollisionComponent>();
+			Rectangle2D otherCollisionBox;
+			Circle2D otherCollisionCircle;
 			bool collided = false;
 			Vector2D collisionDirection = Vector2D(0, 0);
-			if (entity->getComponent<CollisionComponent>().getActive() == true)
-			{
-				/*if (check for collisions with player)
+			if (pOtherCC->getActive() == true)
+			{				
+				if (pOtherCC->getCollisionShape() == "box")
 				{
-					collisionDirection = something;
-					collided = true;
-				}*/
-
+					otherCollisionBox = pOtherCC->getCollisionBox();
+					if (collisionCircle.Intersects(otherCollisionBox) == true)
+					{
+						collisionDirection = collisionCircle.CollisionNormal(otherCollisionBox);
+						collided = true;
+					}
+				}
+				if (pOtherCC->getCollisionShape() == "circle")
+				{
+					otherCollisionCircle = pOtherCC->getCollisionCircle();
+					if (collisionCircle.Intersects(otherCollisionCircle) == true)
+					{
+						collisionDirection = collisionCircle.CollisionNormal(otherCollisionCircle);
+						collided = true;
+					}
+				}
+				
 				if (collided == true)
 				{
-					WorldType colliderType = entity->getWorldType();
+					WorldType colliderType = otherEntity->getWorldType();
 					if (colliderType == Platform)
 					{
-						// if collided with top
-						pPC->stableGround();
-						// else if collided with bottom
-						pGC->setLose(false);
+						if (collisionDirection == Vector2D(0, -1))
+						{
+							pPC->stableGround();
+						}
 					}
 					if (colliderType == TrappedPlatform)
 					{
-						// if collided with platform
-						pPC->stableGround();
-						// else if collided with trap
-						pGC->setLose(false);
+						if (collisionDirection == Vector2D(0, -1))
+						{
+							pPC->stableGround();
+						}
+						if (collisionDirection == Vector2D(0, 1))
+						{
+							pGC->setLose(true);
+							pAC->playerDead();
+							pSC->setSound("playerDeath");
+							pSC->play();
+						}
 					}
 					if (colliderType == Trap)
 					{
-						pGC->setLose(false);
+						pGC->setLose(true);
+						pAC->playerDead();
+						pSC->setSound("playerDeath");
+						pSC->play();
 					}
 					if (colliderType == DestroyedEdge)
 					{
-						pGC->setLose(false);
+						pGC->setLose(true);
+						pAC->playerDead();
+						pSC->setSound("playerDeath");
+						pSC->play();
 					}
 					if (colliderType == Exit)
 					{
@@ -143,10 +183,10 @@ public:
 					}
 					if (colliderType == Point)
 					{
-						entity->getComponent<CollisionComponent>().setActive(false);
-						entity->setWorldType(Empty);
-						entity->getComponent<TransformComponent>().addPosition(Vector2D(0, 16));
-						entity->getComponent<ImageComponent>().setImage("empty");
+						otherEntity->getComponent<CollisionComponent>().setActive(false);
+						otherEntity->setWorldType(Empty);
+						otherEntity->getComponent<TransformComponent>().addPosition(Vector2D(0, 16));
+						otherEntity->getComponent<ImageComponent>().setImage("empty");
 						// pGC->increasePoints();
 					}
 				}
@@ -162,6 +202,21 @@ public:
 	bool getActive()
 	{
 		return collisionActive;
+	}
+
+	const char* getCollisionShape()
+	{
+		return collisionShape;
+	}
+
+	Rectangle2D getCollisionBox()
+	{
+		return collisionBox;
+	}
+
+	Circle2D getCollisionCircle()
+	{
+		return collisionCircle;
 	}
 
 };

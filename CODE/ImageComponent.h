@@ -20,11 +20,14 @@ private:
 	float scale;
 	float transparency;
 
+	bool active;
+
 public:
 	ImageComponent(MyDrawEngine* de, AssetManager* am)
 	{
 		pDE = de;
 		pAM = am;
+		active = true;
 	}
 
 	void setImage(const char* i)
@@ -64,7 +67,7 @@ public:
 
 	void draw() override
 	{
-		if (image != NULL || image != -1)
+		if (image != -1)
 		{
 			pDE->DrawAt(position, image, scale, angle, transparency);
 		}

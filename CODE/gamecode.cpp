@@ -352,6 +352,7 @@ bool lost = false;
 
 // game area
 float playerY;
+float offset;
 float gameAreaWidth;
 float gameAreaHeight;
 float midX;
@@ -415,6 +416,7 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	background = &newBackground;
 	background->addComponent<TransformComponent>(Vector2D(0, 0), 0.0f, 1.0f);
 	background->addComponent<ImageComponent>(pDE, &assetManager);
+	background->getComponent<ImageComponent>().setImage("empty");
 	background->addComponent<SoundComponent>(pSE, &assetManager);
 
 
@@ -422,12 +424,12 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	Entity& newPlayer = entityManager.getEntity(0);
 	player = &newPlayer;
 	player->addComponent<GameComponent>();
-	player->addComponent<TransformComponent>(Vector2D(0, 1), 0.0f, 1.0f);
+	player->addComponent<TransformComponent>(Vector2D(0, 128), 0.0f, 1.0f);
 	player->addComponent<ImageComponent>(pDE, &assetManager);
 	player->addComponent<SoundComponent>(pSE, &assetManager);
-	player->addComponent<PhysicsComponent>(256.0f, 10240.0f, -128.0f);
-	player->addComponent<CollisionComponent>();
+	player->addComponent<PhysicsComponent>(256.0f, 32768.0f, -128.0f);
 	player->addComponent<AnimationComponent>();
+	player->addComponent<CollisionComponent>();
 	player->addComponent<InputComponent>(pInputs);
 
 
@@ -522,7 +524,8 @@ ErrorType Game::Update()
 	}
 	if (playerY >= 440 && playerY <= 1320)
 	{
-		pDE->theCamera.PlaceAt(Vector2D(0, -(playerY + (-(24/55)*(playerY-880)))));
+		offset = ((((2.0f / 3.0f) * -576.0f) / ((1320.0f + 440.0f) / 2.0f)) * (playerY - ((1320.0f + 440.0f) / 2.0f)));
+		pDE->theCamera.PlaceAt(Vector2D(0, -(playerY + offset)));
 	}
 	if (playerY > 1320)
 	{
@@ -568,7 +571,7 @@ ErrorType Game::Update()
 
 	// lose message
 	const wchar_t loseMessage[] = L"You Lose!";
-	if (won == true)
+	if (lost == true)
 	{
 		pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D(midX - 64, midY + gameAreaHeight / 2.0f)), loseMessage, MyDrawEngine::WHITE);
 	}
