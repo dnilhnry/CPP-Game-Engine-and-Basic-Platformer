@@ -79,7 +79,13 @@ public:
 		}
 	}
 
-	void playerDead()
+	void playerWin()
+	{
+		pIC->setImage("playerSmiley");
+		setActive(false);
+	}
+
+	void playerLose()
 	{
 		pIC->setImage("playerDead");
 		setActive(false);

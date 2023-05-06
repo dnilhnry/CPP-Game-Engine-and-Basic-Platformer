@@ -47,7 +47,6 @@ public:
 
 	virtual void init() {}
 	virtual void update() {}
-	virtual void draw() {}
 
 	bool isActive();
 	void setActive(bool a);
@@ -90,8 +89,6 @@ public:
 	void update();
 
 	void updateTime(double time);
-
-	void draw();
 
 	bool isActive() const;
 
@@ -143,8 +140,6 @@ public:
 	void update();
 
 	void updateTime(double frameTime);
-
-	void draw();
 
 	void deleteAll();
 

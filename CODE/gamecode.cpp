@@ -347,8 +347,10 @@ ErrorType Game::MainMenu()
 // **********************************************************************************************
 
 // game
-bool won = false;
-bool lost = false;
+bool won;
+bool lost;
+bool gameStarted;
+bool finalSFX;
 
 // game area
 float playerY;
@@ -370,6 +372,13 @@ Entity* background;
 Entity* player;
 std::vector<Entity*> collidersVector;
 
+// UI
+const wchar_t* FPSlabel;
+const wchar_t* scoreLabel;
+const wchar_t* welcomeMessage;
+const wchar_t* winMessage;
+const wchar_t* loseMessage;
+
 
 // Called at the start of the game - when changing state from LEVEL to RUNNING
 // Use this to initialise the core game
@@ -377,6 +386,13 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 {
 	// Code to setup your game *********************************************
 	// **********************************************************************
+
+	// game
+	won = false;
+	lost = false;
+	gameStarted = false;
+	finalSFX = false;
+
 
 	// load assets
 	assetManager.init(pDE, pSE);
@@ -418,6 +434,7 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	background->addComponent<ImageComponent>(pDE, &assetManager);
 	background->getComponent<ImageComponent>().setImage("empty");
 	background->addComponent<SoundComponent>(pSE, &assetManager);
+	background->getComponent<SoundComponent>().setSound("empty", true);
 
 
 	// player enitity + components
@@ -459,6 +476,13 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	topRectangle.PlaceAt(Vector2D((midX - gameAreaWidth / 2.0f)-0.5f, ((midY - gameAreaHeight / 2.0f)-1.5f)), Vector2D((midX + gameAreaWidth / 2.0f)+0.5f, -pDE->GetScreenHeight()));
 	bottomRectangle.PlaceAt(Vector2D((midX - gameAreaWidth / 2.0f)-0.5f, ((midY + gameAreaHeight / 2.0f)+1.5f)), Vector2D((midX + gameAreaWidth / 2.0f)+0.5f, pDE->GetScreenHeight()));
 
+	// UI
+	FPSlabel = L"FPS:";
+	scoreLabel = L"Score:";
+	welcomeMessage = L"Press ENTER To Start";
+	winMessage = L"YOU WIN!";
+	loseMessage = L"YOU LOSE!";
+
 
 	gt.mark();
 	gt.mark();
@@ -493,26 +517,51 @@ ErrorType Game::Update()
 	// Your code goes here *************************************************
 	// *********************************************************************
 
+	// check if the player uses the keyboard
 	player->getComponent<InputComponent>().checkForInputs();
+
 
 	// check if entities need to be removed
 	// update remaining entities
 	entityManager.refresh();
 	entityManager.update();
 
-	player->getComponent<CollisionComponent>().checkCollision(collidersVector);
+
+	// check if player has collided with anything
+	if (player->getComponent<CollisionComponent>().isActive() == true)
+	{
+		player->getComponent<CollisionComponent>().checkCollision(collidersVector);
+	}
 
 
 	// check if player has won or lost
 	if (player->getComponent<GameComponent>().getWin() == true)
 	{
-		// win code
 		won = true;
+		lost = false;
+		player->getComponent<PhysicsComponent>().setActive(false);
+		player->getComponent<TransformComponent>().addPosition(Vector2D(0, 1));
+		player->getComponent<AnimationComponent>().playerWin();
+		player->getComponent<SoundComponent>().setSound("playerWin");
+		if (finalSFX == false)
+		{
+			player->getComponent<SoundComponent>().play();
+			finalSFX = true;
+		}
 	}
 	if (player->getComponent<GameComponent>().getLose() == true)
 	{
-		// lose code
+		won = false;
 		lost = true;
+		player->getComponent<PhysicsComponent>().setActive(false);
+		player->getComponent<TransformComponent>().addPosition(Vector2D(0, -1));
+		player->getComponent<AnimationComponent>().playerLose();
+		player->getComponent<SoundComponent>().setSound("playerDeath");
+		if (finalSFX == false)
+		{
+			player->getComponent<SoundComponent>().play();
+			finalSFX = true;
+		}
 	}
 
 
@@ -542,7 +591,13 @@ ErrorType Game::Update()
 
 
 	// draw all entities
-	entityManager.draw();
+	for (auto& e : entityManager.getAllEntities())
+	{
+		if (e->hasComponent<ImageComponent>() == true)
+		{
+			e->getComponent<ImageComponent>().draw();
+		}
+	}
 
 
 	// draw game area box 768x576 - 64x64 tiles fit 12x9
@@ -555,30 +610,27 @@ ErrorType Game::Update()
 	
 
 	// welcome message
-	bool started = false;;
-	const wchar_t welcomeMessage[] = L"Press ENTER To Start";
 	if (player->getComponent<InputComponent>().getFirstInput() == false)
 	{
 		pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D(midX - 64, midY + gameAreaHeight / 2.0f)), welcomeMessage, MyDrawEngine::WHITE);
 	}
 	if (player->getComponent<InputComponent>().getFirstInput() == true)
 	{
-		if (started == false)
+		if (gameStarted == false)
 		{
 			for (auto& e : entityManager.getAllEntities())
 			{
-				if (e->hasComponent<ModifyComponent>())
+				if (e->hasComponent<ModifyComponent>() == true)
 				{
 					e->getComponent<ModifyComponent>().setActive(true);
 				}
 			}
 		}
-		started = true;
+		gameStarted = true;
 	}
 
 
 	// win message
-	const wchar_t winMessage[] = L"You WIN!";
 	if (won == true)
 	{
 		pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D(midX - 64, midY + gameAreaHeight / 2.0f)), winMessage, MyDrawEngine::WHITE);
@@ -586,7 +638,6 @@ ErrorType Game::Update()
 
 
 	// lose message
-	const wchar_t loseMessage[] = L"You Lose!";
 	if (lost == true)
 	{
 		pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D(midX - 64, midY + gameAreaHeight / 2.0f)), loseMessage, MyDrawEngine::WHITE);
@@ -594,7 +645,6 @@ ErrorType Game::Update()
 
 
 	// write fps to screen
-	const wchar_t FPSlabel[] = L"FPS:";
 	int FPS = (1 / gt.mdFrameTime);
 	pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f)-80, midY - gameAreaHeight / 2.25f)), FPSlabel, MyDrawEngine::WHITE);
 	pDE->WriteInt(pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f)-40, midY - gameAreaHeight / 2.25f)), FPS, MyDrawEngine::WHITE);
@@ -621,13 +671,10 @@ ErrorType Game::EndOfGame()
 	// *********************************************************************
 
 	// clear all entities
-	won = NULL;
-	lost = NULL;
 	collidersVector.clear();
 	entityManager.deleteAll();
 	entityManager.refresh();
 	assetManager.clearAll();
-
 
 	return SUCCESS;
 }

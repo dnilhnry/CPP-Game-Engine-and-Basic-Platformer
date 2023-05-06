@@ -42,36 +42,39 @@ public:
 
 	void update() override
 	{
-		frameTime = entity->getGameTime();
-		position = pTC->getPosition();
-		setVelocity();
-		setAcceleration();
-		if (!(acceleration.YValue + gravity) == 0)
+		if (isActive() == true)
 		{
-			jumpReady = false;
+			frameTime = entity->getGameTime();
+			position = pTC->getPosition();
+			setVelocity();
+			setAcceleration();
+			if (!(acceleration.YValue + gravity) == 0)
+			{
+				jumpReady = false;
+			}
+			velocity = velocity + (acceleration + Vector2D(0, gravity)) * frameTime;
+			position = position + velocity * frameTime;
+			if (position.XValue <= -353)
+			{
+				position = position + Vector2D(704, 0);
+			}
+			if (position.XValue >= 353)
+			{
+				position = position + Vector2D(-704, 0);
+			}
+			setVelocityX(0.0f);
+			setVelocityY(velocity.YValue);
+			setAccelerationX(0.0f);
+			if (accelerationY > 1)
+			{
+				setAccelerationY(accelerationY / 10);
+			}
+			else if (accelerationY <= 1)
+			{
+				setAccelerationY(0.0f);
+			}
+			pTC->setPosition(position);
 		}
-		velocity = velocity + (acceleration + Vector2D(0, gravity)) * frameTime;
-		position = position + velocity * frameTime;
-		if (position.XValue <= -353)
-		{
-			position = position + Vector2D(704, 0);
-		}
-		if (position.XValue >= 353)
-		{
-			position = position + Vector2D(-704, 0);
-		}
-		setVelocityX(0.0f);
-		setVelocityY(velocity.YValue);
-		setAccelerationX(0.0f);
-		if (accelerationY > 1)
-		{
-			setAccelerationY(accelerationY / 10);
-		}
-		else if (accelerationY <= 1)
-		{
-			setAccelerationY(0.0f);
-		}
-		pTC->setPosition(position);
 	}
 
 	void setVelocity()

@@ -28,11 +28,6 @@ void Entity::updateTime(double time)
 	frameTime = time;
 }
 
-void Entity::draw()
-{
-	for (auto& c : components) { c->draw(); }
-}
-
 bool Entity::isActive() const
 {
 	return active;
@@ -86,14 +81,6 @@ void EntityManager::updateTime(double frameTime)
 	for (auto& e : entities)
 	{
 		e->updateTime(frameTime);
-	}
-}
-
-void EntityManager::draw()
-{
-	for (auto& e : entities)
-	{
-		e->draw();
 	}
 }
 

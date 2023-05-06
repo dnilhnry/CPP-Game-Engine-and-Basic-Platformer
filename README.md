@@ -1,7 +1,7 @@
 # KF6017-Project
 
 GIT REPO DOES NOT EXECUTEABLE:      
-I used Visual Studio 2022 as an IDE - I only tested building win32 on Windows 10/11   
+I used Visual Studio 2022 as an IDE - Configuration: Debug Win32   
 
 
 Menu Controls:   

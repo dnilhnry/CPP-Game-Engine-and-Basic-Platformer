@@ -163,31 +163,24 @@ public:
 						}
 						if (collisionDirection == Vector2D(0, 1))
 						{
+							setActive(false);
 							pGC->setLose(true);
-							pAC->playerDead();
-							pSC->setSound("playerDeath");
-							pSC->play();
 						}
 					}
 					if (colliderType == Trap)
 					{
+						setActive(false);
 						pGC->setLose(true);
-						pAC->playerDead();
-						pSC->setSound("playerDeath");
-						pSC->play();
 					}
 					if (colliderType == DestroyedEdge)
 					{
+						setActive(false);
 						pGC->setLose(true);
-						pAC->playerDead();
-						pSC->setSound("playerDeath");
-						pSC->play();
 					}
 					if (colliderType == Exit)
 					{
+						setActive(false);
 						pGC->setWin(true);
-						pSC->setSound("playerWin");
-						pSC->play();
 					}
 					if (colliderType == Point)
 					{
