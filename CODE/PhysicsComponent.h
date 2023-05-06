@@ -6,6 +6,8 @@
 class PhysicsComponent : public Component
 {
 private:
+	TransformComponent* pTC;
+
 	Vector2D position;
 	Vector2D velocity;
 	float velocityX;
@@ -31,31 +33,24 @@ public:
 
 	void init() override
 	{
-		TransformComponent* pTC = &entity->getComponent<TransformComponent>();
-		pTC->setPhysicsComponent(this);
-		InputComponent* pIC = &entity->getComponent<InputComponent>();
-		pIC->setPhysicsComponent(this);
+		pTC = &entity->getComponent<TransformComponent>();
+		position = pTC->getPosition();
 		velocity = Vector2D(0, 0);
 		acceleration = Vector2D(0, 0);
 		jumpReady = false;
 	}
 
-	void update(double ft) override
+	void update() override
 	{
-		frameTime = ft;
-	}
-
-	Vector2D getNewPosition(Vector2D currentPosition)
-	{
-		position = currentPosition;
-
+		frameTime = entity->getGameTime();
+		position = pTC->getPosition();
 		setVelocity();
 		setAcceleration();
 		if (!(acceleration.YValue + gravity) == 0)
 		{
 			jumpReady = false;
 		}
-		velocity = velocity + (acceleration + Vector2D(0, gravity));
+		velocity = velocity + (acceleration + Vector2D(0, gravity)) * frameTime;
 		position = position + velocity * frameTime;
 		if (position.XValue <= -353)
 		{
@@ -66,6 +61,7 @@ public:
 			position = position + Vector2D(-704, 0);
 		}
 		setVelocityX(0.0f);
+		setVelocityY(velocity.YValue);
 		setAccelerationX(0.0f);
 		if (accelerationY > 1)
 		{
@@ -75,8 +71,7 @@ public:
 		{
 			setAccelerationY(0.0f);
 		}
-
-		return position;
+		pTC->setPosition(position);
 	}
 
 	void setVelocity()
@@ -86,7 +81,6 @@ public:
 
 	Vector2D getVelocity()
 	{
-		setVelocity();
 		return velocity;
 	}
 
@@ -107,7 +101,6 @@ public:
 
 	Vector2D getAcceleration()
 	{
-		setAcceleration();
 		return acceleration;
 	}
 

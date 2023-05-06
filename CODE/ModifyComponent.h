@@ -13,9 +13,13 @@ private:
 	WorldType worldType;
 
 	int rowNumber;
+	int currentEdge = 1;
+	int currentDestroyed = 0;
 
-	// time variables to control speed to level destruction
+	bool running = false;
 	double frameTime;
+	double currentTime = 0.0;
+	int runTime = 10;
 
 
 public:
@@ -31,12 +35,47 @@ public:
 		pTC = &entity->getComponent<TransformComponent>();
 		pIC = &entity->getComponent<ImageComponent>();
 		pCC = &entity->getComponent<CollisionComponent>();
+		frameTime = 0;
 	}
 
-	void update(double ft) override
+	void update() override
 	{
-		// use time variables to control speed to level destruction
-		frameTime = ft;
+		if (worldType != Destroyed)
+		{
+			if (running == true)
+			{
+				frameTime = entity->getGameTime();
+				if (currentTime >= runTime)
+				{
+					currentTime = 0.0;
+					currentDestroyed++;
+					currentEdge++;
+
+
+					if (rowNumber == currentEdge)
+					{
+						if (worldType != Point)
+						{
+							toDestroyedEdge();
+						}
+						else if (worldType == Point)
+						{
+							pointDestroyedEdge();
+						}
+
+					}
+					else if (rowNumber == currentDestroyed)
+					{
+						toDestroyed();
+					}
+
+				}
+				else
+				{
+					currentTime = currentTime + frameTime;
+				}
+			}
+		}
 	}
 
 	void toDestroyedEdge()
@@ -44,7 +83,7 @@ public:
 		entity->setWorldType(DestroyedEdge);
 		Vector2D position = pTC->getPosition();
 		pIC->setImage("destroyedEdge");
-		// pCC->setCollision();
+		pCC->setActive(true);
 	}
 
 	void toDestroyed()
@@ -52,25 +91,20 @@ public:
 		entity->setWorldType(Destroyed);
 		Vector2D position = pTC->getPosition();
 		pIC->setImage("destroyed");
-		// pCC->setCollision();
-	}
-
-	void pointEmpty()
-	{
-		entity->setWorldType(Empty);
-		Vector2D position = pTC->getPosition();
-		pTC->setPosition(Vector2D(position.XValue,position.YValue + 16));
-		pIC->setImage("empty");
-		// pCC->setCollision();
+		pCC->setActive(false);
 	}
 
 	void pointDestroyedEdge()
 	{
 		entity->setWorldType(DestroyedEdge);
-		Vector2D position = pTC->getPosition();
-		pTC->setPosition(Vector2D(position.XValue, position.YValue + 16));
+		pTC->addPosition(Vector2D(0, 16));
 		pIC->setImage("destroyedEdge");
-		// pCC->setCollision();
+		pCC->setActive(true);
+	}
+
+	void setRunning(bool r)
+	{
+		running = r;
 	}
 
 };

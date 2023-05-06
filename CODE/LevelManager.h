@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Levels.h"
-#include "EntityTypes.h"
 #include "vector2D.h"
 
 class EntityManager;
@@ -19,9 +18,6 @@ private:
 	int LevelHeight = 30;
 
 public:
-
-	LevelManager(){}
-	~LevelManager(){}
 
 	void init(Levels l);
 

@@ -19,9 +19,9 @@ public:
 		firstInput = false;
 	}
 
-	void setPhysicsComponent(PhysicsComponent* pc)
+	void init() override
 	{
-		pPC = pc;
+		pPC = &entity->getComponent<PhysicsComponent>();
 	}
 
 	bool getFirstInput()
@@ -29,7 +29,7 @@ public:
 		return firstInput;
 	}
 
-	void update() override
+	void checkForInputs()
 	{
 		pInputs->SampleKeyboard();
 		if (pInputs->KeyPressed(DIK_RETURN))

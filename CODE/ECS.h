@@ -42,7 +42,6 @@ public:
 
 	virtual void init() {}
 	virtual void update() {}
-	virtual void update(double frameTime) {}
 	virtual void draw() {}
 	virtual ~Component() {}
 };
@@ -55,6 +54,7 @@ private:
 	int id;
 	EntityType entityType;
 	WorldType worldType;
+	double frameTime;
 
 	std::vector<std::unique_ptr<Component>> components;
 
@@ -79,7 +79,9 @@ public:
 		worldType = wt;
 	}
 
-	void update(double frameTime);
+	void update();
+
+	void updateTime(double time);
 
 	void draw();
 
@@ -120,6 +122,8 @@ public:
 
 	WorldType getWorldType();
 
+	double getGameTime();
+
 };
 
 class EntityManager
@@ -128,7 +132,9 @@ private:
 	std::vector<std::unique_ptr<Entity>> entities;
 
 public:
-	void update(double frameTime);
+	void update();
+
+	void updateTime(double frameTime);
 
 	void draw();
 
@@ -140,5 +146,7 @@ public:
 	Entity& addEntity(int i, EntityType et, WorldType wt);
 
 	Entity& getEntity(int i);
+
+	std::vector<std::unique_ptr<Entity>>& getAllEntities();
 
 };

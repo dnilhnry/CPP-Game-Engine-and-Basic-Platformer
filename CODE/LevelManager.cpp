@@ -11,7 +11,9 @@
 
 #include "Components.h"
 #include "mydrawengine.h"
+#include "Shapes.h"
 #include "AssetManager.h"
+#include "EntityTypes.h"
 
 void LevelManager::init(Levels selectedLevel)
 {
@@ -60,110 +62,122 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			{
 				// nothing
 				Entity& newEmpty(pEM->addEntity( ((LevelWidth * rowNumber) + (x + 1)), World, Empty ));
-				newEmpty.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0, 1);
+				newEmpty.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newEmpty.addComponent<ImageComponent>(pDE, pAM);
-				// collision component - TODO - used to check if the player is collidng with the entity
-				// modify component - TODO - used to change worldType to 'destroyedEdge' or 'destroyed'
-				// modify component - needs rowNumber passed in to determine when to change it
+				newEmpty.getComponent<ImageComponent>().setImage("empty");
+				newEmpty.addComponent<CollisionComponent>();
+				newEmpty.addComponent<ModifyComponent>(rowNumber);
 				break;
 			}
 			case '-':
 			{
 				// platform
 				Entity& newPlatform(pEM->addEntity( ((LevelWidth * rowNumber) + (x + 1)), World, Platform ));
-				newPlatform.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0, 1);
+				newPlatform.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newPlatform.addComponent<ImageComponent>(pDE, pAM);
 				newPlatform.getComponent<ImageComponent>().setImage("platform");
-				// collision component - TODO - used to check if the player is collidng with the entity
-				// modify component - TODO - used to change worldType to 'destroyedEdge' or 'destroyed'
-				// modify component - needs rowNumber passed in to determine when to change it
+				newPlatform.addComponent<CollisionComponent>();
+				newPlatform.addComponent<ModifyComponent>(rowNumber);
 				break;
 			}
 			case '^':
 			{
 				// trappedPlatform
-				Entity& newTrappedPlatform(pEM->addEntity( ((LevelWidth * rowNumber) + (x + 1)), World, TrappedPlatform ));
-				newTrappedPlatform.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0, 1);
+				Entity& newTrappedPlatform(pEM->addEntity(((LevelWidth * rowNumber) + (x + 1)), World, TrappedPlatform));
+				newTrappedPlatform.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newTrappedPlatform.addComponent<ImageComponent>(pDE, pAM);
 				newTrappedPlatform.getComponent<ImageComponent>().setImage("trappedPlatform");
-				// animation component - TODO - used to rotate the component
-				// collision component - TODO - used to check if the player is collidng with the entity
-				// modify component - TODO - used to change worldType to 'destroyedEdge' or 'destroyed'
-				// modify component - needs rowNumber passed in to determine when to change it
+				newTrappedPlatform.addComponent<CollisionComponent>();
+				newTrappedPlatform.addComponent<ModifyComponent>(rowNumber);
+				break;
+			}
+			case '<':
+			{
+				// trappedPlatform
+				Entity& newTrappedPlatform(pEM->addEntity(((LevelWidth * rowNumber) + (x + 1)), World, TrappedPlatform));
+				newTrappedPlatform.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
+				newTrappedPlatform.addComponent<ImageComponent>(pDE, pAM);
+				newTrappedPlatform.getComponent<ImageComponent>().setImage("trappedPlatform");
+				newTrappedPlatform.addComponent<CollisionComponent>();
+				newTrappedPlatform.addComponent<AnimationComponent>();
+				newTrappedPlatform.addComponent<ModifyComponent>(rowNumber);
+				break;
+			}
+			case '>':
+			{
+				// trappedPlatform
+				Entity& newTrappedPlatform(pEM->addEntity(((LevelWidth * rowNumber) + (x + 1)), World, TrappedPlatform));
+				newTrappedPlatform.addComponent<TransformComponent>(Vector2D(gameX, gameY), 3.142f, 1.0f);
+				newTrappedPlatform.addComponent<ImageComponent>(pDE, pAM);
+				newTrappedPlatform.getComponent<ImageComponent>().setImage("trappedPlatform");
+				newTrappedPlatform.addComponent<CollisionComponent>();
+				newTrappedPlatform.addComponent<ModifyComponent>(rowNumber);
 				break;
 			}
 			case 'H':
 			{
 				// trapHorizontal
 				Entity& newTrapHorizontal(pEM->addEntity( ((LevelWidth * rowNumber) + (x + 1)), World, Trap ));
-				newTrapHorizontal.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0, 1);
+				newTrapHorizontal.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newTrapHorizontal.addComponent<ImageComponent>(pDE, pAM);
 				newTrapHorizontal.getComponent<ImageComponent>().setImage("trap");
-				// collision component - TODO - used to check if the player is collidng with the entity
-				// modify component - TODO - used to change worldType to 'destroyedEdge' or 'destroyed'
-				// modify component - needs rowNumber passed in to determine when to change it
+				newTrapHorizontal.addComponent<CollisionComponent>();
+				newTrapHorizontal.addComponent<ModifyComponent>(rowNumber);
 				break;
 			}
 			case 'I':
 			{
 				// trapHorizontal
 				Entity& newTrapVertical(pEM->addEntity( ((LevelWidth * rowNumber) + (x + 1)), World, Trap ));
-				newTrapVertical.addComponent<TransformComponent>(Vector2D(gameX, gameY), 1.571f, 1);
+				newTrapVertical.addComponent<TransformComponent>(Vector2D(gameX, gameY), 1.571f, 1.0f);
 				newTrapVertical.addComponent<ImageComponent>(pDE, pAM);
 				newTrapVertical.getComponent<ImageComponent>().setImage("trap");
-				// collision component - TODO - used to check if the player is collidng with the entity
-				// modify component - TODO - used to change worldType to 'destroyedEdge' or 'destroyed'
-				// modify component - needs rowNumber passed in to determine when to change it
+				newTrapVertical.addComponent<CollisionComponent>();
+				newTrapVertical.addComponent<ModifyComponent>(rowNumber);
 				break;
 			}
 			case '~':
 			{
 				// destroyedEdge
 				Entity& newDestroyedEdge(pEM->addEntity( ((LevelWidth * rowNumber) + (x + 1)), World, DestroyedEdge ));
-				newDestroyedEdge.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0, 1);
+				newDestroyedEdge.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newDestroyedEdge.addComponent<ImageComponent>(pDE, pAM);
 				newDestroyedEdge.getComponent<ImageComponent>().setImage("destroyedEdge");
-				// collision component - TODO - used to check if the player is collidng with the entity
-				// modify component - TODO - used to change worldType to 'destroyedEdge' or 'destroyed'
-				// modify component - needs rowNumber passed in to determine when to change it
+				newDestroyedEdge.addComponent<CollisionComponent>();
+				newDestroyedEdge.addComponent<ModifyComponent>(rowNumber);
 				break;
 			}
 			case 'x':
 			{
 				// destroyed
 				Entity& newDestroyed(pEM->addEntity( ((LevelWidth * rowNumber) + (x + 1)), World, Destroyed ));
-				newDestroyed.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0, 1);
+				newDestroyed.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newDestroyed.addComponent<ImageComponent>(pDE, pAM);
 				newDestroyed.getComponent<ImageComponent>().setImage("destroyed");
-				// collision component - TODO - used to check if the player is collidng with the entity
-				// modify component - TODO - used to change worldType to 'destroyedEdge' or 'destroyed'
-				// modify component - needs rowNumber passed in to determine when to change it
+				newDestroyed.addComponent<CollisionComponent>();
+				newDestroyed.addComponent<ModifyComponent>(rowNumber);
 				break;
 			}
 			case '=':
 			{
 				// exit
 				Entity& newExit(pEM->addEntity( ((LevelWidth * rowNumber) + (x + 1)), World, Exit ));
-				newExit.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0, 1);
+				newExit.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newExit.addComponent<ImageComponent>(pDE, pAM);
 				newExit.getComponent<ImageComponent>().setImage("exit");
-				// collision component - TODO - used to check if the player is collidng with the entity
-				// modify component - TODO - used to change worldType to 'destroyedEdge' or 'destroyed'
-				// modify component - needs rowNumber passed in to determine when to change it
+				newExit.addComponent<CollisionComponent>();
+				newExit.addComponent<ModifyComponent>(rowNumber);
 				break;
 			}
 			case '+':
 			{
 				// point
 				Entity& newPoint(pEM->addEntity(((LevelWidth* rowNumber) + (x + 1)), World, Point ));
-				newPoint.addComponent<TransformComponent>(Vector2D(gameX, gameY - (tileSize / 4)), 0, 1);
+				newPoint.addComponent<TransformComponent>(Vector2D(gameX, gameY - (tileSize / 4)), 0.0f, 1.0f);
 				newPoint.addComponent<ImageComponent>(pDE, pAM);
 				newPoint.getComponent<ImageComponent>().setImage("point");
-				// collision component - TODO - used to check if the player is collidng with the entity
-				// if collided with, change to empty and change positionY (+tileSize/4) - change to destoyed later
-				// modify component - TODO - used to change worldType to 'destroyedEdge' or 'destroyed'
-				// modify component - needs rowNumber passed in to determine when to change it
-
+				newPoint.addComponent<CollisionComponent>();
+				newPoint.addComponent<ModifyComponent>(rowNumber);
 				break;
 			}
 			default:

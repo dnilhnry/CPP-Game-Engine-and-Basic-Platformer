@@ -156,6 +156,7 @@
     <ClInclude Include="Levels.h" />
     <ClInclude Include="ModifyComponent.h" />
     <ClInclude Include="PhysicsComponent.h" />
+    <ClInclude Include="GameComponent.h" />
     <ClInclude Include="SoundComponent.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="ECS.h" />

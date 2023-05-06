@@ -9,9 +9,6 @@ private:
 	Vector2D position;
 	float angle;
 	float scale;
-	bool physicsEnabled;
-	PhysicsComponent* pPC;
-	double frameTime;
 
 public:
 
@@ -20,32 +17,6 @@ public:
 		position = p;
 		angle = a;
 		scale = s;
-		physicsEnabled = false;
-	}
-
-	TransformComponent(Vector2D p, float a, float s, bool physics)
-	{
-		position = p;
-		angle = a;
-		scale = s;
-		physicsEnabled = physics;
-	}
-
-	void setPhysicsComponent(PhysicsComponent* pc)
-	{
-		pPC = pc;
-	}
-
-	void update() override
-	{
-		if (physicsEnabled == false)
-		{
-			// do nothing
-		}
-		if (physicsEnabled == true)
-		{
-			position = pPC->getNewPosition(position);
-		}
 	}
 
 	Vector2D getPosition()
@@ -91,16 +62,6 @@ public:
 	void addScale(float newScale)
 	{
 		scale = scale + newScale;
-	}
-
-	bool getPhysics()
-	{
-		return physicsEnabled;
-	}
-
-	void setPhysics(bool physics)
-	{
-		physicsEnabled = physics;
 	}
 
 };

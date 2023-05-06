@@ -134,6 +134,9 @@
     <ClInclude Include="CollisionComponent.h">
       <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
     </ClInclude>
+    <ClInclude Include="GameComponent.h">
+      <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vector2D.cpp">

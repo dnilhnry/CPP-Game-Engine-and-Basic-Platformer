@@ -1,12 +1,17 @@
-#include "ECS.h"
+#include "Components.h"
 
 
 // Entity
 //--------------------------------------------------------------
 
-void Entity::update(double frameTime)
+void Entity::update()
 {
-	for (auto& c : components) { c->update(frameTime); }
+	for (auto& c : components) { c->update(); }
+}
+
+void Entity::updateTime(double time)
+{
+	frameTime = time;
 }
 
 void Entity::draw()
@@ -44,19 +49,38 @@ WorldType Entity::getWorldType()
 	return worldType;
 }
 
+double Entity::getGameTime()
+{
+	return frameTime;
+}
+
 //--------------------------------------------------------------
 
 // EntityManager
 //--------------------------------------------------------------
 
-void EntityManager::update(double frameTime)
+void EntityManager::update()
 {
-	for (auto& e : entities) { e->update(frameTime); }
+	for (auto& e : entities)
+	{
+		e->update();
+	}
+}
+
+void EntityManager::updateTime(double frameTime)
+{
+	for (auto& e : entities)
+	{
+		e->updateTime(frameTime);
+	}
 }
 
 void EntityManager::draw()
 {
-	for (auto& e : entities) { e->draw(); }
+	for (auto& e : entities)
+	{
+		e->draw();
+	}
 }
 
 void EntityManager::deleteAll()
@@ -99,6 +123,11 @@ Entity& EntityManager::getEntity(int i)
 			return *e;
 		}
 	}
+}
+
+std::vector<std::unique_ptr<Entity>>& EntityManager::getAllEntities()
+{
+	return entities;
 }
 
 //--------------------------------------------------------------

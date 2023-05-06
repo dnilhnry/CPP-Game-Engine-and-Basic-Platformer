@@ -346,6 +346,10 @@ ErrorType Game::MainMenu()
 // The game !!! *********************************************************************************
 // **********************************************************************************************
 
+// game
+bool won = false;
+bool lost = false;
+
 // game area
 float playerY;
 float gameAreaWidth;
@@ -363,6 +367,7 @@ LevelManager levelManager;
 EntityManager entityManager;
 Entity* background;
 Entity* player;
+std::vector<Entity*> collidersVector;
 
 
 // Called at the start of the game - when changing state from LEVEL to RUNNING
@@ -408,7 +413,7 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	//background entity + components
 	Entity& newBackground = entityManager.getEntity(-1);
 	background = &newBackground;
-	background->addComponent<TransformComponent>(Vector2D(0, 0), 0, 1);
+	background->addComponent<TransformComponent>(Vector2D(0, 0), 0.0f, 1.0f);
 	background->addComponent<ImageComponent>(pDE, &assetManager);
 	background->addComponent<SoundComponent>(pSE, &assetManager);
 
@@ -416,13 +421,25 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	// player enitity + components
 	Entity& newPlayer = entityManager.getEntity(0);
 	player = &newPlayer;
-	player->addComponent<InputComponent>(pInputs);
-	player->addComponent<TransformComponent>(Vector2D(0, 1), 0, 1);
+	player->addComponent<GameComponent>();
+	player->addComponent<TransformComponent>(Vector2D(0, 1), 0.0f, 1.0f);
 	player->addComponent<ImageComponent>(pDE, &assetManager);
 	player->addComponent<SoundComponent>(pSE, &assetManager);
-	// player->addComponent<AnimationComponent>();
-	player->addComponent<PhysicsComponent>(256, 10240, -128);
-	// player->addComponent<CollisionComponent>();
+	player->addComponent<PhysicsComponent>(256.0f, 10240.0f, -128.0f);
+	player->addComponent<CollisionComponent>();
+	player->addComponent<AnimationComponent>();
+	player->addComponent<InputComponent>(pInputs);
+
+
+	// setup collision
+	for (auto& e : entityManager.getAllEntities())
+	{
+		if (e->getID() != -1 && e->getID() != 0 && e->hasComponent<CollisionComponent>() == true)
+		{
+			Entity& collider = *e;
+			collidersVector.emplace_back(&collider);
+		}
+	}
 
 
 	// setup camera + game area
@@ -444,7 +461,7 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	gt.mark();
 	gt.mark();
 
-	player->getComponent<TransformComponent>().setFrameTime(gt.mdFrameTime);
+	entityManager.updateTime(gt.mdFrameTime);
 
 	return SUCCESS;
 }
@@ -474,29 +491,48 @@ ErrorType Game::Update()
 	// Your code goes here *************************************************
 	// *********************************************************************
 
+	player->getComponent<InputComponent>().checkForInputs();
+
 	// check if entities need to be removed
 	// update remaining entities
 	entityManager.refresh();
 	entityManager.update();
 
+	player->getComponent<CollisionComponent>().checkCollision(collidersVector);
 
 
-	// position camera to follow player so player
-	// draw all entities
+	// check if player has won or lost
+	if (player->getComponent<GameComponent>().getWin() == true)
+	{
+		// win code
+		won = true;
+	}
+	if (player->getComponent<GameComponent>().getLose() == true)
+	{
+		// lose code
+		lost = true;
+	}
+
+
+	// position camera to follow player
 	playerY = player->getComponent<TransformComponent>().getPosition().YValue;
 	if (playerY < 440)
 	{
 		pDE->theCamera.PlaceAt(Vector2D(0, -(playerY + 192)));
 	}
-	else if (playerY >= 440 && playerY <= 1320)
+	if (playerY >= 440 && playerY <= 1320)
 	{
-		pDE->theCamera.PlaceAt(Vector2D(0, -( playerY + (((-2/3 * 576) / 880) * playerY + 384)) ));
+		pDE->theCamera.PlaceAt(Vector2D(0, -(playerY + (-(24/55)*(playerY-880)))));
 	}
-	else if (playerY > 1320)
+	if (playerY > 1320)
 	{
 		pDE->theCamera.PlaceAt(Vector2D(0, -(playerY - 192)));
 	}
+
+
+	// draw all entities
 	entityManager.draw();
+
 
 	// draw game area box 768x576 - 64x64 tiles fit 12x9
 	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D(midX - gameAreaWidth / 2.0f, (midY - gameAreaHeight / 2.0f)-1)), pDE->theCamera.ReverseTransform(Vector2D(midX + gameAreaWidth / 2.0f, (midY - gameAreaHeight / 2.0f)-1)), MyDrawEngine::DARKBLUE); // TOP
@@ -508,12 +544,35 @@ ErrorType Game::Update()
 	
 
 	// welcome message
-	const wchar_t welcomeMessage[] = L"Press Enter To Start";
+	const wchar_t welcomeMessage[] = L"Press ENTER To Start";
 	if (player->getComponent<InputComponent>().getFirstInput() == false)
 	{
-		pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D(midX+64, midY + gameAreaHeight / 2.0f)), welcomeMessage, MyDrawEngine::WHITE);
-		// something to delay the gameplay starting
+		pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D(midX - 64, midY + gameAreaHeight / 2.0f)), welcomeMessage, MyDrawEngine::WHITE);
+		for (auto& e : entityManager.getAllEntities())
+		{
+			if (e->hasComponent<ModifyComponent>())
+			{
+				e->getComponent<ModifyComponent>().setRunning(true);
+			}
+		}
 	}
+
+
+	// win message
+	const wchar_t winMessage[] = L"You WIN!";
+	if (won == true)
+	{
+		pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D(midX - 64, midY + gameAreaHeight / 2.0f)), winMessage, MyDrawEngine::WHITE);
+	}
+
+
+	// lose message
+	const wchar_t loseMessage[] = L"You Lose!";
+	if (won == true)
+	{
+		pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D(midX - 64, midY + gameAreaHeight / 2.0f)), loseMessage, MyDrawEngine::WHITE);
+	}
+
 
 	// write fps to screen
 	const wchar_t FPSlabel[] = L"FPS:";
@@ -523,7 +582,7 @@ ErrorType Game::Update()
 
 	gt.mark();
 
-	player->getComponent<TransformComponent>().setFrameTime(gt.mdFrameTime);
+	entityManager.updateTime(gt.mdFrameTime);
 
 	// *********************************************************************
 	// *********************************************************************
