@@ -1,8 +1,7 @@
 # KF6017-Project
 
-GIT REPO DOES NOT EXECUTEABLE:  
-APPLICATION FILE - the executeable needs to be built - I only tested win32 on Windows 10/11    
-I used Visual Studio 2022 as an IDE and compiler    
+GIT REPO DOES NOT EXECUTEABLE:      
+I used Visual Studio 2022 as an IDE - I only tested building win32 on Windows 10/11   
 
 
 Menu Controls:   
