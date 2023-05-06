@@ -386,7 +386,7 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	assetManager.LoadCharacterImage(L"assets/character/image/confused.png", "playerConfused");
 	assetManager.LoadCharacterImage(L"assets/character/image/dead.png", "playerDead");
 
-	assetManager.LoadCharacterSound(L"assets/character/sound/bounce.wav", "playerBounce");
+	assetManager.LoadCharacterSound(L"assets/character/sound/land.wav", "playerLand");
 	assetManager.LoadCharacterSound(L"assets/character/sound/point.wav", "playerPoint");
 	assetManager.LoadCharacterSound(L"assets/character/sound/win.wav", "playerWin");
 	assetManager.LoadCharacterSound(L"assets/character/sound/death.wav", "playerDeath");
@@ -424,10 +424,10 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	Entity& newPlayer = entityManager.getEntity(0);
 	player = &newPlayer;
 	player->addComponent<GameComponent>();
-	player->addComponent<TransformComponent>(Vector2D(0, 128), 0.0f, 1.0f);
+	player->addComponent<TransformComponent>(Vector2D(0, 1), 0.0f, 1.0f);
 	player->addComponent<ImageComponent>(pDE, &assetManager);
 	player->addComponent<SoundComponent>(pSE, &assetManager);
-	player->addComponent<PhysicsComponent>(256.0f, 32768.0f, -128.0f);
+	player->addComponent<PhysicsComponent>(256.0f, 10240.0f, -128.0f);
 	player->addComponent<AnimationComponent>();
 	player->addComponent<CollisionComponent>();
 	player->addComponent<InputComponent>(pInputs);
@@ -516,20 +516,28 @@ ErrorType Game::Update()
 	}
 
 
-	// position camera to follow player
+	// position camera
 	playerY = player->getComponent<TransformComponent>().getPosition().YValue;
-	if (playerY < 440)
+	if (playerY < -104)
+	{
+		pDE->theCamera.PlaceAt(Vector2D(0, -88));
+	}
+	if (playerY >= -104 && playerY < 440)
 	{
 		pDE->theCamera.PlaceAt(Vector2D(0, -(playerY + 192)));
 	}
-	if (playerY >= 440 && playerY <= 1320)
+	if (playerY >= 440 && playerY < 1320)
 	{
 		offset = ((((2.0f / 3.0f) * -576.0f) / ((1320.0f + 440.0f) / 2.0f)) * (playerY - ((1320.0f + 440.0f) / 2.0f)));
 		pDE->theCamera.PlaceAt(Vector2D(0, -(playerY + offset)));
 	}
-	if (playerY > 1320)
+	if (playerY >= 1320 && playerY < 1624)
 	{
 		pDE->theCamera.PlaceAt(Vector2D(0, -(playerY - 192)));
+	}
+	if (playerY >= 1624)
+	{
+		pDE->theCamera.PlaceAt(Vector2D(0, -1432));
 	}
 
 
@@ -547,17 +555,25 @@ ErrorType Game::Update()
 	
 
 	// welcome message
+	bool started = false;;
 	const wchar_t welcomeMessage[] = L"Press ENTER To Start";
 	if (player->getComponent<InputComponent>().getFirstInput() == false)
 	{
 		pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D(midX - 64, midY + gameAreaHeight / 2.0f)), welcomeMessage, MyDrawEngine::WHITE);
-		for (auto& e : entityManager.getAllEntities())
+	}
+	if (player->getComponent<InputComponent>().getFirstInput() == true)
+	{
+		if (started == false)
 		{
-			if (e->hasComponent<ModifyComponent>())
+			for (auto& e : entityManager.getAllEntities())
 			{
-				e->getComponent<ModifyComponent>().setRunning(true);
+				if (e->hasComponent<ModifyComponent>())
+				{
+					e->getComponent<ModifyComponent>().setActive(true);
+				}
 			}
 		}
+		started = true;
 	}
 
 
@@ -583,6 +599,7 @@ ErrorType Game::Update()
 	pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f)-80, midY - gameAreaHeight / 2.25f)), FPSlabel, MyDrawEngine::WHITE);
 	pDE->WriteInt(pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f)-40, midY - gameAreaHeight / 2.25f)), FPS, MyDrawEngine::WHITE);
 
+
 	gt.mark();
 
 	entityManager.updateTime(gt.mdFrameTime);
@@ -604,10 +621,13 @@ ErrorType Game::EndOfGame()
 	// *********************************************************************
 
 	// clear all entities
+	won = NULL;
+	lost = NULL;
+	collidersVector.clear();
 	entityManager.deleteAll();
 	entityManager.refresh();
 	assetManager.clearAll();
-	
-	
+
+
 	return SUCCESS;
 }

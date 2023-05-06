@@ -17,7 +17,6 @@ private:
 	SoundComponent* pSC;
 	AnimationComponent* pAC;
 	
-	bool collisionActive;
 	Vector2D position;
 	const char* collisionShape;
 	Rectangle2D collisionBox;
@@ -29,7 +28,6 @@ public:
 		entityType = entity->getEntityType();
 		worldType = entity->getWorldType();
 		pTC = &entity->getComponent<TransformComponent>();
-		collisionActive = true;
 
 		if (entityType == Character)
 		{
@@ -118,7 +116,7 @@ public:
 			Circle2D otherCollisionCircle;
 			bool collided = false;
 			Vector2D collisionDirection = Vector2D(0, 0);
-			if (pOtherCC->getActive() == true)
+			if (pOtherCC->isActive() == true)
 			{				
 				if (pOtherCC->getCollisionShape() == "box")
 				{
@@ -146,6 +144,10 @@ public:
 					{
 						if (collisionDirection == Vector2D(0, -1))
 						{
+							if (pPC->getVelocity().YValue <= -129)
+							{
+								pSC->setSound("playerLand");
+							}
 							pPC->stableGround();
 						}
 					}
@@ -153,6 +155,10 @@ public:
 					{
 						if (collisionDirection == Vector2D(0, -1))
 						{
+							if (pPC->getVelocity().YValue <= -129)
+							{
+								pSC->setSound("playerLand");
+							}
 							pPC->stableGround();
 						}
 						if (collisionDirection == Vector2D(0, 1))
@@ -180,6 +186,8 @@ public:
 					if (colliderType == Exit)
 					{
 						pGC->setWin(true);
+						pSC->setSound("playerWin");
+						pSC->play();
 					}
 					if (colliderType == Point)
 					{
@@ -187,21 +195,14 @@ public:
 						otherEntity->setWorldType(Empty);
 						otherEntity->getComponent<TransformComponent>().addPosition(Vector2D(0, 16));
 						otherEntity->getComponent<ImageComponent>().setImage("empty");
+
 						// pGC->increasePoints();
+						pSC->setSound("playerPoint");
+						pSC->play();
 					}
 				}
 			}
 		}
-	}
-
-	void setActive(bool condition)
-	{
-		collisionActive = condition;
-	}
-
-	bool getActive()
-	{
-		return collisionActive;
 	}
 
 	const char* getCollisionShape()

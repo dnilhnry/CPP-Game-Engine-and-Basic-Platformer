@@ -8,7 +8,6 @@ private:
 	EntityType entityType;
 	WorldType worldType;
 
-
 	ImageComponent* pIC;
 
 	TransformComponent* pTC;
@@ -18,12 +17,7 @@ private:
 	double currentTime = 0.0;
 	int runTime = 5;
 
-
 public:
-	AnimationComponent()
-	{
-
-	}
 
 	void init() override
 	{
@@ -44,22 +38,25 @@ public:
 
 	void update() override
 	{
-		if (entityType == Character)
+		if (isActive() == true)
 		{
-			playerAnimation();
-		}
-
-		if (worldType == TrappedPlatform)
-		{
-			frameTime = entity->getGameTime();
-			if (currentTime >= runTime)
+			if (entityType == Character)
 			{
-				currentTime = 0.0;
-				platformAnimation();
+				playerAnimation();
 			}
-			else
+
+			if (worldType == TrappedPlatform)
 			{
-				currentTime = currentTime + frameTime;
+				frameTime = entity->getGameTime();
+				if (currentTime >= runTime)
+				{
+					currentTime = 0.0;
+					platformAnimation();
+				}
+				else
+				{
+					currentTime = currentTime + frameTime;
+				}
 			}
 		}
 	}
@@ -85,6 +82,7 @@ public:
 	void playerDead()
 	{
 		pIC->setImage("playerDead");
+		setActive(false);
 	}
 
 	// platform animations

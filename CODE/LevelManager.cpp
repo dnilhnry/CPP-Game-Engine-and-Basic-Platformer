@@ -111,6 +111,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 				newTrappedPlatform.addComponent<ImageComponent>(pDE, pAM);
 				newTrappedPlatform.getComponent<ImageComponent>().setImage("trappedPlatform");
 				newTrappedPlatform.addComponent<CollisionComponent>();
+				newTrappedPlatform.addComponent<AnimationComponent>();
 				newTrappedPlatform.addComponent<ModifyComponent>(rowNumber);
 				break;
 			}

@@ -37,13 +37,21 @@ using ComponentArray = std::array<Component*, maxComponents>;
 
 class Component
 {
+private:
+	bool active = true;
+
 public:
 	Entity* entity;
+
+	virtual ~Component() {}
 
 	virtual void init() {}
 	virtual void update() {}
 	virtual void draw() {}
-	virtual ~Component() {}
+
+	bool isActive();
+	void setActive(bool a);
+
 };
 
 class Entity

@@ -16,7 +16,6 @@ private:
 	int currentEdge = 1;
 	int currentDestroyed = 0;
 
-	bool running = false;
 	double frameTime;
 	double currentTime = 0.0;
 	int runTime = 10;
@@ -36,13 +35,18 @@ public:
 		pIC = &entity->getComponent<ImageComponent>();
 		pCC = &entity->getComponent<CollisionComponent>();
 		frameTime = 0;
+		setActive(false);
 	}
 
 	void update() override
 	{
+		if (worldType == Point)
+		{
+			worldType = entity->getWorldType();
+		}
 		if (worldType != Destroyed)
 		{
-			if (running == true)
+			if (isActive() == true)
 			{
 				frameTime = entity->getGameTime();
 				if (currentTime >= runTime)
@@ -80,6 +84,11 @@ public:
 
 	void toDestroyedEdge()
 	{
+		if (entity->hasComponent<AnimationComponent>() == true)
+		{
+			entity->getComponent<AnimationComponent>().setActive(false);
+			entity->getComponent<TransformComponent>().setRotation(0.0f);
+		}
 		entity->setWorldType(DestroyedEdge);
 		Vector2D position = pTC->getPosition();
 		pIC->setImage("destroyedEdge");
@@ -100,11 +109,6 @@ public:
 		pTC->addPosition(Vector2D(0, 16));
 		pIC->setImage("destroyedEdge");
 		pCC->setActive(true);
-	}
-
-	void setRunning(bool r)
-	{
-		running = r;
 	}
 
 };

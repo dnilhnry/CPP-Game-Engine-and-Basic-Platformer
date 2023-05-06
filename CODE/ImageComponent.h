@@ -67,7 +67,7 @@ public:
 
 	void draw() override
 	{
-		if (image != -1)
+		if (image != -1 && image != NULL)
 		{
 			pDE->DrawAt(position, image, scale, angle, transparency);
 		}

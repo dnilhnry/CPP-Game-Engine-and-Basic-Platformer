@@ -72,7 +72,7 @@ public:
 
 	void play()
 	{
-		if (sound != NULL || sound != -1)
+		if (sound != -1 && sound != NULL)
 		{
 			pSE->Play(sound, looping);
 		}
