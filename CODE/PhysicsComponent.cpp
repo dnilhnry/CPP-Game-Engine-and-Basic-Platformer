@@ -72,9 +72,6 @@ void PhysicsComponent::setGravity(float g)
 
 void PhysicsComponent::jump()
 {
-	// could be better
-	// https://gamedev.stackexchange.com/questions/121389/how-i-can-make-better-jump-to-my-game-c-sfml
-
 	if (jumpReady == true)
 	{
 		jumpReady = false;
@@ -97,4 +94,10 @@ void PhysicsComponent::stableGround()
 	jumpReady = true;
 	accelerationY = accelerationY - gravity;
 	velocityY = 0.0f;
+}
+
+void PhysicsComponent::bounceBack()
+{
+	accelerationY = -gravity;
+	velocityY = -10.0f;
 }

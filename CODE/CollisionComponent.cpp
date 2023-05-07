@@ -67,11 +67,7 @@ void CollisionComponent::checkCollision(std::vector<Entity*>& collidersVector)
 					{
 						if (collisionDirection == Vector2D(0, 1))
 						{
-							if (pPC->getVelocity().YValue <= -129)
-							{
-								pSC->setSound("playerLand");
-							}
-							pPC->stableGround();
+							pPC->bounceBack();
 						}
 						if (collisionDirection == Vector2D(0, -1))
 						{

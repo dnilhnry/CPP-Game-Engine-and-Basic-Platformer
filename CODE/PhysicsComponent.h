@@ -142,4 +142,7 @@ public:
 	// stops the player from falling through the ground
 	void stableGround();
 
+	// stops the player from moving through a platform
+	void bounceBack();
+
 };
