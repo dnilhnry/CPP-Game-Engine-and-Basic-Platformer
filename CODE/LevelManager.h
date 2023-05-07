@@ -1,3 +1,16 @@
+/*
+
+Level Manager
+
+This class is used to load a level from a text file and create the level in the game world.
+the level is selected from the level menu
+the selected level is passed to the init method which sets the level file to be loaded
+the loadLevel method is passed a pointer to the entity manager, draw engine and asset manager
+The level is parsed from a text file and the required entites are created using the EntityManager class.
+all of the entities also have their components added and initialised.
+
+*/
+
 #pragma once
 
 #include "Levels.h"
@@ -19,8 +32,10 @@ private:
 
 public:
 
+	// init method sets the level file to be loaded
 	void init(Levels l);
 
+	// loadLevel method loads the level from the text file and creates the entities in the game world
 	void loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager* pAM);
 
 };

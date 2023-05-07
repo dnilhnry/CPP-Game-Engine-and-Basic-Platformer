@@ -487,6 +487,7 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	gt.mark();
 	gt.mark();
 
+	// send the frame time to each entity
 	entityManager.updateTime(gt.mdFrameTime);
 
 	return SUCCESS;
@@ -537,6 +538,7 @@ ErrorType Game::Update()
 	// check if player has won or lost
 	if (player->getComponent<GameComponent>().getWin() == true)
 	{
+		// if player has won
 		won = true;
 		lost = false;
 		player->getComponent<PhysicsComponent>().setActive(false);
@@ -551,6 +553,7 @@ ErrorType Game::Update()
 	}
 	if (player->getComponent<GameComponent>().getLose() == true)
 	{
+		// if player has lost
 		won = false;
 		lost = true;
 		player->getComponent<PhysicsComponent>().setActive(false);
@@ -566,6 +569,11 @@ ErrorType Game::Update()
 
 
 	// position camera
+	// camera follows player if the player is within the level area
+	// if the player is outside the level area, the camera stays at the edge of the level area
+	// if the player is at the bottom of the level, the player is below the center of the screen
+	// if the player is at the top of the level, the player is above the center of the screen
+	// if the player is between the inter quatile of the level, the player is slowly moved from -192 to 192 of the camera coordinates
 	playerY = player->getComponent<TransformComponent>().getPosition().YValue;
 	if (playerY < -104)
 	{
@@ -614,6 +622,9 @@ ErrorType Game::Update()
 	{
 		pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D(midX - 64, midY + gameAreaHeight / 2.0f)), welcomeMessage, MyDrawEngine::WHITE);
 	}
+
+	// start game - if the first input is pressed->activate the modify component
+	// slowly destroys the level from the bottom to the top - chases the player
 	if (player->getComponent<InputComponent>().getFirstInput() == true)
 	{
 		if (gameStarted == false)
@@ -652,6 +663,7 @@ ErrorType Game::Update()
 
 	gt.mark();
 
+	// send the frame time to each entity
 	entityManager.updateTime(gt.mdFrameTime);
 
 	// *********************************************************************

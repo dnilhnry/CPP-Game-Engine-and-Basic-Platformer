@@ -1,3 +1,11 @@
+/*
+
+The CollisionComponent class is used to check for collisions
+between the player entity and all other entities that contain a CollisionComponet.
+If a collision is detected, the CollisionComponent will call methods from many of the players components
+
+*/
+
 #pragma once
 
 #include "Components.h"

@@ -1,3 +1,14 @@
+/*
+
+The modify component is used to change the existing entity into a different type
+this is used by almost every entity in the game
+
+ a key gameplay element is that a type of entity (which kills the player)
+ slowly takes over the level, this is done by changing the entity type (world type) of the existing entities
+ the existing entities are changed to a destroyed type
+
+*/
+
 #pragma once
 
 #include "Components.h"
@@ -21,11 +32,13 @@ private:
 	int runTime = 10;
 
 public:
+	// constructor - sets the row number of the entity
 	ModifyComponent(int r)
 	{
 		rowNumber = r;
 	}
 
+	// initialise the components required variables
 	void init() override
 	{
 		entityType = entity->getEntityType();
@@ -37,6 +50,8 @@ public:
 		setActive(false);
 	}
 
+	// changes world type of the entity to destroyed
+	// if the row number is equal to the current destroyed
 	void update() override
 	{
 		if (worldType == Point)
@@ -81,10 +96,13 @@ public:
 		}
 	}
 
+	// sets the entity world type to destroyedEdge
 	void toDestroyedEdge();
 
+	// sets the entity world type to destroyed
 	void toDestroyed();
 
+	// sets the entity world type to DestroyedEdge from point
 	void pointDestroyedEdge();
 
 };

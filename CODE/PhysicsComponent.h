@@ -1,3 +1,10 @@
+/*
+
+The PhysicsComponent is used to apply velocity and acceleration to an entity
+it is used by the player entity to move and jump and constantly apply gravity
+
+*/
+
 #pragma once
 
 #include "Components.h"
@@ -24,6 +31,7 @@ private:
 	double frameTime;
 
 public:
+	// constructor - takes movement speed, jump speed and gravity
 	PhysicsComponent(float ms, float js, float g)
 	{
 		movementSpeed = ms;
@@ -31,6 +39,7 @@ public:
 		gravity = g;
 	}
 
+	// initialise the components required variables
 	void init() override
 	{
 		pTC = &entity->getComponent<TransformComponent>();
@@ -40,6 +49,7 @@ public:
 		jumpReady = false;
 	}
 
+	// update the position based on the velocity and acceleration and frame time
 	void update() override
 	{
 		if (isActive() == true)
@@ -77,40 +87,59 @@ public:
 		}
 	}
 
+	// set the velocity vector based on the velocityX and velocityY
 	void setVelocity();
 
+	// returns the velocity vector
 	Vector2D getVelocity();
 
+	// sets the velocity x value
 	void setVelocityX(float x);
 
+	// sets the velocity y value
 	void setVelocityY(float y);
 
+	// sets the acceleration vector based on the accelerationX and accelerationY
 	void setAcceleration();
 
+	// gets the acceleration vector
 	Vector2D getAcceleration();
 
+	// sets the acceleration x value
 	void setAccelerationX(float x);
 
+	// sets the acceleration y value
 	void setAccelerationY(float y);
 
+	// returns the movement speed
 	float getMovementSpeed();
 
+	// sets the movement speed
 	void setMovementSpeed(float s);
 
+	// returns the jump speed
 	float getJumpSpeed();
 
+	// sets the jump speed
 	void setJumpSpeed(float s);
 
+	// returns the gravity
 	float getGravity();
 
+	// sets the gravity
 	void setGravity(float g);
 
+	// adds acceleration if jumpReady is true 
 	void jump();
 
+	// sets velocityX to -movementSpeed
 	void moveLeft();
 
+	// sets velocityX to movementSpeed
 	void moveRight();
 
+	// sets jumpReady to true
+	// stops the player from falling through the ground
 	void stableGround();
 
 };

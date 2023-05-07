@@ -1,3 +1,9 @@
+/*
+
+this file is used to include all the entity component system in the game
+
+*/
+
 #pragma once
 
 #include "ECS.h"

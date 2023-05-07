@@ -1,3 +1,9 @@
+/*
+
+The AnimationComponent is responsible for modifying an entities image or orientation
+
+*/
+
 #pragma once
 
 #include "Components.h"
@@ -19,6 +25,8 @@ private:
 
 public:
 
+	// The init method is used to setup the component
+	// It initializes all of the required variables
 	void init() override
 	{
 		entityType = entity->getEntityType();
@@ -36,6 +44,8 @@ public:
 		frameTime = 0;
 	}
 
+	// The update method is used to update the component
+	// If the component is active, it will update the entities animation
 	void update() override
 	{
 		if (isActive() == true)
@@ -62,14 +72,21 @@ public:
 	}
 
 	// player animations
+	// the players physics determines the animation
 	void playerAnimation();
 
+	// If the player wins the game
+	// the player will be animated to celebrate
 	void playerWin();
 
+	// If the player loses the game
+	// the player will be animated to die
 	void playerLose();
 
 
 	// platform animations
+	// if the platform is a trapped platform with an animation component
+	// the platform will be rotated 180degrees every 5 seconds
 	void platformAnimation();
 
 };
