@@ -654,11 +654,16 @@ ErrorType Game::Update()
 		pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D(midX - 64, midY + gameAreaHeight / 2.0f)), loseMessage, MyDrawEngine::WHITE);
 	}
 
+	// write score to screen
+	int score = player->getComponent<GameComponent>().getScore();
+	pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D((midX + gameAreaWidth / 2.0f) + 10, midY - gameAreaHeight / 2.25f)), scoreLabel, MyDrawEngine::WHITE);
+	pDE->WriteInt(pDE->theCamera.ReverseTransform(Vector2D((midX + gameAreaWidth / 2.0f) + 70, midY - gameAreaHeight / 2.25f)), score, MyDrawEngine::WHITE);
+
 
 	// write fps to screen
 	int FPS = (1 / gt.mdFrameTime);
 	pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f)-80, midY - gameAreaHeight / 2.25f)), FPSlabel, MyDrawEngine::WHITE);
-	pDE->WriteInt(pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f)-40, midY - gameAreaHeight / 2.25f)), FPS, MyDrawEngine::WHITE);
+	pDE->WriteInt(pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f)-35, midY - gameAreaHeight / 2.25f)), FPS, MyDrawEngine::WHITE);
 
 
 	gt.mark();

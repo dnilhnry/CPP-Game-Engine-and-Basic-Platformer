@@ -28,6 +28,10 @@ void TransformComponent::setRotation(float newAngle)
 void TransformComponent::addRotation(float newAngle)
 {
 	angle = angle + newAngle;
+	if (angle >= 6.284f)
+	{
+		angle = angle - 6.284f;
+	}
 }
 
 float TransformComponent::getScale()

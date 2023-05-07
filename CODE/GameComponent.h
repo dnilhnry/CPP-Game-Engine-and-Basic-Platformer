@@ -14,6 +14,7 @@ class GameComponent : public Component
 private:
 	bool win;
 	bool lose;
+	int score;
 
 public:
 
@@ -21,6 +22,7 @@ public:
 	{
 		win = false;
 		lose = false;
+		score = 0;
 	}
 
 	// sets bool win to given input
@@ -34,5 +36,11 @@ public:
 
 	// gets bool lose
 	bool getLose();
+
+	// increases score
+	void increaseScore();
+
+	// gets score
+	int getScore();
 
 };

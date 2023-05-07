@@ -46,19 +46,40 @@ void CollisionComponent::checkCollision(std::vector<Entity*>& collidersVector)
 				}
 				if (colliderType == TrappedPlatform)
 				{
-					if (collisionDirection == Vector2D(0, -1))
+					float trapAngle = otherEntity->getComponent<TransformComponent>().getRotation();
+					if (trapAngle == 0)
 					{
-						if (pPC->getVelocity().YValue <= -129)
+						if (collisionDirection == Vector2D(0, -1))
 						{
-							pSC->setSound("playerLand");
+							if (pPC->getVelocity().YValue <= -129)
+							{
+								pSC->setSound("playerLand");
+							}
+							pPC->stableGround();
 						}
-						pPC->stableGround();
+						if (collisionDirection == Vector2D(0, 1))
+						{
+							setActive(false);
+							pGC->setLose(true);
+						}
 					}
-					if (collisionDirection == Vector2D(0, 1))
+					if (trapAngle == 3.142f)
 					{
-						setActive(false);
-						pGC->setLose(true);
+						if (collisionDirection == Vector2D(0, 1))
+						{
+							if (pPC->getVelocity().YValue <= -129)
+							{
+								pSC->setSound("playerLand");
+							}
+							pPC->stableGround();
+						}
+						if (collisionDirection == Vector2D(0, -1))
+						{
+							setActive(false);
+							pGC->setLose(true);
+						}
 					}
+					
 				}
 				if (colliderType == Trap)
 				{
@@ -82,7 +103,7 @@ void CollisionComponent::checkCollision(std::vector<Entity*>& collidersVector)
 					otherEntity->getComponent<TransformComponent>().addPosition(Vector2D(0, 16));
 					otherEntity->getComponent<ImageComponent>().setImage("empty");
 
-					// pGC->increasePoints();
+					pGC->increaseScore();
 					pSC->setSound("playerPoint");
 					pSC->play();
 				}

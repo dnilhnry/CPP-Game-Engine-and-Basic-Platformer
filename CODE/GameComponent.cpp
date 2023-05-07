@@ -19,3 +19,13 @@ bool GameComponent::getLose()
 {
 	return lose;
 }
+
+void GameComponent::increaseScore()
+{
+	score++;
+}
+
+int GameComponent::getScore()
+{
+	return score;
+}
