@@ -84,7 +84,7 @@ public:
 
    // Called at the start of the game - when changing state from MENU to RUNNING
    // Use this to initialise the core game
-   ErrorType StartOfGame(Levels currentLevel); // added property to load selected level
+   ErrorType StartOfGame(Levels selectedLevel); // added property to load selected level
 
    // Called each frame when in the RUNNING state.
    // Checks for user pressing escape (which puts the game in the PAUSED state)
