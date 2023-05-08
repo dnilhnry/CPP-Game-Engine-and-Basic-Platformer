@@ -15,10 +15,10 @@
 #include "AssetManager.h"
 #include "EntityTypes.h"
 
-void LevelManager::init(Levels selectedLevel)
+void LevelManager::init(Levels l)
 {
-	currentLevel = selectedLevel;
-	switch (currentLevel)
+	selectedLevel = l;
+	switch (selectedLevel)
 	{
 	case Level0:
 		levelFile = "Assets/Levels/Level0.txt";

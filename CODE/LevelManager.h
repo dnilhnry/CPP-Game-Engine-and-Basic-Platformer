@@ -23,7 +23,7 @@ class AssetManager;
 class LevelManager
 {
 private:
-	Levels currentLevel;
+	Levels selectedLevel;
 	const char* levelFile;
 	Vector2D startPosition = Vector2D(-352,1688);
 	int tileSize = 64;
