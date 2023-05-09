@@ -40,6 +40,7 @@ void CollisionComponent::checkCollision(std::vector<Entity*>& collidersVector)
 						if (pPC->getVelocity().YValue <= -129)
 						{
 							pSC->setSound("playerLand");
+							pSC->play();
 						}
 						pPC->stableGround();
 					}
@@ -54,6 +55,7 @@ void CollisionComponent::checkCollision(std::vector<Entity*>& collidersVector)
 							if (pPC->getVelocity().YValue <= -129)
 							{
 								pSC->setSound("playerLand");
+								pSC->play();
 							}
 							pPC->stableGround();
 						}

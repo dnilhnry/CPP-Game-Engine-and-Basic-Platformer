@@ -92,7 +92,7 @@ void EntityManager::deleteAll()
 	}
 }
 
-void EntityManager::refresh()
+void EntityManager::removeInactiveEntities()
 {
 	entities.erase(std::remove_if(std::begin(entities), std::end(entities), [](const std::unique_ptr<Entity>& e)
 		{ return !e->isActive(); }

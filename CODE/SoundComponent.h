@@ -22,6 +22,7 @@ private:
 	EntityType entityType;
 	
 	SoundIndex sound;
+	bool playing;
 	bool looping;
 
 public:
@@ -36,6 +37,7 @@ public:
 	void init() override
 	{
 		entityType = entity->getEntityType();
+		playing = false;
 		looping = false;
 	}
 

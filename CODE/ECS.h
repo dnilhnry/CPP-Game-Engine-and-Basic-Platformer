@@ -228,7 +228,7 @@ public:
 	void deleteAll();
 
 	// deletes all inactive entities
-	void refresh();
+	void removeInactiveEntities();
 
 	// adds an entity to the entity manager
 	Entity& addEntity(int i, EntityType et);

@@ -16,6 +16,7 @@ void SoundComponent::setSound(const char* s)
 	default:
 		break;
 	}
+	playing = false;
 	looping = false;
 }
 
@@ -35,13 +36,18 @@ void SoundComponent::setSound(const char* s, bool l)
 	default:
 		break;
 	}
+	playing = false;
 	looping = l;
 }
 
 void SoundComponent::play()
 {
-	if (sound != -1 && sound != NULL)
+	if (playing == false)
 	{
-		pSE->Play(sound, looping);
+		if (sound != -1 && sound != NULL)
+		{
+			pSE->Play(sound, looping);
+			playing = true;
+		}
 	}
 }

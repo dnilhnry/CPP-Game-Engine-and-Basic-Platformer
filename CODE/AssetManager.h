@@ -83,6 +83,9 @@ public:
 	// This method is used to retrieve the index of a sound for a world entity
 	SoundIndex GetWorldSound(const char* name);
 
+	// This method is used to load every required asset
+	void loadAll();
+
 	// This method is used to clear the asset maps
 	void clearAll();
 

@@ -353,6 +353,7 @@ bool gameStarted;
 bool finalSFX;
 
 // game area
+float zoom;
 float playerY;
 float offset;
 float gameAreaWidth;
@@ -361,6 +362,8 @@ float midX;
 float midY;
 Rectangle2D topRectangle;
 Rectangle2D bottomRectangle;
+Rectangle2D leftRectangle;
+Rectangle2D rightRectangle;
 
 // Asset Manager + Level Manager
 AssetManager assetManager;
@@ -394,32 +397,36 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	finalSFX = false;
 
 
+	// setup camera + game area
+	pDE->UseCamera(true);
+	pDE->theCamera.PlaceAt(Vector2D(0, 0));
+	zoom = pDE->GetScreenHeight() / 800.0f;
+	pDE->theCamera.SetZoom(zoom);
+
+	playerY = 0;
+	gameAreaWidth = 768;
+	gameAreaHeight = 576;
+	gameAreaWidth = pDE->theCamera.Transform(gameAreaWidth);
+	gameAreaHeight = pDE->theCamera.Transform(gameAreaHeight);
+	midX = pDE->GetScreenWidth() / 2.0f;
+	midY = pDE->GetScreenHeight() / 2.0f;
+	topRectangle.PlaceAt(Vector2D((midX - gameAreaWidth / 2.0f) - 0.5f, ((midY - gameAreaHeight / 2.0f) - 1.5f)), Vector2D((midX + gameAreaWidth / 2.0f) + 0.5f, -pDE->GetScreenHeight()));
+	bottomRectangle.PlaceAt(Vector2D((midX - gameAreaWidth / 2.0f) - 0.5f, ((midY + gameAreaHeight / 2.0f) + 1.5f)), Vector2D((midX + gameAreaWidth / 2.0f) + 0.5f, pDE->GetScreenHeight()));
+	leftRectangle.PlaceAt(Vector2D(((midX - gameAreaWidth / 2.0f) - 1.0f), pDE->GetScreenHeight()), Vector2D(-pDE->GetScreenWidth(), -pDE->GetScreenHeight()));
+	rightRectangle.PlaceAt(Vector2D(((midX + gameAreaWidth / 2.0f) + 1.0f), pDE->GetScreenHeight()), Vector2D(pDE->GetScreenWidth(), -pDE->GetScreenHeight()));
+
+
+	// UI
+	FPSlabel = L"FPS:";
+	scoreLabel = L"Score:";
+	welcomeMessage = L"Press ENTER To Start";
+	winMessage = L"YOU WIN!";
+	loseMessage = L"YOU LOSE!";
+
+
 	// load assets
 	assetManager.init(pDE, pSE);
-	
-	assetManager.LoadCharacterImage(L"assets/character/image/smiley.png", "playerSmiley");
-	assetManager.LoadCharacterImage(L"assets/character/image/scared.png", "playerScared");
-	assetManager.LoadCharacterImage(L"assets/character/image/confused.png", "playerConfused");
-	assetManager.LoadCharacterImage(L"assets/character/image/dead.png", "playerDead");
-
-	assetManager.LoadCharacterSound(L"assets/character/sound/land.wav", "playerLand");
-	assetManager.LoadCharacterSound(L"assets/character/sound/point.wav", "playerPoint");
-	assetManager.LoadCharacterSound(L"assets/character/sound/win.wav", "playerWin");
-	assetManager.LoadCharacterSound(L"assets/character/sound/death.wav", "playerDeath");
-
-	// assetManager.LoadBackgroundImage(L"assets/background/image/background.png", "backgroundImage0");
-
-	// assetManager.LoadBackgroundMusic(L"assets/background/music/level0.wav", "backgroundMusic0");
-
-	assetManager.LoadWorldImage(L"assets/world/image/platform.png", "platform");
-	assetManager.LoadWorldImage(L"assets/world/image/trappedPlatform.png", "trappedPlatform");
-	assetManager.LoadWorldImage(L"assets/world/image/trap.png", "trap");
-	assetManager.LoadWorldImage(L"assets/world/image/destroyed.png", "destroyed");
-	assetManager.LoadWorldImage(L"assets/world/image/destroyedEdge.png", "destroyedEdge");
-	assetManager.LoadWorldImage(L"assets/world/image/exit.png", "exit");
-	assetManager.LoadWorldImage(L"assets/world/image/point.png", "point");
-
-	// assetManager.LoadWorldSound(L"assets/world/image/TODO0.wav", "TODO0");
+	assetManager.loadAll();
 
 
 	// load level
@@ -432,7 +439,7 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	background = &newBackground;
 	background->addComponent<TransformComponent>(Vector2D(0, 0), 0.0f, 1.0f);
 	background->addComponent<ImageComponent>(pDE, &assetManager);
-	background->getComponent<ImageComponent>().setImage("empty");
+	background->getComponent<ImageComponent>().setImage("backgroundImage");
 	background->addComponent<SoundComponent>(pSE, &assetManager);
 	background->getComponent<SoundComponent>().setSound("empty", true);
 
@@ -444,13 +451,13 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	player->addComponent<TransformComponent>(Vector2D(0, 1), 0.0f, 1.0f);
 	player->addComponent<ImageComponent>(pDE, &assetManager);
 	player->addComponent<SoundComponent>(pSE, &assetManager);
-	player->addComponent<PhysicsComponent>(256.0f, 10240.0f, -128.0f);
+	player->addComponent<PhysicsComponent>(zoom * 256.0f, zoom * 10240.0f, zoom * -128.0f);
 	player->addComponent<AnimationComponent>();
 	player->addComponent<CollisionComponent>();
 	player->addComponent<InputComponent>(pInputs);
 
 
-	// setup collision
+	// get all game entities that the play can collide with
 	for (auto& e : entityManager.getAllEntities())
 	{
 		if (e->getID() != -1 && e->getID() != 0 && e->hasComponent<CollisionComponent>() == true)
@@ -459,29 +466,6 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 			collidersVector.emplace_back(&collider);
 		}
 	}
-
-
-	// setup camera + game area
-	pDE->UseCamera(true);
-	pDE->theCamera.PlaceAt(Vector2D(0, player->getComponent<TransformComponent>().getPosition().YValue + 192));
-	pDE->theCamera.SetZoom(pDE->GetScreenHeight() / 800.0f);
-
-	playerY = player->getComponent<TransformComponent>().getPosition().YValue;
-	gameAreaWidth = 768;
-	gameAreaHeight = 576;
-	gameAreaWidth = pDE->theCamera.Transform(gameAreaWidth);
-	gameAreaHeight = pDE->theCamera.Transform(gameAreaHeight);
-	midX = pDE->GetScreenWidth() / 2.0f;
-	midY = pDE->GetScreenHeight() / 2.0f;
-	topRectangle.PlaceAt(Vector2D((midX - gameAreaWidth / 2.0f)-0.5f, ((midY - gameAreaHeight / 2.0f)-1.5f)), Vector2D((midX + gameAreaWidth / 2.0f)+0.5f, -pDE->GetScreenHeight()));
-	bottomRectangle.PlaceAt(Vector2D((midX - gameAreaWidth / 2.0f)-0.5f, ((midY + gameAreaHeight / 2.0f)+1.5f)), Vector2D((midX + gameAreaWidth / 2.0f)+0.5f, pDE->GetScreenHeight()));
-
-	// UI
-	FPSlabel = L"FPS:";
-	scoreLabel = L"Score:";
-	welcomeMessage = L"Press ENTER To Start";
-	winMessage = L"YOU WIN!";
-	loseMessage = L"YOU LOSE!";
 
 
 	gt.mark();
@@ -524,7 +508,7 @@ ErrorType Game::Update()
 
 	// check if entities need to be removed
 	// update remaining entities
-	entityManager.refresh();
+	entityManager.removeInactiveEntities();
 	entityManager.update();
 
 
@@ -596,6 +580,7 @@ ErrorType Game::Update()
 	{
 		pDE->theCamera.PlaceAt(Vector2D(0, -1432));
 	}
+	background->getComponent<TransformComponent>().setPosition(pDE->theCamera.ReverseTransform(Vector2D(midX,midY)));
 
 
 	// draw all entities
@@ -615,6 +600,8 @@ ErrorType Game::Update()
 	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D(midX - gameAreaWidth / 2.0f, (midY + gameAreaHeight / 2.0f)+1)), pDE->theCamera.ReverseTransform(Vector2D(midX + gameAreaWidth / 2.0f, (midY + gameAreaHeight / 2.0f)+1)), MyDrawEngine::DARKBLUE); // BOTTOM
 	pDE->FillRect(pDE->theCamera.ReverseTransform(topRectangle), MyDrawEngine::BLACK, 0.0f);
 	pDE->FillRect(pDE->theCamera.ReverseTransform(bottomRectangle), MyDrawEngine::BLACK, 0.0f);
+	pDE->FillRect(pDE->theCamera.ReverseTransform(leftRectangle), MyDrawEngine::BLACK, 0.0f);
+	pDE->FillRect(pDE->theCamera.ReverseTransform(rightRectangle), MyDrawEngine::BLACK, 0.0f);
 	
 
 	// welcome message
@@ -690,7 +677,7 @@ ErrorType Game::EndOfGame()
 	// clear all entities
 	collidersVector.clear();
 	entityManager.deleteAll();
-	entityManager.refresh();
+	entityManager.removeInactiveEntities();
 	assetManager.clearAll();
 
 	return SUCCESS;
