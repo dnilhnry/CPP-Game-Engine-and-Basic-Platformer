@@ -412,8 +412,8 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	midY = pDE->GetScreenHeight() / 2.0f;
 	topRectangle.PlaceAt(Vector2D((midX - gameAreaWidth / 2.0f) - 0.5f, ((midY - gameAreaHeight / 2.0f) - 1.5f)), Vector2D((midX + gameAreaWidth / 2.0f) + 0.5f, -pDE->GetScreenHeight()));
 	bottomRectangle.PlaceAt(Vector2D((midX - gameAreaWidth / 2.0f) - 0.5f, ((midY + gameAreaHeight / 2.0f) + 1.5f)), Vector2D((midX + gameAreaWidth / 2.0f) + 0.5f, pDE->GetScreenHeight()));
-	leftRectangle.PlaceAt(Vector2D(((midX - gameAreaWidth / 2.0f) - 1.0f), pDE->GetScreenHeight()), Vector2D(-pDE->GetScreenWidth(), -pDE->GetScreenHeight()));
-	rightRectangle.PlaceAt(Vector2D(((midX + gameAreaWidth / 2.0f) + 1.0f), pDE->GetScreenHeight()), Vector2D(pDE->GetScreenWidth(), -pDE->GetScreenHeight()));
+	leftRectangle.PlaceAt(Vector2D(((midX - gameAreaWidth / 2.0f) - 1.5f), pDE->GetScreenHeight()), Vector2D(-pDE->GetScreenWidth(), -pDE->GetScreenHeight()));
+	rightRectangle.PlaceAt(Vector2D(((midX + gameAreaWidth / 2.0f) + 1.5f), pDE->GetScreenHeight()), Vector2D(pDE->GetScreenWidth(), -pDE->GetScreenHeight()));
 
 
 	// UI
@@ -451,7 +451,7 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	player->addComponent<TransformComponent>(Vector2D(0, 1), 0.0f, 1.0f);
 	player->addComponent<ImageComponent>(pDE, &assetManager);
 	player->addComponent<SoundComponent>(pSE, &assetManager);
-	player->addComponent<PhysicsComponent>(zoom * 256.0f, zoom * 10240.0f, zoom * -128.0f);
+	player->addComponent<PhysicsComponent>(256.0f, 10240.0f, -128.0f);
 	player->addComponent<AnimationComponent>();
 	player->addComponent<CollisionComponent>();
 	player->addComponent<InputComponent>(pInputs);
@@ -595,8 +595,8 @@ ErrorType Game::Update()
 
 	// draw game area box 768x576 - 64x64 tiles fit 12x9
 	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D(midX - gameAreaWidth / 2.0f, (midY - gameAreaHeight / 2.0f)-1)), pDE->theCamera.ReverseTransform(Vector2D(midX + gameAreaWidth / 2.0f, (midY - gameAreaHeight / 2.0f)-1)), MyDrawEngine::DARKBLUE); // TOP
-	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f)-1, midY - gameAreaHeight / 2.0f)), pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f)-1, midY + gameAreaHeight / 2.0f)), MyDrawEngine::DARKBLUE); // LEFT
-	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((midX + gameAreaWidth / 2.0f)+1, midY - gameAreaHeight / 2.0f)), pDE->theCamera.ReverseTransform(Vector2D((midX + gameAreaWidth / 2.0f)+1, midY + gameAreaHeight / 2.0f)), MyDrawEngine::DARKBLUE); // RIGHT
+	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f)-0.5f, midY - gameAreaHeight / 2.0f)), pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f)-0.5f, midY + gameAreaHeight / 2.0f)), MyDrawEngine::DARKBLUE); // LEFT
+	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((midX + gameAreaWidth / 2.0f)+0.5f, midY - gameAreaHeight / 2.0f)), pDE->theCamera.ReverseTransform(Vector2D((midX + gameAreaWidth / 2.0f)+0.5f, midY + gameAreaHeight / 2.0f)), MyDrawEngine::DARKBLUE); // RIGHT
 	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D(midX - gameAreaWidth / 2.0f, (midY + gameAreaHeight / 2.0f)+1)), pDE->theCamera.ReverseTransform(Vector2D(midX + gameAreaWidth / 2.0f, (midY + gameAreaHeight / 2.0f)+1)), MyDrawEngine::DARKBLUE); // BOTTOM
 	pDE->FillRect(pDE->theCamera.ReverseTransform(topRectangle), MyDrawEngine::BLACK, 0.0f);
 	pDE->FillRect(pDE->theCamera.ReverseTransform(bottomRectangle), MyDrawEngine::BLACK, 0.0f);

@@ -84,7 +84,7 @@ public:
 			{
 				collisionShape = "box";
 				collisionBox = Rectangle2D();
-				collisionBox.PlaceAt(Vector2D(pTC->getPosition().XValue - 32, pTC->getPosition().YValue - 32), Vector2D(pTC->getPosition().XValue + 32, pTC->getPosition().YValue + 32));
+				collisionBox.PlaceAt(Vector2D(pTC->getPosition().XValue - 32, pTC->getPosition().YValue - 32), Vector2D(pTC->getPosition().XValue + 32, pTC->getPosition().YValue + 24));
 			}
 			if (worldType == Destroyed)
 			{
@@ -96,7 +96,7 @@ public:
 			{
 				collisionShape = "box";
 				collisionBox = Rectangle2D();
-				collisionBox.PlaceAt(Vector2D(pTC->getPosition().XValue - 32, pTC->getPosition().YValue - 32), Vector2D(pTC->getPosition().XValue + 32, pTC->getPosition().YValue + 32));
+				collisionBox.PlaceAt(Vector2D(pTC->getPosition().XValue - 32, pTC->getPosition().YValue - 24), Vector2D(pTC->getPosition().XValue + 32, pTC->getPosition().YValue + 32));
 			}
 			if (worldType == Point)
 			{

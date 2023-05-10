@@ -75,6 +75,8 @@ public:
 			setVelocityX(0.0f);
 			setVelocityY(velocity.YValue);
 			setAccelerationX(0.0f);
+
+			// reduce accelerationY by real life time not every frame
 			if (accelerationY > 1)
 			{
 				setAccelerationY(accelerationY / 10);
@@ -83,6 +85,7 @@ public:
 			{
 				setAccelerationY(0.0f);
 			}
+
 			pTC->setPosition(position);
 		}
 	}
