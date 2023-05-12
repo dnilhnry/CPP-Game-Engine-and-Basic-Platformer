@@ -48,40 +48,40 @@ public:
 	}
 
 	// This method is used to load a picture for a character entity
-	void LoadCharacterImage(const wchar_t* path, const char* name);
+	void loadCharacterImage(const wchar_t* path, const char* name);
 
 	// This method is used to retrieve the index of a picture for a character entity
-	PictureIndex GetCharacterImage(const char* name);
+	PictureIndex getCharacterImage(const char* name);
 
 	// This method is used to load a sound for a character entity
-	void LoadCharacterSound(const wchar_t* path, const char* name);
+	void loadCharacterSound(const wchar_t* path, const char* name);
 
 	// This method is used to retrieve the index of a sound for a character entity
-	SoundIndex GetCharacterSound(const char* name);
+	SoundIndex getCharacterSound(const char* name);
 
 	// This method is used to load a picture for a background entity
-	void LoadBackgroundImage(const wchar_t* path, const char* name);
+	void loadBackgroundImage(const wchar_t* path, const char* name);
 
 	// This method is used to retrieve the index of a picture for a background entity
-	PictureIndex GetBackgroundImage(const char* name);
+	PictureIndex getBackgroundImage(const char* name);
 
 	// This method is used to load a sound for a background entity
-	void LoadBackgroundSound(const wchar_t* path, const char* name);
+	void loadBackgroundSound(const wchar_t* path, const char* name);
 
 	// This method is used to retrieve the index of a sound for a background entity
-	SoundIndex GetBackgroundSound(const char* name);
+	SoundIndex getBackgroundSound(const char* name);
 
 	// This method is used to load a picture for a world entity
-	void LoadWorldImage(const wchar_t* path, const char* name);
+	void loadWorldImage(const wchar_t* path, const char* name);
 
 	// This method is used to retrieve the index of a picture for a world entity
-	PictureIndex GetWorldImage(const char* name);
+	PictureIndex getWorldImage(const char* name);
 
 	// This method is used to load a sound for a world entity
-	void LoadWorldSound(const wchar_t* path, const char* name);
+	void loadWorldSound(const wchar_t* path, const char* name);
 
 	// This method is used to retrieve the index of a sound for a world entity
-	SoundIndex GetWorldSound(const char* name);
+	SoundIndex getWorldSound(const char* name);
 
 	// This method is used to load every required asset
 	void loadAll();

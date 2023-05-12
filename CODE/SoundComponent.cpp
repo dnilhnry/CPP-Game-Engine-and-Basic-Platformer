@@ -5,13 +5,13 @@ void SoundComponent::setSound(const char* s)
 	switch (entityType)
 	{
 	case Character:
-		sound = pAM->GetCharacterSound(s);
+		sound = pAM->getCharacterSound(s);
 		break;
 	case Background:
-		sound = pAM->GetBackgroundSound(s);
+		sound = pAM->getBackgroundSound(s);
 		break;
 	case World:
-		sound = pAM->GetWorldSound(s);
+		sound = pAM->getWorldSound(s);
 		break;
 	default:
 		break;
@@ -25,13 +25,13 @@ void SoundComponent::setSound(const char* s, bool l)
 	switch (entityType)
 	{
 	case Character:
-		sound = pAM->GetCharacterSound(s);
+		sound = pAM->getCharacterSound(s);
 		break;
 	case Background:
-		sound = pAM->GetBackgroundSound(s);
+		sound = pAM->getBackgroundSound(s);
 		break;
 	case World:
-		sound = pAM->GetWorldSound(s);
+		sound = pAM->getWorldSound(s);
 		break;
 	default:
 		break;

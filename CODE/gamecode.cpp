@@ -351,6 +351,7 @@ bool won;
 bool lost;
 bool gameStarted;
 bool finalSFX;
+bool backgroudMusicPlaying;
 
 // game area
 float zoom;
@@ -441,7 +442,8 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	background->addComponent<ImageComponent>(pDE, &assetManager);
 	background->getComponent<ImageComponent>().setImage("backgroundImage");
 	background->addComponent<SoundComponent>(pSE, &assetManager);
-	background->getComponent<SoundComponent>().setSound("empty", true);
+	background->getComponent<SoundComponent>().setSound("backgroundMusic", true);
+	backgroudMusicPlaying = false;
 
 
 	// player enitity + components
@@ -501,6 +503,13 @@ ErrorType Game::Update()
 
 	// Your code goes here *************************************************
 	// *********************************************************************
+
+	// play background music
+	if (backgroudMusicPlaying == false)
+	{
+		background->getComponent<SoundComponent>().play();
+		backgroudMusicPlaying = true;
+	}
 
 	// check if the player uses the keyboard
 	player->getComponent<InputComponent>().checkForInputs();

@@ -5,13 +5,13 @@ void ImageComponent::setImage(const char* i)
 	switch (entityType)
 	{
 	case Character:
-		image = pAM->GetCharacterImage(i);
+		image = pAM->getCharacterImage(i);
 		break;
 	case Background:
-		image = pAM->GetBackgroundImage(i);
+		image = pAM->getBackgroundImage(i);
 		break;
 	case World:
-		image = pAM->GetWorldImage(i);
+		image = pAM->getWorldImage(i);
 		break;
 	default:
 		break;
