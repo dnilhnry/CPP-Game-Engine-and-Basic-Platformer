@@ -448,10 +448,10 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	Entity& newPlayer = entityManager.getEntity(0);
 	player = &newPlayer;
 	player->addComponent<GameComponent>();
-	player->addComponent<TransformComponent>(Vector2D(0, 1), 0.0f, 1.0f);
+	player->addComponent<TransformComponent>(Vector2D(0, 0), 0.0f, 1.0f);
 	player->addComponent<ImageComponent>(pDE, &assetManager);
 	player->addComponent<SoundComponent>(pSE, &assetManager);
-	player->addComponent<PhysicsComponent>(256.0f, 10240.0f, -128.0f);
+	player->addComponent<PhysicsComponent>(256.0f, 7680.0f, -128.0f);
 	player->addComponent<AnimationComponent>();
 	player->addComponent<CollisionComponent>();
 	player->addComponent<InputComponent>(pInputs);
@@ -460,7 +460,7 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	// get all game entities that the play can collide with
 	for (auto& e : entityManager.getAllEntities())
 	{
-		if (e->getID() != -1 && e->getID() != 0 && e->hasComponent<CollisionComponent>() == true)
+		if (e->getID() != -1 && e->getID() != 0)
 		{
 			Entity& collider = *e;
 			collidersVector.emplace_back(&collider);

@@ -26,9 +26,12 @@ private:
 	AnimationComponent* pAC;
 	
 	Vector2D position;
-	const char* collisionShape;
+	Vector2D lbCorner;
+	Vector2D rtCorner;
 	Rectangle2D collisionBox;
-	Circle2D collisionCircle;
+
+	double ignoreTime;
+	double frameTime;
 
 public:
 	void init() override
@@ -36,11 +39,16 @@ public:
 		entityType = entity->getEntityType();
 		worldType = entity->getWorldType();
 		pTC = &entity->getComponent<TransformComponent>();
+		position = pTC->getPosition();
+
+		collisionBox = Rectangle2D();
 
 		if (entityType == Character)
 		{
-			collisionShape = "circle";
-			collisionCircle = Circle2D(Vector2D(pTC->getPosition().XValue, pTC->getPosition().YValue), 30);
+			lbCorner = Vector2D(position.XValue - 20, position.YValue - 30);
+			rtCorner = Vector2D(position.XValue + 20, position.YValue + 30);
+			collisionBox.PlaceAt(lbCorner, rtCorner);
+
 			pGC = &entity->getComponent<GameComponent>();
 			pPC = &entity->getComponent<PhysicsComponent>();
 			pIC = &entity->getComponent<ImageComponent>();
@@ -51,76 +59,91 @@ public:
 		{
 			if (worldType == Empty)
 			{
-				collisionShape = "box";
-				collisionBox = Rectangle2D();
-				collisionBox.PlaceAt(Vector2D(pTC->getPosition().XValue - 32, pTC->getPosition().YValue - 32), Vector2D(pTC->getPosition().XValue + 32, pTC->getPosition().YValue + 32));
+				lbCorner = Vector2D(position.XValue - 32, position.YValue - 32);
+				rtCorner = Vector2D(position.XValue + 32, position.YValue + 32);
+				collisionBox.PlaceAt(lbCorner, rtCorner);
 			}
 			if (worldType == Platform)
 			{
-				collisionShape = "box";
-				collisionBox = Rectangle2D();
-				collisionBox.PlaceAt(Vector2D(pTC->getPosition().XValue - 32, pTC->getPosition().YValue - 8), Vector2D(pTC->getPosition().XValue + 32, pTC->getPosition().YValue + 8));
+				lbCorner = Vector2D(position.XValue - 32, position.YValue - 8);
+				rtCorner = Vector2D(position.XValue + 32, position.YValue + 8);
+				collisionBox.PlaceAt(lbCorner, rtCorner);
 			}
 			if (worldType == TrappedPlatform)
 			{
-				collisionShape = "box";
-				collisionBox = Rectangle2D();
-				collisionBox.PlaceAt(Vector2D(pTC->getPosition().XValue - 32, pTC->getPosition().YValue - 8), Vector2D(pTC->getPosition().XValue + 32, pTC->getPosition().YValue + 8));
+				lbCorner = Vector2D(position.XValue - 32, position.YValue - 8);
+				rtCorner = Vector2D(position.XValue + 32, position.YValue + 8);
+				collisionBox.PlaceAt(lbCorner, rtCorner);
 			}
 			if (worldType == Trap)
 			{
-				collisionShape = "box";
-				collisionBox = Rectangle2D();
 				if (pTC->getRotation() == 0)
 				{
-					collisionBox.PlaceAt(Vector2D(pTC->getPosition().XValue - 32, pTC->getPosition().YValue - 8), Vector2D(pTC->getPosition().XValue + 32, pTC->getPosition().YValue + 8));
+					lbCorner = Vector2D(position.XValue - 32, position.YValue - 8);
+					rtCorner = Vector2D(position.XValue + 32, position.YValue + 8);
 				}
 				if (pTC->getRotation() == 1.571f)
 				{
-					collisionBox.PlaceAt(Vector2D(pTC->getPosition().XValue - 8, pTC->getPosition().YValue - 32), Vector2D(pTC->getPosition().XValue + 8, pTC->getPosition().YValue + 32));
+					lbCorner = Vector2D(position.XValue - 8, position.YValue - 32);
+					rtCorner = Vector2D(position.XValue + 8, position.YValue + 32);
 				}
+				collisionBox.PlaceAt(lbCorner, rtCorner);
 			}
 			if (worldType == DestroyedEdge)
 			{
-				collisionShape = "box";
-				collisionBox = Rectangle2D();
-				collisionBox.PlaceAt(Vector2D(pTC->getPosition().XValue - 32, pTC->getPosition().YValue - 32), Vector2D(pTC->getPosition().XValue + 32, pTC->getPosition().YValue + 24));
+				lbCorner = Vector2D(position.XValue - 32, position.YValue - 32);
+				rtCorner = Vector2D(position.XValue + 32, position.YValue + 24);
+				collisionBox.PlaceAt(lbCorner, rtCorner);
 			}
 			if (worldType == Destroyed)
 			{
-				collisionShape = "box";
-				collisionBox = Rectangle2D();
-				collisionBox.PlaceAt(Vector2D(pTC->getPosition().XValue - 32, pTC->getPosition().YValue - 32), Vector2D(pTC->getPosition().XValue + 32, pTC->getPosition().YValue + 32));
+				lbCorner = Vector2D(position.XValue - 32, position.YValue - 32);
+				rtCorner = Vector2D(position.XValue + 32, position.YValue + 24);
+				collisionBox.PlaceAt(lbCorner, rtCorner);
 			}
 			if (worldType == Exit)
 			{
-				collisionShape = "box";
-				collisionBox = Rectangle2D();
-				collisionBox.PlaceAt(Vector2D(pTC->getPosition().XValue - 32, pTC->getPosition().YValue - 24), Vector2D(pTC->getPosition().XValue + 32, pTC->getPosition().YValue + 32));
+				lbCorner = Vector2D(position.XValue - 32, position.YValue - 24);
+				rtCorner = Vector2D(position.XValue + 32, position.YValue + 24);
+				collisionBox.PlaceAt(lbCorner, rtCorner);
 			}
 			if (worldType == Point)
 			{
-				collisionShape = "circle";
-				collisionCircle = Circle2D(Vector2D(pTC->getPosition().XValue, pTC->getPosition().YValue), 8);
+				lbCorner = Vector2D(position.XValue - 8, position.YValue - 8);
+				rtCorner = Vector2D(position.XValue + 8, position.YValue + 8);
+				collisionBox.PlaceAt(lbCorner, rtCorner);
 			}
 		}
+		ignoreTime = 0;
+		frameTime = 0;
 	}
 
 	void update() override
 	{
+		frameTime = entity->getGameTime();
+
 		if (entityType == Character)
 		{
 			position = pTC->getPosition();
-			collisionCircle.PlaceAt(position, 32);
+			lbCorner = Vector2D(position.XValue - 20, position.YValue - 30);
+			rtCorner = Vector2D(position.XValue + 20, position.YValue + 30);
+			collisionBox.PlaceAt(lbCorner, rtCorner);
+		}
+
+		if (ignoreTime > 0)
+		{
+			ignoreTime = ignoreTime - frameTime;
+		}
+		if (ignoreTime < 0)
+		{
+			ignoreTime = 0;
 		}
 	}
 
 	void checkCollision(std::vector<Entity*>& collidersVector);
 
-	const char* getCollisionShape();
-
 	Rectangle2D getCollisionBox();
 
-	Circle2D getCollisionCircle();
+	void moveCollisionBox(Vector2D newLB, Vector2D newRT);
 
 };

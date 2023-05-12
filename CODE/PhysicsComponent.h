@@ -22,6 +22,7 @@ private:
 	Vector2D acceleration;
 	float accelerationX;
 	float accelerationY;
+	double impulseTime;
 
 	float movementSpeed;
 	float jumpSpeed;
@@ -58,12 +59,18 @@ public:
 			position = pTC->getPosition();
 			setVelocity();
 			setAcceleration();
+
+			// if the player is not on solid ground, set jumpReady to false
 			if (!(acceleration.YValue + gravity) == 0)
 			{
 				jumpReady = false;
 			}
-			velocity = velocity + (acceleration + Vector2D(0, gravity)) * frameTime;
-			position = position + velocity * frameTime;
+
+			// apply forces and calculate new position
+			velocity = velocity + ((acceleration + Vector2D(0, gravity)) * frameTime);
+			position = position + (velocity * frameTime);
+
+			// teleport the player to the other side of the screen if they go off the edge
 			if (position.XValue <= -353)
 			{
 				position = position + Vector2D(704, 0);
@@ -72,17 +79,17 @@ public:
 			{
 				position = position + Vector2D(-704, 0);
 			}
+
 			setVelocityX(0.0f);
 			setVelocityY(velocity.YValue);
 			setAccelerationX(0.0f);
-
-			// reduce accelerationY by real life time not every frame
-			if (accelerationY > 1)
+			if (impulseTime > 0.0)
 			{
-				setAccelerationY(accelerationY / 10);
+				impulseTime = impulseTime - frameTime;
 			}
-			else if (accelerationY <= 1)
+			else if (impulseTime <= 0.0)
 			{
+				impulseTime = 0.0;
 				setAccelerationY(0.0f);
 			}
 

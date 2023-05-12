@@ -5,44 +5,35 @@ void CollisionComponent::checkCollision(std::vector<Entity*>& collidersVector)
 	for (auto& otherEntity : collidersVector)
 	{
 		CollisionComponent* pOtherCC = &otherEntity->getComponent<CollisionComponent>();
-		Rectangle2D otherCollisionBox;
-		Circle2D otherCollisionCircle;
 		bool collided = false;
 		Vector2D collisionDirection = Vector2D(0, 0);
-		if (pOtherCC->isActive() == true)
+		if (pOtherCC->isActive() == true && pOtherCC->ignoreTime <= 0)
 		{
-			if (pOtherCC->getCollisionShape() == "box")
+			Rectangle2D otherCollisionBox = pOtherCC->getCollisionBox();
+			if (collisionBox.Intersects(otherCollisionBox) == true)
 			{
-				otherCollisionBox = pOtherCC->getCollisionBox();
-				if (collisionCircle.Intersects(otherCollisionBox) == true)
-				{
-					collisionDirection = collisionCircle.CollisionNormal(otherCollisionBox);
-					collided = true;
-				}
+				collisionDirection = collisionBox.CollisionNormal(otherCollisionBox);
+				collided = true;
 			}
-			if (pOtherCC->getCollisionShape() == "circle")
-			{
-				otherCollisionCircle = pOtherCC->getCollisionCircle();
-				if (collisionCircle.Intersects(otherCollisionCircle) == true)
-				{
-					collisionDirection = collisionCircle.CollisionNormal(otherCollisionCircle);
-					collided = true;
-				}
-			}
+
 
 			if (collided == true)
 			{
 				WorldType colliderType = otherEntity->getWorldType();
 				if (colliderType == Platform)
 				{
-					if (collisionDirection == Vector2D(0, -1))
+					if (collisionDirection == Vector2D(0, 1) || collisionDirection == Vector2D(-1, 1) || collisionDirection == Vector2D(1, 1))
 					{
-						if (pPC->getVelocity().YValue <= -129)
+						if (pPC->getVelocity().YValue <= -255)
 						{
 							pSC->setSound("playerLand");
 							pSC->play();
 						}
 						pPC->stableGround();
+					}
+					if (collisionDirection == Vector2D(0, -1) || collisionDirection == Vector2D(-1, 0) || collisionDirection == Vector2D(1, 0) || collisionDirection == Vector2D(-1, -1) || collisionDirection == Vector2D(1, -1))
+					{
+						pOtherCC->ignoreTime = 0.8;
 					}
 				}
 				if (colliderType == TrappedPlatform)
@@ -50,16 +41,16 @@ void CollisionComponent::checkCollision(std::vector<Entity*>& collidersVector)
 					float trapAngle = otherEntity->getComponent<TransformComponent>().getRotation();
 					if (trapAngle == 0)
 					{
-						if (collisionDirection == Vector2D(0, -1))
+						if (collisionDirection == Vector2D(0, 1))
 						{
-							if (pPC->getVelocity().YValue <= -129)
+							if (pPC->getVelocity().YValue <= -255)
 							{
 								pSC->setSound("playerLand");
 								pSC->play();
 							}
 							pPC->stableGround();
 						}
-						if (collisionDirection == Vector2D(0, 1))
+						if (collisionDirection == Vector2D(0, -1))
 						{
 							setActive(false);
 							pGC->setLose(true);
@@ -67,11 +58,11 @@ void CollisionComponent::checkCollision(std::vector<Entity*>& collidersVector)
 					}
 					if (trapAngle == 3.142f)
 					{
-						if (collisionDirection == Vector2D(0, 1))
+						if (collisionDirection == Vector2D(0, -1))
 						{
 							pPC->bounceBack();
 						}
-						if (collisionDirection == Vector2D(0, -1))
+						if (collisionDirection == Vector2D(0, 1))
 						{
 							setActive(false);
 							pGC->setLose(true);
@@ -110,17 +101,12 @@ void CollisionComponent::checkCollision(std::vector<Entity*>& collidersVector)
 	}
 }
 
-const char* CollisionComponent::getCollisionShape()
-{
-	return collisionShape;
-}
-
 Rectangle2D CollisionComponent::getCollisionBox()
 {
 	return collisionBox;
 }
 
-Circle2D CollisionComponent::getCollisionCircle()
+void CollisionComponent::moveCollisionBox(Vector2D newLB, Vector2D newRT)
 {
-	return collisionCircle;
+	collisionBox.PlaceAt(newLB, newRT);
 }

@@ -4,15 +4,15 @@
 void AnimationComponent::playerAnimation()
 {
 	float playerYVelocity = pPC->getVelocity().YValue;
-	if (playerYVelocity < 1 && playerYVelocity > -1)
+	if (playerYVelocity < 5.0f && playerYVelocity > -5.0f)
 	{
 		pIC->setImage("playerConfused");
 	}
-	else if (playerYVelocity <= -1)
+	else if (playerYVelocity <= -5.0f)
 	{
 		pIC->setImage("playerScared");
 	}
-	else if (playerYVelocity >= 1)
+	else if (playerYVelocity >= 5.0f)
 	{
 		pIC->setImage("playerSmiley");
 	}
@@ -33,5 +33,29 @@ void AnimationComponent::playerLose()
 // platform animations
 void AnimationComponent::platformAnimation()
 {
-	pTC->addRotation(3.142f);
+	if (frameNumber == 0)
+	{
+		pTC->addPosition(Vector2D(0, 1.5f));
+	}
+	if (frameNumber == 1)
+	{
+		pTC->addPosition(Vector2D(0, -3.0f));
+	}
+	if (frameNumber == 2)
+	{
+		pTC->addPosition(Vector2D(0, 3.0f));
+	}
+	if (frameNumber == 3)
+	{
+		pTC->addPosition(Vector2D(0, -3.0f));
+	}
+	if (frameNumber == 4)
+	{
+		pTC->addPosition(Vector2D(0, 1.5f));
+	}
+	if (frameNumber == 5)
+	{
+		pTC->addRotation(3.142f);
+		animationStarted = false;
+	}
 }

@@ -22,6 +22,8 @@ private:
 	double frameTime;
 	double currentTime = 0.0;
 	int runTime = 5;
+	int frameNumber = 0;
+	bool animationStarted;
 
 public:
 
@@ -42,6 +44,7 @@ public:
 			pPC = nullptr;
 		}
 		frameTime = 0;
+		animationStarted = false;
 	}
 
 	// The update method is used to update the component
@@ -58,14 +61,33 @@ public:
 			if (worldType == TrappedPlatform)
 			{
 				frameTime = entity->getGameTime();
-				if (currentTime >= runTime)
+				
+				if (animationStarted == false)
 				{
-					currentTime = 0.0;
-					platformAnimation();
+					if (currentTime >= runTime)
+					{
+						currentTime = 0.0;
+						animationStarted = true;
+						frameNumber = 0;
+					}
+					else
+					{
+						currentTime = currentTime + frameTime;
+					}
 				}
-				else
+				if (animationStarted == true)
 				{
-					currentTime = currentTime + frameTime;
+					if (currentTime >= 0.15f)
+					{
+						platformAnimation();
+						frameNumber++;
+						currentTime = 0.0;
+					}
+					else
+					{
+						currentTime = currentTime + frameTime;
+					}
+
 				}
 			}
 		}
@@ -83,10 +105,10 @@ public:
 	// the player will be animated to die
 	void playerLose();
 
-
 	// platform animations
 	// if the platform is a trapped platform with an animation component
-	// the platform will be rotated 180degrees every 5 seconds
+	// the platform will be vibrate to indicate it is going to change
+	// rotating 180degrees every 5 seconds
 	void platformAnimation();
 
 };
