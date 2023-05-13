@@ -75,7 +75,7 @@ void PhysicsComponent::jump()
 	if (jumpReady == true)
 	{
 		jumpReady = false;
-		impulseTime = 0.015f;
+		impulseTime = 0.01f;
 		setAccelerationY(jumpSpeed);
 	}
 }
@@ -93,12 +93,12 @@ void PhysicsComponent::moveRight()
 void PhysicsComponent::stableGround()
 {
 	jumpReady = true;
-	accelerationY = accelerationY - gravity;
-	velocityY = 0.1f;
+	accelerationY =  -gravity;
+	velocityY = 1.0f;
 }
 
 void PhysicsComponent::bounceBack()
 {
-	accelerationY = -gravity;
+	accelerationY = gravity;
 	velocityY = -10.0f;
 }

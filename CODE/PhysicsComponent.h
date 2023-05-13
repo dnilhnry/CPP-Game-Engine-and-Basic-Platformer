@@ -48,6 +48,8 @@ public:
 		velocity = Vector2D(0, 0);
 		acceleration = Vector2D(0, 0);
 		jumpReady = false;
+		impulseTime = 0.0;
+		frameTime = 0.0;
 	}
 
 	// update the position based on the velocity and acceleration and frame time

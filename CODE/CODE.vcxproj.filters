@@ -42,22 +42,22 @@
     <Filter Include="Engine\Source Files\Sub Engines\Input">
       <UniqueIdentifier>{76556f86-4b51-4d7a-8e3a-942a64aff786}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Header Files\Sub Engines\Manager">
-      <UniqueIdentifier>{ea7087e5-c29c-41db-b981-848be6636b9e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Source Files\Sub Engines\Manager">
-      <UniqueIdentifier>{129d7d1d-b229-4213-8065-c1abe151925e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Header Files\Sub Engines\Video">
       <UniqueIdentifier>{8540819b-c3fc-4bf5-9e0e-c2df6452f816}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Source Files\Sub Engines\Video">
       <UniqueIdentifier>{a70fc88a-a7e3-472c-815d-908ecdfd5cb3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Source Files\Sub Engines\Manager\ECS">
+    <Filter Include="Engine\Source Files\Main\Manager">
+      <UniqueIdentifier>{129d7d1d-b229-4213-8065-c1abe151925e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Source Files\Main\Manager\ECS">
       <UniqueIdentifier>{49ff1ba3-0675-4d18-bb35-182e97c8555d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Header Files\Sub Engines\Manager\ECS">
+    <Filter Include="Engine\Header Files\Main\Manager">
+      <UniqueIdentifier>{ea7087e5-c29c-41db-b981-848be6636b9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Header Files\Main\Manager\ECS">
       <UniqueIdentifier>{d2cd2af9-8b7c-4de4-ad86-1d36b2ee1e1a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -93,49 +93,49 @@
       <Filter>Engine\Header Files\Sub Engines\Video</Filter>
     </ClInclude>
     <ClInclude Include="ECS.h">
-      <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
+      <Filter>Engine\Header Files\Main\Manager\ECS</Filter>
     </ClInclude>
     <ClInclude Include="TransformComponent.h">
-      <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
+      <Filter>Engine\Header Files\Main\Manager\ECS</Filter>
     </ClInclude>
     <ClInclude Include="ImageComponent.h">
-      <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
+      <Filter>Engine\Header Files\Main\Manager\ECS</Filter>
     </ClInclude>
     <ClInclude Include="Components.h">
-      <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
+      <Filter>Engine\Header Files\Main\Manager\ECS</Filter>
     </ClInclude>
     <ClInclude Include="SoundComponent.h">
-      <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
+      <Filter>Engine\Header Files\Main\Manager\ECS</Filter>
     </ClInclude>
     <ClInclude Include="InputComponent.h">
-      <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
+      <Filter>Engine\Header Files\Main\Manager\ECS</Filter>
     </ClInclude>
     <ClInclude Include="AssetManager.h">
-      <Filter>Engine\Header Files\Sub Engines\Manager</Filter>
+      <Filter>Engine\Header Files\Main\Manager</Filter>
     </ClInclude>
     <ClInclude Include="EntityTypes.h">
-      <Filter>Engine\Header Files\Sub Engines\Manager</Filter>
+      <Filter>Engine\Header Files\Main\Manager</Filter>
     </ClInclude>
     <ClInclude Include="LevelManager.h">
-      <Filter>Engine\Header Files\Sub Engines\Manager</Filter>
+      <Filter>Engine\Header Files\Main\Manager</Filter>
     </ClInclude>
     <ClInclude Include="AnimationComponent.h">
-      <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
+      <Filter>Engine\Header Files\Main\Manager\ECS</Filter>
     </ClInclude>
     <ClInclude Include="Levels.h">
-      <Filter>Engine\Header Files\Sub Engines\Manager</Filter>
+      <Filter>Engine\Header Files\Main\Manager</Filter>
     </ClInclude>
     <ClInclude Include="ModifyComponent.h">
-      <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
+      <Filter>Engine\Header Files\Main\Manager\ECS</Filter>
     </ClInclude>
     <ClInclude Include="PhysicsComponent.h">
-      <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
+      <Filter>Engine\Header Files\Main\Manager\ECS</Filter>
     </ClInclude>
     <ClInclude Include="CollisionComponent.h">
-      <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
+      <Filter>Engine\Header Files\Main\Manager\ECS</Filter>
     </ClInclude>
     <ClInclude Include="GameComponent.h">
-      <Filter>Engine\Header Files\Sub Engines\Manager\ECS</Filter>
+      <Filter>Engine\Header Files\Main\Manager\ECS</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -170,40 +170,40 @@
       <Filter>Engine\Source Files\Sub Engines\Video</Filter>
     </ClCompile>
     <ClCompile Include="ECS.cpp">
-      <Filter>Engine\Source Files\Sub Engines\Manager\ECS</Filter>
+      <Filter>Engine\Source Files\Main\Manager\ECS</Filter>
     </ClCompile>
     <ClCompile Include="AssetManager.cpp">
-      <Filter>Engine\Source Files\Sub Engines\Manager</Filter>
+      <Filter>Engine\Source Files\Main\Manager</Filter>
     </ClCompile>
     <ClCompile Include="LevelManager.cpp">
-      <Filter>Engine\Source Files\Sub Engines\Manager</Filter>
+      <Filter>Engine\Source Files\Main\Manager</Filter>
     </ClCompile>
     <ClCompile Include="TransformComponent.cpp">
-      <Filter>Engine\Source Files\Sub Engines\Manager\ECS</Filter>
+      <Filter>Engine\Source Files\Main\Manager\ECS</Filter>
     </ClCompile>
     <ClCompile Include="AnimationComponent.cpp">
-      <Filter>Engine\Source Files\Sub Engines\Manager\ECS</Filter>
+      <Filter>Engine\Source Files\Main\Manager\ECS</Filter>
     </ClCompile>
     <ClCompile Include="CollisionComponent.cpp">
-      <Filter>Engine\Source Files\Sub Engines\Manager\ECS</Filter>
+      <Filter>Engine\Source Files\Main\Manager\ECS</Filter>
     </ClCompile>
     <ClCompile Include="GameComponent.cpp">
-      <Filter>Engine\Source Files\Sub Engines\Manager\ECS</Filter>
+      <Filter>Engine\Source Files\Main\Manager\ECS</Filter>
     </ClCompile>
     <ClCompile Include="ImageComponent.cpp">
-      <Filter>Engine\Source Files\Sub Engines\Manager\ECS</Filter>
+      <Filter>Engine\Source Files\Main\Manager\ECS</Filter>
     </ClCompile>
     <ClCompile Include="InputComponent.cpp">
-      <Filter>Engine\Source Files\Sub Engines\Manager\ECS</Filter>
+      <Filter>Engine\Source Files\Main\Manager\ECS</Filter>
     </ClCompile>
     <ClCompile Include="ModifyComponent.cpp">
-      <Filter>Engine\Source Files\Sub Engines\Manager\ECS</Filter>
+      <Filter>Engine\Source Files\Main\Manager\ECS</Filter>
     </ClCompile>
     <ClCompile Include="PhysicsComponent.cpp">
-      <Filter>Engine\Source Files\Sub Engines\Manager\ECS</Filter>
+      <Filter>Engine\Source Files\Main\Manager\ECS</Filter>
     </ClCompile>
     <ClCompile Include="SoundComponent.cpp">
-      <Filter>Engine\Source Files\Sub Engines\Manager\ECS</Filter>
+      <Filter>Engine\Source Files\Main\Manager\ECS</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -396,6 +396,7 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	lost = false;
 	gameStarted = false;
 	finalSFX = false;
+	backgroudMusicPlaying = false;
 
 
 	// setup camera + game area
@@ -450,7 +451,7 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	Entity& newPlayer = entityManager.getEntity(0);
 	player = &newPlayer;
 	player->addComponent<GameComponent>();
-	player->addComponent<TransformComponent>(Vector2D(0, 0), 0.0f, 1.0f);
+	player->addComponent<TransformComponent>(Vector2D(0, 1), 0.0f, 1.0f);
 	player->addComponent<ImageComponent>(pDE, &assetManager);
 	player->addComponent<SoundComponent>(pSE, &assetManager);
 	player->addComponent<PhysicsComponent>(256.0f, 7680.0f, -128.0f);
@@ -485,15 +486,16 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 // Gameplay programmer will develop this to create an actual game
 ErrorType Game::Update()
 {
-	// check for input
-	pInputs->SampleKeyboard();
-
 	// if ESC pressed -> pause game
 	static bool escapepressed = true;
 	if (KEYPRESSED(VK_ESCAPE))
 	{
 		if (!escapepressed)
+		{
+			backgroudMusicPlaying = false;
+			entityManager.updateTime(0);
 			ChangeState(PAUSED);
+		}
 		escapepressed = true;
 	}
 	else
@@ -618,6 +620,7 @@ ErrorType Game::Update()
 	{
 		pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D(midX - 64, midY + gameAreaHeight / 2.0f)), welcomeMessage, MyDrawEngine::WHITE);
 	}
+
 
 	// start game - if the first input is pressed->activate the modify component
 	// slowly destroys the level from the bottom to the top - chases the player

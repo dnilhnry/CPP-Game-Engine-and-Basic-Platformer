@@ -66,6 +66,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 				newEmpty.addComponent<ImageComponent>(pDE, pAM);
 				newEmpty.getComponent<ImageComponent>().setImage("empty");
 				newEmpty.addComponent<CollisionComponent>();
+				newEmpty.getComponent<CollisionComponent>().setActive(false);
 				newEmpty.addComponent<ModifyComponent>(rowNumber);
 				break;
 			}
@@ -156,6 +157,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 				newDestroyed.addComponent<ImageComponent>(pDE, pAM);
 				newDestroyed.getComponent<ImageComponent>().setImage("destroyed");
 				newDestroyed.addComponent<CollisionComponent>();
+				newDestroyed.getComponent<CollisionComponent>().setActive(false);
 				newDestroyed.addComponent<ModifyComponent>(rowNumber);
 				break;
 			}
