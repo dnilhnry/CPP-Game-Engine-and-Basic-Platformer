@@ -220,7 +220,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			gameX = gameX + tileSize;
 
 			Entity& newEntity = pEM->getEntity(((LevelWidth * rowNumber) + (x + 1)));
-			switch (rowNumber)
+			switch ((rowNumber + 1))
 			{
 			case 30:
 				collidersVector30.emplace_back(&newEntity);

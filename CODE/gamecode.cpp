@@ -455,12 +455,12 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	player->addComponent<TransformComponent>(Vector2D(0, 1), 0.0f, 1.0f);
 	player->addComponent<ImageComponent>(pDE, &assetManager);
 	player->addComponent<SoundComponent>(pSE, &assetManager);
-	player->addComponent<PhysicsComponent>(256.0f, 7680.0f, -128.0f);
+	player->addComponent<PhysicsComponent>(256.0f, 6144.0f, -128.0f);
 	player->addComponent<AnimationComponent>();
 	player->addComponent<CollisionComponent>();
 	player->addComponent<InputComponent>(pInputs);
 
-
+	gt.setMinimumFrameTime(0.0164);
 	gt.mark();
 	gt.mark();
 
@@ -483,7 +483,7 @@ ErrorType Game::Update()
 		if (!escapepressed)
 		{
 			backgroudMusicPlaying = false;
-			entityManager.updateTime(0);
+			entityManager.updateTime(0.0);
 			ChangeState(PAUSED);
 		}
 		escapepressed = true;
@@ -519,6 +519,7 @@ ErrorType Game::Update()
 
 	// check if player has collided with anything
 	// narrow number of entities to check by getting 24 entities closest to player
+	// more efficient than checking all 360 entities every frame
 	if (player->getComponent<CollisionComponent>().isActive() == true)
 	{
 		if (playerY >= -104 && playerY < -40)

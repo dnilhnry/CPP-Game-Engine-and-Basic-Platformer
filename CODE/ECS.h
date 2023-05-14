@@ -143,6 +143,7 @@ public:
 		{
 			worldType = NOTworld;
 		}
+		frameTime = 0.0;
 	}
 
 	// constructor - takes an entity manager, an id, an entity type and a world type
@@ -151,6 +152,7 @@ public:
 		id = i;
 		entityType = et;
 		worldType = wt;
+		frameTime = 0.0;
 	}
 
 	// update all components in the entity
