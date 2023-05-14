@@ -252,7 +252,7 @@ void MySoundEngine::StopAllSounds()
 {
 	ErrorType answer = SUCCESS;
 	std::map<SoundIndex, MySound>::iterator it = m_MySoundList.begin();
-	for (; it != m_MySoundList.end(); it++)
+	for (it; it != m_MySoundList.end(); it++)
 	{
 		MySound &sb = it->second;
 

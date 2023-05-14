@@ -22,7 +22,7 @@ void CollisionComponent::checkCollision(std::vector<Entity*>& collidersVector)
 				WorldType colliderType = otherEntity->getWorldType();
 				if (colliderType == Platform)
 				{
-					if (collisionDirection == Vector2D(0, 1) || collisionDirection == Vector2D(-1, 1) || collisionDirection == Vector2D(1, 1))
+					if (collisionDirection == Vector2D(0, 1))
 					{
 						if (pPC->getVelocity().YValue <= -255)
 						{
@@ -31,7 +31,7 @@ void CollisionComponent::checkCollision(std::vector<Entity*>& collidersVector)
 						}
 						pPC->stableGround();
 					}
-					if (collisionDirection == Vector2D(0, -1) || collisionDirection == Vector2D(-1, 0) || collisionDirection == Vector2D(1, 0) || collisionDirection == Vector2D(-1, -1) || collisionDirection == Vector2D(1, -1))
+					if (collisionDirection == Vector2D(0, -1))
 					{
 						pOtherCC->ignoreTime = 0.8;
 					}

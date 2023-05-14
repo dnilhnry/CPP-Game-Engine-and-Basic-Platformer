@@ -72,17 +72,13 @@ public:
 
 					if (rowNumber == currentEdge)
 					{
-						if (worldType != Point && worldType != Trap)
+						if (worldType != Point)
 						{
 							toDestroyedEdge();
 						}
 						else if (worldType == Point)
 						{
 							pointDestroyedEdge();
-						}
-						else if (worldType == Trap)
-						{
-							vTrapDestroyedEdge();
 						}
 
 					}
@@ -108,8 +104,5 @@ public:
 
 	// sets the entity world type to DestroyedEdge from point
 	void pointDestroyedEdge();
-
-	// sets the entity world type to DestroyedEdge from verticalTrap
-	void vTrapDestroyedEdge();
 
 };

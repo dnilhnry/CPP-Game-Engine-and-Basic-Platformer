@@ -62,6 +62,8 @@ SoundIndex AssetManager::getWorldSound(const char* name)
 
 void AssetManager::loadAll()
 {
+	// all assets created by me, unless stated otherwise
+
 	loadCharacterImage(L"assets/character/image/smiley.png", "playerSmiley");
 	loadCharacterImage(L"assets/character/image/scared.png", "playerScared");
 	loadCharacterImage(L"assets/character/image/confused.png", "playerConfused");
@@ -74,6 +76,8 @@ void AssetManager::loadAll()
 
 	loadBackgroundImage(L"assets/background/image/768576darkblue.png", "backgroundImage");
 
+	// backgroundMusic.wav is the first 8 seconds from the royalty-free, copyright-free song
+	// https://pixabay.com/music/upbeat-unlock-me-149058/
 	loadBackgroundSound(L"assets/background/sound/backgroundMusic.wav", "backgroundMusic");
 
 	loadWorldImage(L"assets/world/image/platform.png", "platform");

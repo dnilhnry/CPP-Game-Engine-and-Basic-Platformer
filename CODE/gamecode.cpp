@@ -67,28 +67,11 @@ ErrorType Game::Main()
 void Game::ChangeState(GameState newState)
 {
 	// Very crude state system
-	// Close old state
-	switch (m_currentState)
-	{
-	case MENU:
-		// Not needed
-		break;
-	case LEVEL:
-		// Not needed
-		break;
-	case PAUSED:
-		// Not needed
-		break;
-	case RUNNING:
-		// Not needed
-		break;
-	}
-
+	
 	// Change the state
 	m_currentState = newState;
 	m_menuOption = 0;
 
-	// Transition to new state
 	switch (m_currentState)
 	{
 	case MENU:
@@ -101,9 +84,10 @@ void Game::ChangeState(GameState newState)
 		// Not needed
 		break;
 	case RUNNING:
-		// Not needed
+		gt.mdGameRate = 0.1f; // slows down the game for a few moments on start / resume
 		break;
 	}
+
 }
 
 // Starts the game engines - Draw Engine, Sound Engine, Input Engine - singletons
@@ -122,6 +106,8 @@ ErrorType Game::Setup(bool bFullScreen, HWND hwnd, HINSTANCE hinstance)
 		ErrorLogger::Writeln(L"Failed to start MySoundEngine");
 		return FAILURE;
 	}
+	pDE->AddFont(L"Ariel", 48, false, false);
+	pDE->AddFont(L"Ariel", 72, false, false);
 	pSE = MySoundEngine::GetInstance();
 	if (FAILED(MyInputs::Start(hinstance, hwnd)))
 	{
@@ -157,7 +143,7 @@ ErrorType Game::PauseMenu()
 
 	// Code for a basic pause menu
 
-	pDE->WriteText(450, 220, L"Paused", MyDrawEngine::WHITE);
+	pDE->WriteText(450, 220, L"Paused", MyDrawEngine::WHITE, 1);
 
 	const int NUMOPTIONS = 2;
 	wchar_t options[NUMOPTIONS][11] = { L"Resume", L"Main menu" };
@@ -218,7 +204,7 @@ ErrorType Game::LevelMenu()
 
 	// Code for a basic  menu
 
-	pDE->WriteText(450, 220, L"Level Select", MyDrawEngine::WHITE);
+	pDE->WriteText(450, 220, L"Level Select", MyDrawEngine::WHITE, 1);
 
 	const int NUMOPTIONS = 4;
 	wchar_t options[NUMOPTIONS][15] = { L"Level 0", L"Level 1", L"Level 2", L"Main Menu" };
@@ -287,7 +273,7 @@ ErrorType Game::MainMenu()
 {
 	pSE->StopAllSounds();
 
-	pDE->WriteText(450, 220, L"Main menu", MyDrawEngine::WHITE);
+	pDE->WriteText(450, 220, L"Main Menu", MyDrawEngine::WHITE, 1);
 
 	const int NUMOPTIONS = 2;
 	wchar_t options[NUMOPTIONS][15] = {L"Start game", L"Exit"};
@@ -347,6 +333,8 @@ ErrorType Game::MainMenu()
 // **********************************************************************************************
 
 // game
+bool slowStarted;
+double slowTime;
 bool won;
 bool lost;
 bool gameStarted;
@@ -392,6 +380,8 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	// **********************************************************************
 
 	// game
+	slowStarted = false;
+	slowTime = 0.0;
 	won = false;
 	lost = false;
 	gameStarted = false;
@@ -452,7 +442,7 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	Entity& newPlayer = entityManager.getEntity(0);
 	player = &newPlayer;
 	player->addComponent<GameComponent>();
-	player->addComponent<TransformComponent>(Vector2D(0, 1), 0.0f, 1.0f);
+	player->addComponent<TransformComponent>(Vector2D(0, 5), 0.0f, 1.0f);
 	player->addComponent<ImageComponent>(pDE, &assetManager);
 	player->addComponent<SoundComponent>(pSE, &assetManager);
 	player->addComponent<PhysicsComponent>(256.0f, 6144.0f, -128.0f);
@@ -482,8 +472,6 @@ ErrorType Game::Update()
 	{
 		if (!escapepressed)
 		{
-			backgroudMusicPlaying = false;
-			entityManager.updateTime(0.0);
 			ChangeState(PAUSED);
 		}
 		escapepressed = true;
@@ -496,11 +484,41 @@ ErrorType Game::Update()
 	// Your code goes here *************************************************
 	// *********************************************************************
 
-	// play background music
-	if (backgroudMusicPlaying == false)
+	// ensure starting or resuming the game does not mess with the physics
+	// also continues to play the background music
+	if (gt.mdGameRate != 1)
 	{
-		background->getComponent<SoundComponent>().play();
-		backgroudMusicPlaying = true;
+		if (slowStarted == false)
+		{
+			slowStarted = true;
+			slowTime = 0.5;
+		}
+		else if (slowStarted == true)
+		{
+			if (slowTime > 0)
+			{
+				slowTime = slowTime - gt.mdFrameTime;
+			}
+			else if (slowTime <= 0)
+			{
+				slowStarted = false;
+				slowTime = 0.0;
+				gt.mdGameRate = 1;
+				backgroudMusicPlaying = false;
+				background->getComponent<SoundComponent>().setSound("backgroundMusic", true);
+			}
+		}
+	}
+
+
+	// play background music
+	if (gt.mdGameRate == 1)
+	{
+		if (backgroudMusicPlaying == false)
+		{
+			background->getComponent<SoundComponent>().play();
+			backgroudMusicPlaying = true;
+		}
 	}
 
 	// check if the player uses the keyboard
@@ -790,7 +808,7 @@ ErrorType Game::Update()
 	// welcome message
 	if (player->getComponent<InputComponent>().getFirstInput() == false)
 	{
-		pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D(midX - 64, midY + gameAreaHeight / 2.0f)), welcomeMessage, MyDrawEngine::WHITE);
+		pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D(midX - 192, midY + gameAreaHeight / 2.0f)), welcomeMessage, MyDrawEngine::WHITE, 1);
 	}
 
 
@@ -815,14 +833,14 @@ ErrorType Game::Update()
 	// win message
 	if (won == true)
 	{
-		pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D(midX - 64, midY + gameAreaHeight / 2.0f)), winMessage, MyDrawEngine::WHITE);
+		pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D(midX - 96, midY + gameAreaHeight / 2.0f)), winMessage, MyDrawEngine::WHITE, 1);
 	}
 
 
 	// lose message
 	if (lost == true)
 	{
-		pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D(midX - 64, midY + gameAreaHeight / 2.0f)), loseMessage, MyDrawEngine::WHITE);
+		pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D(midX - 96, midY + gameAreaHeight / 2.0f)), loseMessage, MyDrawEngine::WHITE, 1);
 	}
 
 	// write score to screen
@@ -836,6 +854,12 @@ ErrorType Game::Update()
 	pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f)-80, midY - gameAreaHeight / 2.25f)), FPSlabel, MyDrawEngine::WHITE);
 	pDE->WriteInt(pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f)-35, midY - gameAreaHeight / 2.25f)), FPS, MyDrawEngine::WHITE);
 
+
+	// write countdown to screen
+	if (slowTime > 0)
+	{
+		pDE->WriteInt(pDE->theCamera.ReverseTransform(Vector2D(midX, midY)), (10.0 * slowTime), MyDrawEngine::WHITE, 2);
+	}
 
 	gt.mark();
 
