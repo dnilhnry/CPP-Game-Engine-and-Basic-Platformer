@@ -518,149 +518,187 @@ ErrorType Game::Update()
 
 
 	// check if player has collided with anything
-	// narrow number of entities to check by getting 24 entities closest to player
+	// narrow number of entities to check by getting 24/36 entities closest to player
 	// more efficient than checking all 360 entities every frame
 	if (player->getComponent<CollisionComponent>().isActive() == true)
 	{
-		if (playerY >= -104 && playerY < -40)
+		if (playerY >= -200 && playerY < -136)
 		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(1));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(2));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(30));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(29));
 		}
-		if (playerY >= -40 && playerY < 24)
+		if (playerY >= -136 && playerY < -72)
 		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(2));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(3));
-		}
-		if (playerY >= 24 && playerY < 88)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(3));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(4));
-		}
-		if (playerY >= 88 && playerY < 152)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(4));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(5));
-		}
-		if (playerY >= 152 && playerY < 216)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(5));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(6));
-		}
-		if (playerY >= 216 && playerY < 280)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(6));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(7));
-		}
-		if (playerY >= 280 && playerY < 344)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(7));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(8));
-		}
-		if (playerY >= 344 && playerY < 408)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(8));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(9));
-		}
-		if (playerY >= 408 && playerY < 472)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(9));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(10));
-		}
-		if (playerY >= 472 && playerY < 536)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(10));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(11));
-		}
-		if (playerY >= 536 && playerY < 600)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(11));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(12));
-		}
-		if (playerY >= 600 && playerY < 664)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(12));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(13));
-		}
-		if (playerY >= 664 && playerY < 728)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(13));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(14));
-		}
-		if (playerY >= 728 && playerY < 792)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(14));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(15));
-		}
-		if (playerY >= 792 && playerY < 856)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(15));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(16));
-		}
-		if (playerY >= 856 && playerY < 920)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(16));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(17));
-		}
-		if (playerY >= 920 && playerY < 984)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(17));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(18));
-		}
-		if (playerY >= 984 && playerY < 1048)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(18));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(19));
-		}
-		if (playerY >= 1048 && playerY < 1112)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(19));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(20));
-		}
-		if (playerY >= 1112 && playerY < 1176)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(20));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(21));
-		}
-		if (playerY >= 1176 && playerY < 1240)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(21));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(22));
-		}
-		if (playerY >= 1240 && playerY < 1304)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(22));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(23));
-		}
-		if (playerY >= 1304 && playerY < 1368)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(23));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(24));
-		}
-		if (playerY >= 1368 && playerY < 1432)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(24));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(25));
-		}
-		if (playerY >= 1432 && playerY < 1496)
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(25));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(26));
-		}
-		if (playerY >= 1496 && playerY < 1560 )
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(26));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(27));
-		}
-		if (playerY >= 1560 && playerY < 1624 )
-		{
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(27));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(30));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(29));
 			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(28));
 		}
-		if (playerY >= 1624 && playerY < 1688)
+		if (playerY >= -72 && playerY < -8)
 		{
 			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(29));
-			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(30));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(28));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(27));
+		}
+		if (playerY >= -8 && playerY < 56)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(28));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(27));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(26));
+		}
+		if (playerY >= 56 && playerY < 120)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(27));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(26));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(25));
+		}
+		if (playerY >= 120 && playerY < 184)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(26));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(25));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(24));
+		}
+		if (playerY >= 184 && playerY < 248)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(25));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(24));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(23));
+		}
+		if (playerY >= 248 && playerY < 312)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(24));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(23));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(22));
+		}
+		if (playerY >= 312 && playerY < 376)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(23));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(22));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(21));
+		}
+		if (playerY >= 376 && playerY < 440)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(22));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(21));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(20));
+		}
+		if (playerY >= 440 && playerY < 504)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(21));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(20));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(19));
+		}
+		if (playerY >= 504 && playerY < 568)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(20));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(19));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(18));
+		}
+		if (playerY >= 568 && playerY < 632)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(19));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(18));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(17));
+		}
+		if (playerY >= 632 && playerY < 696)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(18));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(17));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(16));
+		}
+		if (playerY >= 696 && playerY < 760)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(17));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(16));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(15));
+		}
+		if (playerY >= 760 && playerY < 824)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(16));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(15));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(14));
+		}
+		if (playerY >= 824 && playerY < 888)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(15));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(14));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(13));
+		}
+		if (playerY >= 888 && playerY < 952)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(14));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(13));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(12));
+		}
+		if (playerY >= 952 && playerY < 1016)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(13));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(12));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(11));
+		}
+		if (playerY >= 1016 && playerY < 1080)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(12));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(11));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(10));
+		}
+		if (playerY >= 1080 && playerY < 1144)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(11));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(10));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(9));
+		}
+		if (playerY >= 1144 && playerY < 1208)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(10));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(9));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(8));
+		}
+		if (playerY >= 1208 && playerY < 1272)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(9));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(8));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(7));
+		}
+		if (playerY >= 1272 && playerY < 1336)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(8));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(7));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(6));
+		}
+		if (playerY >= 1336 && playerY < 1400)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(7));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(6));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(5));
+		}
+		if (playerY >= 1400 && playerY < 1464)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(6));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(5));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(4));
+		}
+		if (playerY >= 1464 && playerY < 1528)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(5));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(4));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(3));
+		}
+		if (playerY >= 1528 && playerY < 1592)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(4));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(3));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(2));
+		}
+		if (playerY >= 1592 && playerY < 1656)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(3));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(2));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(1));
+		}
+		if (playerY >= 1656 && playerY < 1720)
+		{
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(2));
+			player->getComponent<CollisionComponent>().checkCollision(collidersMap.at(1));
 		}
 	}
 

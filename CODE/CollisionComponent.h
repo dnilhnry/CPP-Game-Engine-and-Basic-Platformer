@@ -98,7 +98,7 @@ public:
 			if (worldType == Destroyed)
 			{
 				lbCorner = Vector2D(position.XValue - 32, position.YValue - 32);
-				rtCorner = Vector2D(position.XValue + 32, position.YValue + 24);
+				rtCorner = Vector2D(position.XValue + 32, position.YValue + 32);
 				collisionBox.PlaceAt(lbCorner, rtCorner);
 			}
 			if (worldType == Exit)

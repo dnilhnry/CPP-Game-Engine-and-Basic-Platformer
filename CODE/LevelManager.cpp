@@ -48,7 +48,8 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 	int y = 0;
 	float gameX = startPosition.XValue+0.5f;
 	float gameY = startPosition.YValue-0.5f;
-	int rowNumber = LevelHeight - 1;
+	int rowNumber = 1;
+	int idRowNumber = LevelHeight - 1;
 
 	std::vector<Entity*> collidersVector1;
 	std::vector<Entity*> collidersVector2;
@@ -92,7 +93,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			case ' ':
 			{
 				// nothing
-				Entity& newEmpty(pEM->addEntity( ((LevelWidth * rowNumber) + (x + 1)), World, Empty ));
+				Entity& newEmpty(pEM->addEntity( ((LevelWidth * idRowNumber) + (x + 1)), World, Empty ));
 				newEmpty.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newEmpty.addComponent<ImageComponent>(pDE, pAM);
 				newEmpty.getComponent<ImageComponent>().setImage("empty");
@@ -104,7 +105,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			case '-':
 			{
 				// platform
-				Entity& newPlatform(pEM->addEntity( ((LevelWidth * rowNumber) + (x + 1)), World, Platform ));
+				Entity& newPlatform(pEM->addEntity( ((LevelWidth * idRowNumber) + (x + 1)), World, Platform ));
 				newPlatform.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newPlatform.addComponent<ImageComponent>(pDE, pAM);
 				newPlatform.getComponent<ImageComponent>().setImage("platform");
@@ -115,7 +116,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			case '^':
 			{
 				// trappedPlatform
-				Entity& newTrappedPlatform(pEM->addEntity(((LevelWidth * rowNumber) + (x + 1)), World, TrappedPlatform));
+				Entity& newTrappedPlatform(pEM->addEntity(((LevelWidth * idRowNumber) + (x + 1)), World, TrappedPlatform));
 				newTrappedPlatform.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newTrappedPlatform.addComponent<ImageComponent>(pDE, pAM);
 				newTrappedPlatform.getComponent<ImageComponent>().setImage("trappedPlatform");
@@ -126,7 +127,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			case '<':
 			{
 				// trappedPlatform
-				Entity& newTrappedPlatform(pEM->addEntity(((LevelWidth * rowNumber) + (x + 1)), World, TrappedPlatform));
+				Entity& newTrappedPlatform(pEM->addEntity(((LevelWidth * idRowNumber) + (x + 1)), World, TrappedPlatform));
 				newTrappedPlatform.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newTrappedPlatform.addComponent<ImageComponent>(pDE, pAM);
 				newTrappedPlatform.getComponent<ImageComponent>().setImage("trappedPlatform");
@@ -138,7 +139,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			case '>':
 			{
 				// trappedPlatform
-				Entity& newTrappedPlatform(pEM->addEntity(((LevelWidth * rowNumber) + (x + 1)), World, TrappedPlatform));
+				Entity& newTrappedPlatform(pEM->addEntity(((LevelWidth * idRowNumber) + (x + 1)), World, TrappedPlatform));
 				newTrappedPlatform.addComponent<TransformComponent>(Vector2D(gameX, gameY), 3.142f, 1.0f);
 				newTrappedPlatform.addComponent<ImageComponent>(pDE, pAM);
 				newTrappedPlatform.getComponent<ImageComponent>().setImage("trappedPlatform");
@@ -150,7 +151,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			case 'H':
 			{
 				// trapHorizontal
-				Entity& newTrapHorizontal(pEM->addEntity( ((LevelWidth * rowNumber) + (x + 1)), World, Trap ));
+				Entity& newTrapHorizontal(pEM->addEntity( ((LevelWidth * idRowNumber) + (x + 1)), World, Trap ));
 				newTrapHorizontal.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newTrapHorizontal.addComponent<ImageComponent>(pDE, pAM);
 				newTrapHorizontal.getComponent<ImageComponent>().setImage("trap");
@@ -161,7 +162,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			case 'I':
 			{
 				// trapHorizontal
-				Entity& newTrapVertical(pEM->addEntity( ((LevelWidth * rowNumber) + (x + 1)), World, Trap ));
+				Entity& newTrapVertical(pEM->addEntity( ((LevelWidth * idRowNumber) + (x + 1)), World, Trap ));
 				newTrapVertical.addComponent<TransformComponent>(Vector2D(gameX, gameY), 1.571f, 1.0f);
 				newTrapVertical.addComponent<ImageComponent>(pDE, pAM);
 				newTrapVertical.getComponent<ImageComponent>().setImage("trap");
@@ -172,7 +173,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			case '~':
 			{
 				// destroyedEdge
-				Entity& newDestroyedEdge(pEM->addEntity( ((LevelWidth * rowNumber) + (x + 1)), World, DestroyedEdge ));
+				Entity& newDestroyedEdge(pEM->addEntity( ((LevelWidth * idRowNumber) + (x + 1)), World, DestroyedEdge ));
 				newDestroyedEdge.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newDestroyedEdge.addComponent<ImageComponent>(pDE, pAM);
 				newDestroyedEdge.getComponent<ImageComponent>().setImage("destroyedEdge");
@@ -183,7 +184,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			case 'x':
 			{
 				// destroyed
-				Entity& newDestroyed(pEM->addEntity( ((LevelWidth * rowNumber) + (x + 1)), World, Destroyed ));
+				Entity& newDestroyed(pEM->addEntity( ((LevelWidth * idRowNumber) + (x + 1)), World, Destroyed ));
 				newDestroyed.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newDestroyed.addComponent<ImageComponent>(pDE, pAM);
 				newDestroyed.getComponent<ImageComponent>().setImage("destroyed");
@@ -195,7 +196,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			case '=':
 			{
 				// exit
-				Entity& newExit(pEM->addEntity( ((LevelWidth * rowNumber) + (x + 1)), World, Exit ));
+				Entity& newExit(pEM->addEntity( ((LevelWidth * idRowNumber) + (x + 1)), World, Exit ));
 				newExit.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newExit.addComponent<ImageComponent>(pDE, pAM);
 				newExit.getComponent<ImageComponent>().setImage("exit");
@@ -206,7 +207,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			case '+':
 			{
 				// point
-				Entity& newPoint(pEM->addEntity(((LevelWidth* rowNumber) + (x + 1)), World, Point ));
+				Entity& newPoint(pEM->addEntity(((LevelWidth* idRowNumber) + (x + 1)), World, Point ));
 				newPoint.addComponent<TransformComponent>(Vector2D(gameX, gameY - (tileSize / 4)), 0.0f, 1.0f);
 				newPoint.addComponent<ImageComponent>(pDE, pAM);
 				newPoint.getComponent<ImageComponent>().setImage("point");
@@ -219,107 +220,228 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			}
 			gameX = gameX + tileSize;
 
-			Entity& newEntity = pEM->getEntity(((LevelWidth * rowNumber) + (x + 1)));
-			switch ((rowNumber + 1))
+			// setup collision checks
+
+			Entity& newEntity = pEM->getEntity(((LevelWidth * idRowNumber) + (x + 1)));
+
+			// if the entity is a point, add it to the row belows vector too
+			// this is because the point is moved 16px bellow the rest of it's row
+			if (newEntity.getWorldType() == Point)
 			{
-			case 30:
-				collidersVector30.emplace_back(&newEntity);
-				break;
-			case 29:
-				collidersVector29.emplace_back(&newEntity);
-				break;
-			case 28:
-				collidersVector28.emplace_back(&newEntity);
-				break;
-			case 27:
-				collidersVector27.emplace_back(&newEntity);
-				break;
-			case 26:
-				collidersVector26.emplace_back(&newEntity);
-				break;
-			case 25:
-				collidersVector25.emplace_back(&newEntity);
-				break;
-			case 24:
-				collidersVector24.emplace_back(&newEntity);
-				break;
-			case 23:
-				collidersVector23.emplace_back(&newEntity);
-				break;
-			case 22:
-				collidersVector22.emplace_back(&newEntity);
-				break;
-			case 21:
-				collidersVector21.emplace_back(&newEntity);
-				break;
-			case 20:
-				collidersVector20.emplace_back(&newEntity);
-				break;
-			case 19:
-				collidersVector19.emplace_back(&newEntity);
-				break;
-			case 18:
-				collidersVector18.emplace_back(&newEntity);
-				break;
-			case 17:
-				collidersVector17.emplace_back(&newEntity);
-				break;
-			case 16:
-				collidersVector16.emplace_back(&newEntity);
-				break;
-			case 15:
-				collidersVector15.emplace_back(&newEntity);
-				break;
-			case 14:
-				collidersVector14.emplace_back(&newEntity);
-				break;
-			case 13:
-				collidersVector13.emplace_back(&newEntity);
-				break;
-			case 12:
-				collidersVector12.emplace_back(&newEntity);
-				break;
-			case 11:
-				collidersVector11.emplace_back(&newEntity);
-				break;
-			case 10:
-				collidersVector10.emplace_back(&newEntity);
-				break;
-			case 9:
-				collidersVector9.emplace_back(&newEntity);
-				break;
-			case 8:
-				collidersVector8.emplace_back(&newEntity);
-				break;
-			case 7:
-				collidersVector7.emplace_back(&newEntity);
-				break;
-			case 6:
-				collidersVector6.emplace_back(&newEntity);
-				break;
-			case 5:
-				collidersVector5.emplace_back(&newEntity);
-				break;
-			case 4:
-				collidersVector4.emplace_back(&newEntity);
-				break;
-			case 3:
-				collidersVector3.emplace_back(&newEntity);
-				break;
-			case 2:
-				collidersVector2.emplace_back(&newEntity);
-				break;
-			case 1:
-				collidersVector1.emplace_back(&newEntity);
-				break;
-			default:
-				break;
+				switch (rowNumber)
+				{
+				case 27:
+					collidersVector28.emplace_back(&newEntity);
+					collidersVector27.emplace_back(&newEntity);
+					break;
+				case 26:
+					collidersVector27.emplace_back(&newEntity);
+					collidersVector26.emplace_back(&newEntity);
+					break;
+				case 25:
+					collidersVector26.emplace_back(&newEntity);
+					collidersVector25.emplace_back(&newEntity);
+					break;
+				case 24:
+					collidersVector25.emplace_back(&newEntity);
+					collidersVector24.emplace_back(&newEntity);
+					break;
+				case 23:
+					collidersVector24.emplace_back(&newEntity);
+					collidersVector23.emplace_back(&newEntity);
+					break;
+				case 22:
+					collidersVector23.emplace_back(&newEntity);
+					collidersVector22.emplace_back(&newEntity);
+					break;
+				case 21:
+					collidersVector22.emplace_back(&newEntity);
+					collidersVector21.emplace_back(&newEntity);
+					break;
+				case 20:
+					collidersVector21.emplace_back(&newEntity);
+					collidersVector20.emplace_back(&newEntity);
+					break;
+				case 19:
+					collidersVector20.emplace_back(&newEntity);
+					collidersVector19.emplace_back(&newEntity);
+					break;
+				case 18:
+					collidersVector19.emplace_back(&newEntity);
+					collidersVector18.emplace_back(&newEntity);
+					break;
+				case 17:
+					collidersVector18.emplace_back(&newEntity);
+					collidersVector17.emplace_back(&newEntity);
+					break;
+				case 16:
+					collidersVector17.emplace_back(&newEntity);
+					collidersVector16.emplace_back(&newEntity);
+					break;
+				case 15:
+					collidersVector16.emplace_back(&newEntity);
+					collidersVector15.emplace_back(&newEntity);
+					break;
+				case 14:
+					collidersVector15.emplace_back(&newEntity);
+					collidersVector14.emplace_back(&newEntity);
+					break;
+				case 13:
+					collidersVector14.emplace_back(&newEntity);
+					collidersVector13.emplace_back(&newEntity);
+					break;
+				case 12:
+					collidersVector13.emplace_back(&newEntity);
+					collidersVector12.emplace_back(&newEntity);
+					break;
+				case 11:
+					collidersVector12.emplace_back(&newEntity);
+					collidersVector11.emplace_back(&newEntity);
+					break;
+				case 10:
+					collidersVector11.emplace_back(&newEntity);
+					collidersVector10.emplace_back(&newEntity);
+					break;
+				case 9:
+					collidersVector10.emplace_back(&newEntity);
+					collidersVector9.emplace_back(&newEntity);
+					break;
+				case 8:
+					collidersVector9.emplace_back(&newEntity);
+					collidersVector8.emplace_back(&newEntity);
+					break;
+				case 7:
+					collidersVector8.emplace_back(&newEntity);
+					collidersVector7.emplace_back(&newEntity);
+					break;
+				case 6:
+					collidersVector7.emplace_back(&newEntity);
+					collidersVector6.emplace_back(&newEntity);
+					break;
+				case 5:
+					collidersVector6.emplace_back(&newEntity);
+					collidersVector5.emplace_back(&newEntity);
+					break;
+				case 4:
+					collidersVector5.emplace_back(&newEntity);
+					collidersVector4.emplace_back(&newEntity);
+					break;
+				case 3:
+					collidersVector4.emplace_back(&newEntity);
+					collidersVector3.emplace_back(&newEntity);
+					break;
+				case 2:
+					collidersVector3.emplace_back(&newEntity);
+					collidersVector2.emplace_back(&newEntity);
+					break;
+				default:
+					break;
+				}
+			}
+			else
+			{
+				switch (rowNumber)
+				{
+				case 30:
+					collidersVector30.emplace_back(&newEntity);
+					break;
+				case 29:
+					collidersVector29.emplace_back(&newEntity);
+					break;
+				case 28:
+					collidersVector28.emplace_back(&newEntity);
+					break;
+				case 27:
+					collidersVector27.emplace_back(&newEntity);
+					break;
+				case 26:
+					collidersVector26.emplace_back(&newEntity);
+					break;
+				case 25:
+					collidersVector25.emplace_back(&newEntity);
+					break;
+				case 24:
+					collidersVector24.emplace_back(&newEntity);
+					break;
+				case 23:
+					collidersVector23.emplace_back(&newEntity);
+					break;
+				case 22:
+					collidersVector22.emplace_back(&newEntity);
+					break;
+				case 21:
+					collidersVector21.emplace_back(&newEntity);
+					break;
+				case 20:
+					collidersVector20.emplace_back(&newEntity);
+					break;
+				case 19:
+					collidersVector19.emplace_back(&newEntity);
+					break;
+				case 18:
+					collidersVector18.emplace_back(&newEntity);
+					break;
+				case 17:
+					collidersVector17.emplace_back(&newEntity);
+					break;
+				case 16:
+					collidersVector16.emplace_back(&newEntity);
+					break;
+				case 15:
+					collidersVector15.emplace_back(&newEntity);
+					break;
+				case 14:
+					collidersVector14.emplace_back(&newEntity);
+					break;
+				case 13:
+					collidersVector13.emplace_back(&newEntity);
+					break;
+				case 12:
+					collidersVector12.emplace_back(&newEntity);
+					break;
+				case 11:
+					collidersVector11.emplace_back(&newEntity);
+					break;
+				case 10:
+					collidersVector10.emplace_back(&newEntity);
+					break;
+				case 9:
+					collidersVector9.emplace_back(&newEntity);
+					break;
+				case 8:
+					collidersVector8.emplace_back(&newEntity);
+					break;
+				case 7:
+					collidersVector7.emplace_back(&newEntity);
+					break;
+				case 6:
+					collidersVector6.emplace_back(&newEntity);
+					break;
+				case 5:
+					collidersVector5.emplace_back(&newEntity);
+					break;
+				case 4:
+					collidersVector4.emplace_back(&newEntity);
+					break;
+				case 3:
+					collidersVector3.emplace_back(&newEntity);
+					break;
+				case 2:
+					collidersVector2.emplace_back(&newEntity);
+					break;
+				case 1:
+					collidersVector1.emplace_back(&newEntity);
+					break;
+				default:
+					break;
+				}
 			}
 
 		}
 		y++;
 		gameY = gameY - tileSize;
-		rowNumber--;
+		rowNumber++;
+		idRowNumber--;
 
 	}
 	myFile.close();

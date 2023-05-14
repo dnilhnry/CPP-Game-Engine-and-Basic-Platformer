@@ -32,3 +32,14 @@ void ModifyComponent::pointDestroyedEdge()
 	Vector2D rtCorner = Vector2D(pTC->getPosition().XValue + 32, pTC->getPosition().YValue + 24);
 	pCC->moveCollisionBox(lbCorner, rtCorner);
 }
+
+void ModifyComponent::vTrapDestroyedEdge()
+{
+	entity->setWorldType(DestroyedEdge);
+	pTC->setRotation(0);
+	pIC->setImage("destroyedEdge");
+	pCC->setActive(true);
+	Vector2D lbCorner = Vector2D(pTC->getPosition().XValue - 32, pTC->getPosition().YValue - 32);
+	Vector2D rtCorner = Vector2D(pTC->getPosition().XValue + 32, pTC->getPosition().YValue + 24);
+	pCC->moveCollisionBox(lbCorner, rtCorner);
+}

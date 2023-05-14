@@ -24,8 +24,8 @@ private:
 	WorldType worldType;
 
 	int rowNumber;
-	int currentEdge = 1;
-	int currentDestroyed = 0;
+	int currentEdge = 29;
+	int currentDestroyed = 30;
 
 	double frameTime;
 	double currentTime = 0.0;
@@ -66,19 +66,23 @@ public:
 				if (currentTime >= runTime)
 				{
 					currentTime = 0.0;
-					currentDestroyed++;
-					currentEdge++;
+					currentDestroyed--;
+					currentEdge--;
 
 
 					if (rowNumber == currentEdge)
 					{
-						if (worldType != Point)
+						if (worldType != Point && worldType != Trap)
 						{
 							toDestroyedEdge();
 						}
 						else if (worldType == Point)
 						{
 							pointDestroyedEdge();
+						}
+						else if (worldType == Trap)
+						{
+							vTrapDestroyedEdge();
 						}
 
 					}
@@ -104,5 +108,8 @@ public:
 
 	// sets the entity world type to DestroyedEdge from point
 	void pointDestroyedEdge();
+
+	// sets the entity world type to DestroyedEdge from verticalTrap
+	void vTrapDestroyedEdge();
 
 };
