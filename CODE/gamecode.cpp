@@ -107,7 +107,7 @@ ErrorType Game::Setup(bool bFullScreen, HWND hwnd, HINSTANCE hinstance)
 		return FAILURE;
 	}
 	pDE->AddFont(L"Ariel", 48, false, false);
-	pDE->AddFont(L"Ariel", 72, false, false);
+	pDE->AddFont(L"Ariel", 96, true, false);
 	pSE = MySoundEngine::GetInstance();
 	if (FAILED(MyInputs::Start(hinstance, hwnd)))
 	{
@@ -858,7 +858,7 @@ ErrorType Game::Update()
 	// write countdown to screen
 	if (slowTime > 0)
 	{
-		pDE->WriteInt(pDE->theCamera.ReverseTransform(Vector2D(midX, midY)), (10.0 * slowTime), MyDrawEngine::WHITE, 2);
+		pDE->WriteInt(pDE->theCamera.ReverseTransform(Vector2D(midX - 24, midY - 48)), (10.0 * slowTime), MyDrawEngine::WHITE, 2);
 	}
 
 	gt.mark();
