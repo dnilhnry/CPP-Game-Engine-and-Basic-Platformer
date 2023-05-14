@@ -50,6 +50,37 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 	float gameY = startPosition.YValue-0.5f;
 	int rowNumber = LevelHeight - 1;
 
+	std::vector<Entity*> collidersVector1;
+	std::vector<Entity*> collidersVector2;
+	std::vector<Entity*> collidersVector3;
+	std::vector<Entity*> collidersVector4;
+	std::vector<Entity*> collidersVector5;
+	std::vector<Entity*> collidersVector6;
+	std::vector<Entity*> collidersVector7;
+	std::vector<Entity*> collidersVector8;
+	std::vector<Entity*> collidersVector9;
+	std::vector<Entity*> collidersVector10;
+	std::vector<Entity*> collidersVector11;
+	std::vector<Entity*> collidersVector12;
+	std::vector<Entity*> collidersVector13;
+	std::vector<Entity*> collidersVector14;
+	std::vector<Entity*> collidersVector15;
+	std::vector<Entity*> collidersVector16;
+	std::vector<Entity*> collidersVector17;
+	std::vector<Entity*> collidersVector18;
+	std::vector<Entity*> collidersVector19;
+	std::vector<Entity*> collidersVector20;
+	std::vector<Entity*> collidersVector21;
+	std::vector<Entity*> collidersVector22;
+	std::vector<Entity*> collidersVector23;
+	std::vector<Entity*> collidersVector24;
+	std::vector<Entity*> collidersVector25;
+	std::vector<Entity*> collidersVector26;
+	std::vector<Entity*> collidersVector27;
+	std::vector<Entity*> collidersVector28;
+	std::vector<Entity*> collidersVector29;
+	std::vector<Entity*> collidersVector30;
+
 	while (std::getline(myFile, line))
 	{
 		std::vector<char> chars(line.begin(), line.end());
@@ -187,6 +218,104 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 				break;
 			}
 			gameX = gameX + tileSize;
+
+			Entity& newEntity = pEM->getEntity(((LevelWidth * rowNumber) + (x + 1)));
+			switch (rowNumber)
+			{
+			case 30:
+				collidersVector30.emplace_back(&newEntity);
+				break;
+			case 29:
+				collidersVector29.emplace_back(&newEntity);
+				break;
+			case 28:
+				collidersVector28.emplace_back(&newEntity);
+				break;
+			case 27:
+				collidersVector27.emplace_back(&newEntity);
+				break;
+			case 26:
+				collidersVector26.emplace_back(&newEntity);
+				break;
+			case 25:
+				collidersVector25.emplace_back(&newEntity);
+				break;
+			case 24:
+				collidersVector24.emplace_back(&newEntity);
+				break;
+			case 23:
+				collidersVector23.emplace_back(&newEntity);
+				break;
+			case 22:
+				collidersVector22.emplace_back(&newEntity);
+				break;
+			case 21:
+				collidersVector21.emplace_back(&newEntity);
+				break;
+			case 20:
+				collidersVector20.emplace_back(&newEntity);
+				break;
+			case 19:
+				collidersVector19.emplace_back(&newEntity);
+				break;
+			case 18:
+				collidersVector18.emplace_back(&newEntity);
+				break;
+			case 17:
+				collidersVector17.emplace_back(&newEntity);
+				break;
+			case 16:
+				collidersVector16.emplace_back(&newEntity);
+				break;
+			case 15:
+				collidersVector15.emplace_back(&newEntity);
+				break;
+			case 14:
+				collidersVector14.emplace_back(&newEntity);
+				break;
+			case 13:
+				collidersVector13.emplace_back(&newEntity);
+				break;
+			case 12:
+				collidersVector12.emplace_back(&newEntity);
+				break;
+			case 11:
+				collidersVector11.emplace_back(&newEntity);
+				break;
+			case 10:
+				collidersVector10.emplace_back(&newEntity);
+				break;
+			case 9:
+				collidersVector9.emplace_back(&newEntity);
+				break;
+			case 8:
+				collidersVector8.emplace_back(&newEntity);
+				break;
+			case 7:
+				collidersVector7.emplace_back(&newEntity);
+				break;
+			case 6:
+				collidersVector6.emplace_back(&newEntity);
+				break;
+			case 5:
+				collidersVector5.emplace_back(&newEntity);
+				break;
+			case 4:
+				collidersVector4.emplace_back(&newEntity);
+				break;
+			case 3:
+				collidersVector3.emplace_back(&newEntity);
+				break;
+			case 2:
+				collidersVector2.emplace_back(&newEntity);
+				break;
+			case 1:
+				collidersVector1.emplace_back(&newEntity);
+				break;
+			default:
+				break;
+			}
+
 		}
 		y++;
 		gameY = gameY - tileSize;
@@ -194,4 +323,42 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 
 	}
 	myFile.close();
+
+	collidersMap = {
+		{30, collidersVector30},
+		{29, collidersVector29},
+		{28, collidersVector28},
+		{27, collidersVector27},
+		{26, collidersVector26},
+		{25, collidersVector25},
+		{24, collidersVector24},
+		{23, collidersVector23},
+		{22, collidersVector22},
+		{21, collidersVector21},
+		{20, collidersVector20},
+		{19, collidersVector19},
+		{18, collidersVector18},
+		{17, collidersVector17},
+		{16, collidersVector16},
+		{15, collidersVector15},
+		{14, collidersVector14},
+		{13, collidersVector13},
+		{12, collidersVector12},
+		{11, collidersVector11},
+		{10, collidersVector10},
+		{9, collidersVector9},
+		{8, collidersVector8},
+		{7, collidersVector7},
+		{6, collidersVector6},
+		{5, collidersVector5},
+		{4, collidersVector4},
+		{3, collidersVector3},
+		{2, collidersVector2},
+		{1, collidersVector1}
+	};	
+}
+
+std::unordered_map<int, std::vector<Entity*>> LevelManager::getCollidersMap()
+{
+	return collidersMap;
 }

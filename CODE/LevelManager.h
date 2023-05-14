@@ -13,9 +13,12 @@ all of the entities also have their components added and initialised.
 
 #pragma once
 
+#include <unordered_map>
+
 #include "Levels.h"
 #include "vector2D.h"
 
+class Entity;
 class EntityManager;
 class MyDrawEngine;
 class AssetManager;
@@ -29,6 +32,7 @@ private:
 	int tileSize = 64;
 	int LevelWidth = 12;
 	int LevelHeight = 30;
+	std::unordered_map<int, std::vector<Entity*>> collidersMap;
 
 public:
 
@@ -37,5 +41,8 @@ public:
 
 	// loadLevel method loads the level from the text file and creates the entities in the game world
 	void loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager* pAM);
+
+	// gets a map of the colliders vectors of entities
+	std::unordered_map<int, std::vector<Entity*>> getCollidersMap();
 
 };
