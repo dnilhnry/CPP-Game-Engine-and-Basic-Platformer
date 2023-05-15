@@ -402,10 +402,10 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	gameAreaHeight = pDE->theCamera.Transform(gameAreaHeight);
 	midX = pDE->GetScreenWidth() / 2.0f;
 	midY = pDE->GetScreenHeight() / 2.0f;
-	topRectangle.PlaceAt(Vector2D((midX - gameAreaWidth / 2.0f) - 0.5f, ((midY - gameAreaHeight / 2.0f) - 1.5f)), Vector2D((midX + gameAreaWidth / 2.0f) + 0.5f, -pDE->GetScreenHeight()));
-	bottomRectangle.PlaceAt(Vector2D((midX - gameAreaWidth / 2.0f) - 0.5f, ((midY + gameAreaHeight / 2.0f) + 1.5f)), Vector2D((midX + gameAreaWidth / 2.0f) + 0.5f, pDE->GetScreenHeight()));
-	leftRectangle.PlaceAt(Vector2D(((midX - gameAreaWidth / 2.0f) - 1.5f), pDE->GetScreenHeight()), Vector2D(-pDE->GetScreenWidth(), -pDE->GetScreenHeight()));
-	rightRectangle.PlaceAt(Vector2D(((midX + gameAreaWidth / 2.0f) + 1.5f), pDE->GetScreenHeight()), Vector2D(pDE->GetScreenWidth(), -pDE->GetScreenHeight()));
+	topRectangle.PlaceAt(Vector2D(-(2.0f * midX), (midY - gameAreaHeight / 2.0f)), Vector2D(2.0f * midX, -(2.0f * midY)));
+	bottomRectangle.PlaceAt(Vector2D(-(2.0f * midX), (midY + gameAreaHeight / 2.0f)), Vector2D(2.0f * midX, 2.0f * midY));
+	leftRectangle.PlaceAt(Vector2D((midX - gameAreaWidth / 2.0f) - 0.5f, 2.0f * midY), Vector2D(-(2.0f * midX), -(2.0f * midY)));
+	rightRectangle.PlaceAt(Vector2D((midX + gameAreaWidth / 2.0f) - 0.5f, 2.0f * midY), Vector2D(2.0f * midX, -(2.0f * midY)));
 
 
 	// UI
@@ -450,12 +450,15 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	player->addComponent<CollisionComponent>();
 	player->addComponent<InputComponent>(pInputs);
 
+
 	gt.setMinimumFrameTime(0.0164);
 	gt.mark();
 	gt.mark();
 
+
 	// send the frame time to each entity
 	entityManager.updateTime(gt.mdFrameTime);
+
 
 	return SUCCESS;
 }
@@ -484,6 +487,7 @@ ErrorType Game::Update()
 	// Your code goes here *************************************************
 	// *********************************************************************
 
+
 	// ensure starting or resuming the game does not mess with the physics
 	// also continues to play the background music
 	if (gt.mdGameRate != 1)
@@ -504,6 +508,7 @@ ErrorType Game::Update()
 				slowStarted = false;
 				slowTime = 0.0;
 				gt.mdGameRate = 1;
+
 				backgroudMusicPlaying = false;
 				background->getComponent<SoundComponent>().setSound("backgroundMusic", true);
 			}
@@ -520,6 +525,7 @@ ErrorType Game::Update()
 			backgroudMusicPlaying = true;
 		}
 	}
+
 
 	// check if the player uses the keyboard
 	player->getComponent<InputComponent>().checkForInputs();
@@ -795,10 +801,6 @@ ErrorType Game::Update()
 
 
 	// draw game area box 768x576 - 64x64 tiles fit 12x9
-	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D(midX - gameAreaWidth / 2.0f, (midY - gameAreaHeight / 2.0f)-1)), pDE->theCamera.ReverseTransform(Vector2D(midX + gameAreaWidth / 2.0f, (midY - gameAreaHeight / 2.0f)-1)), MyDrawEngine::DARKBLUE); // TOP
-	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f)-0.5f, midY - gameAreaHeight / 2.0f)), pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f)-0.5f, midY + gameAreaHeight / 2.0f)), MyDrawEngine::DARKBLUE); // LEFT
-	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((midX + gameAreaWidth / 2.0f)+0.5f, midY - gameAreaHeight / 2.0f)), pDE->theCamera.ReverseTransform(Vector2D((midX + gameAreaWidth / 2.0f)+0.5f, midY + gameAreaHeight / 2.0f)), MyDrawEngine::DARKBLUE); // RIGHT
-	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D(midX - gameAreaWidth / 2.0f, (midY + gameAreaHeight / 2.0f)+1)), pDE->theCamera.ReverseTransform(Vector2D(midX + gameAreaWidth / 2.0f, (midY + gameAreaHeight / 2.0f)+1)), MyDrawEngine::DARKBLUE); // BOTTOM
 	pDE->FillRect(pDE->theCamera.ReverseTransform(topRectangle), MyDrawEngine::BLACK, 0.0f);
 	pDE->FillRect(pDE->theCamera.ReverseTransform(bottomRectangle), MyDrawEngine::BLACK, 0.0f);
 	pDE->FillRect(pDE->theCamera.ReverseTransform(leftRectangle), MyDrawEngine::BLACK, 0.0f);
@@ -883,7 +885,7 @@ ErrorType Game::EndOfGame()
 	// *********************************************************************
 
 	// clear all entities
-	// collidersVector.clear();
+	collidersMap.clear();
 	entityManager.deleteAll();
 	entityManager.removeInactiveEntities();
 	assetManager.clearAll();

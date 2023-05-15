@@ -46,8 +46,8 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 
 	int x = 0;
 	int y = 0;
-	float gameX = startPosition.XValue+0.5f;
-	float gameY = startPosition.YValue-0.5f;
+	float gameX = startPosition.XValue;
+	float gameY = startPosition.YValue;
 	int rowNumber = 1;
 	int idRowNumber = LevelHeight - 1;
 
@@ -85,7 +85,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 	while (std::getline(myFile, line))
 	{
 		std::vector<char> chars(line.begin(), line.end());
-		gameX = startPosition.XValue+0.5f;
+		gameX = startPosition.XValue;
 		for (unsigned int x = 0; x < chars.size(); x++)
 		{
 			switch (chars[x])
