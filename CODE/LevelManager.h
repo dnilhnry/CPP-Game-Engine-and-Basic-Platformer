@@ -30,8 +30,8 @@ private:
 	const char* levelFile;
 	Vector2D startPosition = Vector2D(-352,1688);
 	int tileSize = 64;
-	int LevelWidth = 12;
-	int LevelHeight = 30;
+	int levelWidth = 12;
+	int levelHeight = 30;
 	std::unordered_map<int, std::vector<Entity*>> collidersMap;
 
 public:

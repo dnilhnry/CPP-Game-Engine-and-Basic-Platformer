@@ -51,44 +51,41 @@ public:
 	// If the component is active, it will update the entities animation
 	void update() override
 	{
-		if (isActive() == true)
+		if (entityType == Character)
 		{
-			if (entityType == Character)
-			{
-				playerAnimation();
-			}
+			playerAnimation();
+		}
 
-			if (worldType == TrappedPlatform)
-			{
-				frameTime = entity->getGameTime();
+		if (worldType == TrappedPlatform)
+		{
+			frameTime = entity->getGameTime();
 				
-				if (animationStarted == false)
+			if (animationStarted == false)
+			{
+				if (currentTime >= runTime)
 				{
-					if (currentTime >= runTime)
-					{
-						currentTime = 0.0;
-						animationStarted = true;
-						frameNumber = 0;
-					}
-					else
-					{
-						currentTime = currentTime + frameTime;
-					}
+					currentTime = 0.0;
+					animationStarted = true;
+					frameNumber = 0;
 				}
-				if (animationStarted == true)
+				else
 				{
-					if (currentTime >= 0.15f)
-					{
-						platformAnimation();
-						frameNumber++;
-						currentTime = 0.0;
-					}
-					else
-					{
-						currentTime = currentTime + frameTime;
-					}
+					currentTime = currentTime + frameTime;
+				}
+			}
+			if (animationStarted == true)
+			{
+				if (currentTime >= 0.15f)
+				{
+					platformAnimation();
+					frameNumber++;
+					currentTime = 0.0;
+				}
+				else
+				{
+					currentTime = currentTime + frameTime;
+				}
 
-				}
 			}
 		}
 	}

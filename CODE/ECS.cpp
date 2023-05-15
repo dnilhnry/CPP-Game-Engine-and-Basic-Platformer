@@ -20,7 +20,13 @@ void Component::setActive(bool a)
 
 void Entity::update()
 {
-	for (auto& c : components) { c->update(); }
+	for (auto& c : components)
+	{
+		if (c->isActive() == true)
+		{
+			c->update();
+		}
+	}
 }
 
 void Entity::updateTime(double time)

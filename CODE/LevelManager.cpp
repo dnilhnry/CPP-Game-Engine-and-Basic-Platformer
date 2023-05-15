@@ -49,7 +49,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 	float gameX = startPosition.XValue;
 	float gameY = startPosition.YValue;
 	int rowNumber = 1;
-	int idRowNumber = LevelHeight - 1;
+	int idRowNumber = levelHeight - 1;
 
 	std::vector<Entity*> collidersVector1;
 	std::vector<Entity*> collidersVector2;
@@ -93,7 +93,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			case ' ':
 			{
 				// nothing
-				Entity& newEmpty(pEM->addEntity( ((LevelWidth * idRowNumber) + (x + 1)), World, Empty ));
+				Entity& newEmpty(pEM->addEntity( ((levelWidth * idRowNumber) + (x + 1)), World, Empty ));
 				newEmpty.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newEmpty.addComponent<ImageComponent>(pDE, pAM);
 				newEmpty.getComponent<ImageComponent>().setImage("empty");
@@ -105,7 +105,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			case '-':
 			{
 				// platform
-				Entity& newPlatform(pEM->addEntity( ((LevelWidth * idRowNumber) + (x + 1)), World, Platform ));
+				Entity& newPlatform(pEM->addEntity( ((levelWidth * idRowNumber) + (x + 1)), World, Platform ));
 				newPlatform.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newPlatform.addComponent<ImageComponent>(pDE, pAM);
 				newPlatform.getComponent<ImageComponent>().setImage("platform");
@@ -116,7 +116,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			case '^':
 			{
 				// trappedPlatform
-				Entity& newTrappedPlatform(pEM->addEntity(((LevelWidth * idRowNumber) + (x + 1)), World, TrappedPlatform));
+				Entity& newTrappedPlatform(pEM->addEntity(((levelWidth * idRowNumber) + (x + 1)), World, TrappedPlatform));
 				newTrappedPlatform.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newTrappedPlatform.addComponent<ImageComponent>(pDE, pAM);
 				newTrappedPlatform.getComponent<ImageComponent>().setImage("trappedPlatform");
@@ -127,7 +127,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			case '<':
 			{
 				// trappedPlatform
-				Entity& newTrappedPlatform(pEM->addEntity(((LevelWidth * idRowNumber) + (x + 1)), World, TrappedPlatform));
+				Entity& newTrappedPlatform(pEM->addEntity(((levelWidth * idRowNumber) + (x + 1)), World, TrappedPlatform));
 				newTrappedPlatform.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newTrappedPlatform.addComponent<ImageComponent>(pDE, pAM);
 				newTrappedPlatform.getComponent<ImageComponent>().setImage("trappedPlatform");
@@ -139,7 +139,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			case '>':
 			{
 				// trappedPlatform
-				Entity& newTrappedPlatform(pEM->addEntity(((LevelWidth * idRowNumber) + (x + 1)), World, TrappedPlatform));
+				Entity& newTrappedPlatform(pEM->addEntity(((levelWidth * idRowNumber) + (x + 1)), World, TrappedPlatform));
 				newTrappedPlatform.addComponent<TransformComponent>(Vector2D(gameX, gameY), 3.142f, 1.0f);
 				newTrappedPlatform.addComponent<ImageComponent>(pDE, pAM);
 				newTrappedPlatform.getComponent<ImageComponent>().setImage("trappedPlatform");
@@ -151,7 +151,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			case 'H':
 			{
 				// trapHorizontal
-				Entity& newTrapHorizontal(pEM->addEntity( ((LevelWidth * idRowNumber) + (x + 1)), World, Trap ));
+				Entity& newTrapHorizontal(pEM->addEntity( ((levelWidth * idRowNumber) + (x + 1)), World, Trap ));
 				newTrapHorizontal.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newTrapHorizontal.addComponent<ImageComponent>(pDE, pAM);
 				newTrapHorizontal.getComponent<ImageComponent>().setImage("trap");
@@ -162,7 +162,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			case 'I':
 			{
 				// trapHorizontal
-				Entity& newTrapVertical(pEM->addEntity( ((LevelWidth * idRowNumber) + (x + 1)), World, Trap ));
+				Entity& newTrapVertical(pEM->addEntity( ((levelWidth * idRowNumber) + (x + 1)), World, Trap ));
 				newTrapVertical.addComponent<TransformComponent>(Vector2D(gameX, gameY), 1.571f, 1.0f);
 				newTrapVertical.addComponent<ImageComponent>(pDE, pAM);
 				newTrapVertical.getComponent<ImageComponent>().setImage("trap");
@@ -173,7 +173,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			case '~':
 			{
 				// destroyedEdge
-				Entity& newDestroyedEdge(pEM->addEntity( ((LevelWidth * idRowNumber) + (x + 1)), World, DestroyedEdge ));
+				Entity& newDestroyedEdge(pEM->addEntity( ((levelWidth * idRowNumber) + (x + 1)), World, DestroyedEdge ));
 				newDestroyedEdge.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newDestroyedEdge.addComponent<ImageComponent>(pDE, pAM);
 				newDestroyedEdge.getComponent<ImageComponent>().setImage("destroyedEdge");
@@ -184,7 +184,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			case 'x':
 			{
 				// destroyed
-				Entity& newDestroyed(pEM->addEntity( ((LevelWidth * idRowNumber) + (x + 1)), World, Destroyed ));
+				Entity& newDestroyed(pEM->addEntity( ((levelWidth * idRowNumber) + (x + 1)), World, Destroyed ));
 				newDestroyed.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newDestroyed.addComponent<ImageComponent>(pDE, pAM);
 				newDestroyed.getComponent<ImageComponent>().setImage("destroyed");
@@ -196,7 +196,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			case '=':
 			{
 				// exit
-				Entity& newExit(pEM->addEntity( ((LevelWidth * idRowNumber) + (x + 1)), World, Exit ));
+				Entity& newExit(pEM->addEntity( ((levelWidth * idRowNumber) + (x + 1)), World, Exit ));
 				newExit.addComponent<TransformComponent>(Vector2D(gameX, gameY), 0.0f, 1.0f);
 				newExit.addComponent<ImageComponent>(pDE, pAM);
 				newExit.getComponent<ImageComponent>().setImage("exit");
@@ -207,7 +207,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 			case '+':
 			{
 				// point
-				Entity& newPoint(pEM->addEntity(((LevelWidth* idRowNumber) + (x + 1)), World, Point ));
+				Entity& newPoint(pEM->addEntity(((levelWidth* idRowNumber) + (x + 1)), World, Point ));
 				newPoint.addComponent<TransformComponent>(Vector2D(gameX, gameY - (tileSize / 4)), 0.0f, 1.0f);
 				newPoint.addComponent<ImageComponent>(pDE, pAM);
 				newPoint.getComponent<ImageComponent>().setImage("point");
@@ -222,7 +222,7 @@ void LevelManager::loadLevel(EntityManager* pEM, MyDrawEngine* pDE, AssetManager
 
 			// setup collision checks
 
-			Entity& newEntity = pEM->getEntity(((LevelWidth * idRowNumber) + (x + 1)));
+			Entity& newEntity = pEM->getEntity(((levelWidth * idRowNumber) + (x + 1)));
 
 			// if the entity is a point, add it to the row belows vector too
 			// this is because the point is moved 16px bellow the rest of it's row

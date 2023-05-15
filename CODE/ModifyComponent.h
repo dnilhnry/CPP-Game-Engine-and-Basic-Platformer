@@ -60,38 +60,35 @@ public:
 		}
 		if (worldType != Destroyed)
 		{
-			if (isActive() == true)
+			frameTime = entity->getGameTime();
+			if (currentTime >= runTime)
 			{
-				frameTime = entity->getGameTime();
-				if (currentTime >= runTime)
+				currentTime = 0.0;
+				currentDestroyed--;
+				currentEdge--;
+
+
+				if (rowNumber == currentEdge)
 				{
-					currentTime = 0.0;
-					currentDestroyed--;
-					currentEdge--;
-
-
-					if (rowNumber == currentEdge)
+					if (worldType != Point)
 					{
-						if (worldType != Point)
-						{
-							toDestroyedEdge();
-						}
-						else if (worldType == Point)
-						{
-							pointDestroyedEdge();
-						}
-
+						toDestroyedEdge();
 					}
-					else if (rowNumber == currentDestroyed)
+					else if (worldType == Point)
 					{
-						toDestroyed();
+						pointDestroyedEdge();
 					}
 
 				}
-				else
+				else if (rowNumber == currentDestroyed)
 				{
-					currentTime = currentTime + frameTime;
+					toDestroyed();
 				}
+
+			}
+			else
+			{
+				currentTime = currentTime + frameTime;
 			}
 		}
 	}

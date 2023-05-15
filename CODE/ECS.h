@@ -156,6 +156,7 @@ public:
 	}
 
 	// update all components in the entity
+	// if component is not active, it is not updated
 	void update();
 
 	// updates the frame time of the entity
