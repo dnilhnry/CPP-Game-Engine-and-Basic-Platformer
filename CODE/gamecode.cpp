@@ -803,7 +803,15 @@ ErrorType Game::Update()
 	pDE->FillRect(pDE->theCamera.ReverseTransform(bottomRectangle), MyDrawEngine::BLACK, 0.0f);
 	pDE->FillRect(pDE->theCamera.ReverseTransform(leftRectangle), MyDrawEngine::BLACK, 0.0f);
 	pDE->FillRect(pDE->theCamera.ReverseTransform(rightRectangle), MyDrawEngine::BLACK, 0.0f);
-	
+	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f) - 1.0f, (midY - gameAreaHeight / 2.0f) - 1.5f)), pDE->theCamera.ReverseTransform(Vector2D((midX + gameAreaWidth / 2.0f) + 0.5f, (midY - gameAreaHeight / 2.0f) - 1.5f)), MyDrawEngine::WHITE);
+	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f) - 3.0f, (midY - gameAreaHeight / 2.0f) - 3.0f)), pDE->theCamera.ReverseTransform(Vector2D((midX + gameAreaWidth / 2.0f) + 2.5f, (midY - gameAreaHeight / 2.0f) - 3.0f)), MyDrawEngine::WHITE);
+	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f) - 1.0f, (midY + gameAreaHeight / 2.0f) + 1.5f)), pDE->theCamera.ReverseTransform(Vector2D((midX + gameAreaWidth / 2.0f) + 0.5f, (midY + gameAreaHeight / 2.0f) + 1.5f)), MyDrawEngine::WHITE);
+	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f) - 3.0f, (midY + gameAreaHeight / 2.0f) + 3.0f)), pDE->theCamera.ReverseTransform(Vector2D((midX + gameAreaWidth / 2.0f) + 2.5f, (midY + gameAreaHeight / 2.0f) + 3.0f)), MyDrawEngine::WHITE);
+	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f) - 1.5f, (midY - gameAreaHeight / 2.0f) - 1.5f)), pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f) - 1.5f, (midY + gameAreaHeight / 2.0f) + 1.5f)), MyDrawEngine::WHITE);
+	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f) - 3.5f, (midY - gameAreaHeight / 2.0f) - 3.0f)), pDE->theCamera.ReverseTransform(Vector2D((midX - gameAreaWidth / 2.0f) - 3.5f, (midY + gameAreaHeight / 2.0f) + 3.0f)), MyDrawEngine::WHITE);
+	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((midX + gameAreaWidth / 2.0f) + 1.0f, (midY - gameAreaHeight / 2.0f) - 1.5f)), pDE->theCamera.ReverseTransform(Vector2D((midX + gameAreaWidth / 2.0f) + 1.0f, (midY + gameAreaHeight / 2.0f) + 1.5f)), MyDrawEngine::WHITE);
+	pDE->DrawLine(pDE->theCamera.ReverseTransform(Vector2D((midX + gameAreaWidth / 2.0f) + 3.0f, (midY - gameAreaHeight / 2.0f) - 3.0f)), pDE->theCamera.ReverseTransform(Vector2D((midX + gameAreaWidth / 2.0f) + 3.0f, (midY + gameAreaHeight / 2.0f) + 3.0f)), MyDrawEngine::WHITE);
+
 
 	// welcome message
 	if (player->getComponent<InputComponent>().getFirstInput() == false)
