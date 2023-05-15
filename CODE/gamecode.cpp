@@ -386,7 +386,6 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	lost = false;
 	gameStarted = false;
 	finalSFX = false;
-	backgroudMusicPlaying = false;
 
 
 	// setup camera + game area
@@ -435,7 +434,6 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	background->getComponent<ImageComponent>().setImage("backgroundImage");
 	background->addComponent<SoundComponent>(pSE, &assetManager);
 	background->getComponent<SoundComponent>().setSound("backgroundMusic", true);
-	backgroudMusicPlaying = false;
 
 
 	// player enitity + components
