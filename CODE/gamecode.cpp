@@ -869,10 +869,13 @@ ErrorType Game::Update()
 		pDE->WriteInt(pDE->theCamera.ReverseTransform(Vector2D(midX - 24, midY - 48)), (10.0 * slowTime), MyDrawEngine::WHITE, 2);
 	}
 
+
 	gt.mark();
+
 
 	// send the frame time to each entity
 	entityManager.updateTime(gt.mdFrameTime);
+
 
 	// *********************************************************************
 	// *********************************************************************
@@ -890,7 +893,6 @@ ErrorType Game::EndOfGame()
 	// Add code here to tidy up ********************************************
 	// *********************************************************************
 
-	// clear all entities
 	collidersMap.clear();
 	entityManager.deleteAll();
 	entityManager.removeInactiveEntities();
