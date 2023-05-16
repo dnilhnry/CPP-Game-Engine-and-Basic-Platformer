@@ -157,6 +157,8 @@ public:
 	static const unsigned int YELLOW = D3DCOLOR_ARGB(255, 255, 255, 0);
 	static const unsigned int CYAN = D3DCOLOR_ARGB(255, 0, 255, 255);
 	static const unsigned int PURPLE = D3DCOLOR_ARGB(255, 255, 0, 255);
+	static const unsigned int ORANGE = D3DCOLOR_ARGB(255, 255, 128, 0);
+	static const unsigned int PINK = D3DCOLOR_ARGB(255, 255, 128, 255);
 	static const unsigned int GREY = D3DCOLOR_ARGB(255, 128, 128, 128);
 
 	// Public methods ***************************************

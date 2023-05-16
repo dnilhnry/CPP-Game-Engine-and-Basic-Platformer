@@ -31,8 +31,6 @@ private:
 	Rectangle2D collisionBox;
 	Circle2D collisionCircle;
 	float radius;
-	float leftBoundary;
-	float rightBoundary;
 	float upperBoundary;
 	float lowerBoundary;
 
@@ -51,15 +49,10 @@ public:
 
 		if (entityType == Character)
 		{
-			/*lbCorner = Vector2D(position.XValue - 20, position.YValue - 30);
-			rtCorner = Vector2D(position.XValue + 20, position.YValue + 30);
-			collisionBox.PlaceAt(lbCorner, rtCorner);*/
 			radius = 30.0f;
 			collisionCircle.PlaceAt(position, radius);
-			leftBoundary = 0.6f;
-			rightBoundary = -0.6f;
-			upperBoundary = -0.8f;
-			lowerBoundary = 0.8f;
+			upperBoundary = -0.3333f;
+			lowerBoundary = 0.9428f;
 
 			pGC = &entity->getComponent<GameComponent>();
 			pPC = &entity->getComponent<PhysicsComponent>();
@@ -137,9 +130,6 @@ public:
 		if (entityType == Character)
 		{
 			position = pTC->getPosition();
-			/*lbCorner = Vector2D(position.XValue - 20, position.YValue - 30);
-			rtCorner = Vector2D(position.XValue + 20, position.YValue + 30);
-			collisionBox.PlaceAt(lbCorner, rtCorner);*/
 			collisionCircle.PlaceAt(position, radius);
 		}
 
