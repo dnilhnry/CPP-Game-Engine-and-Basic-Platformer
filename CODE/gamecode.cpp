@@ -499,7 +499,7 @@ ErrorType Game::Update()
 				slowStarted = true;
 				slowTime = 0.5;
 			}
-			if (gameStarted == false)
+			else if (gameStarted == false)
 			{
 				slowStarted = false;
 				slowTime = 0.0;
