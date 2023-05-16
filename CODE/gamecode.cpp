@@ -554,6 +554,7 @@ ErrorType Game::Update()
 	// check if player has collided with anything
 	// narrow number of entities to check by getting 24/36 entities closest to player
 	// more efficient than checking all 360 entities every frame
+	// could be more efficient by taking into account the player's x position
 	if (player->getComponent<CollisionComponent>().isActive() == true)
 	{
 		if (playerY >= -200 && playerY < -136)
