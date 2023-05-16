@@ -29,6 +29,12 @@ private:
 	Vector2D lbCorner;
 	Vector2D rtCorner;
 	Rectangle2D collisionBox;
+	Circle2D collisionCircle;
+	float radius;
+	float leftBoundary;
+	float rightBoundary;
+	float upperBoundary;
+	float lowerBoundary;
 
 	double ignoreTime;
 	double frameTime;
@@ -45,9 +51,15 @@ public:
 
 		if (entityType == Character)
 		{
-			lbCorner = Vector2D(position.XValue - 20, position.YValue - 30);
+			/*lbCorner = Vector2D(position.XValue - 20, position.YValue - 30);
 			rtCorner = Vector2D(position.XValue + 20, position.YValue + 30);
-			collisionBox.PlaceAt(lbCorner, rtCorner);
+			collisionBox.PlaceAt(lbCorner, rtCorner);*/
+			radius = 30.0f;
+			collisionCircle.PlaceAt(position, radius);
+			leftBoundary = (2.0f / 3.0f);
+			rightBoundary = -(2.0f / 3.0f);
+			upperBoundary = (3.0f / 4.0f);
+			lowerBoundary = -(3.0f / 4.0f);
 
 			pGC = &entity->getComponent<GameComponent>();
 			pPC = &entity->getComponent<PhysicsComponent>();
@@ -125,9 +137,10 @@ public:
 		if (entityType == Character)
 		{
 			position = pTC->getPosition();
-			lbCorner = Vector2D(position.XValue - 20, position.YValue - 30);
+			/*lbCorner = Vector2D(position.XValue - 20, position.YValue - 30);
 			rtCorner = Vector2D(position.XValue + 20, position.YValue + 30);
-			collisionBox.PlaceAt(lbCorner, rtCorner);
+			collisionBox.PlaceAt(lbCorner, rtCorner);*/
+			collisionCircle.PlaceAt(position, radius);
 		}
 
 		if (ignoreTime > 0)

@@ -10,9 +10,9 @@ void CollisionComponent::checkCollision(std::vector<Entity*>& collidersVector)
 		if (pOtherCC->isActive() == true && pOtherCC->ignoreTime <= 0)
 		{
 			Rectangle2D otherCollisionBox = pOtherCC->getCollisionBox();
-			if (collisionBox.Intersects(otherCollisionBox) == true)
+			if (collisionCircle.Intersects(otherCollisionBox) == true)
 			{
-				collisionDirection = collisionBox.CollisionNormal(otherCollisionBox);
+				collisionDirection = otherCollisionBox.CollisionNormal(collisionCircle);
 				collided = true;
 			}
 
@@ -22,7 +22,7 @@ void CollisionComponent::checkCollision(std::vector<Entity*>& collidersVector)
 				WorldType colliderType = otherEntity->getWorldType();
 				if (colliderType == Platform)
 				{
-					if (collisionDirection == Vector2D(0, 1))
+					if (collisionDirection.XValue <= leftBoundary && collisionDirection.XValue >= rightBoundary && collisionDirection.YValue >= lowerBoundary)
 					{
 						if (pPC->getVelocity().YValue <= -255)
 						{
@@ -31,9 +31,9 @@ void CollisionComponent::checkCollision(std::vector<Entity*>& collidersVector)
 						}
 						pPC->stableGround();
 					}
-					if (collisionDirection == Vector2D(0, -1))
+					if (collisionDirection.XValue > leftBoundary || collisionDirection.XValue < rightBoundary || collisionDirection.YValue <= upperBoundary)
 					{
-						pOtherCC->ignoreTime = 0.8;
+						pOtherCC->ignoreTime = 1.0;
 					}
 				}
 				if (colliderType == TrappedPlatform)
@@ -41,7 +41,7 @@ void CollisionComponent::checkCollision(std::vector<Entity*>& collidersVector)
 					float trapAngle = otherEntity->getComponent<TransformComponent>().getRotation();
 					if (trapAngle == 0)
 					{
-						if (collisionDirection == Vector2D(0, 1))
+						if (collisionDirection.XValue <= leftBoundary && collisionDirection.XValue >= rightBoundary && collisionDirection.YValue >= lowerBoundary)
 						{
 							if (pPC->getVelocity().YValue <= -255)
 							{
@@ -50,7 +50,7 @@ void CollisionComponent::checkCollision(std::vector<Entity*>& collidersVector)
 							}
 							pPC->stableGround();
 						}
-						if (collisionDirection == Vector2D(0, -1))
+						if (collisionDirection.XValue > leftBoundary || collisionDirection.XValue < rightBoundary || collisionDirection.YValue <= upperBoundary)
 						{
 							setActive(false);
 							pGC->setLose(true);
@@ -58,11 +58,11 @@ void CollisionComponent::checkCollision(std::vector<Entity*>& collidersVector)
 					}
 					if (trapAngle == 3.142f)
 					{
-						if (collisionDirection == Vector2D(0, -1))
+						if (collisionDirection.XValue > leftBoundary || collisionDirection.XValue < rightBoundary || collisionDirection.YValue <= upperBoundary)
 						{
 							pPC->bounceBack();
 						}
-						if (collisionDirection == Vector2D(0, 1))
+						if (collisionDirection.XValue <= leftBoundary && collisionDirection.XValue >= rightBoundary && collisionDirection.YValue >= lowerBoundary)
 						{
 							setActive(false);
 							pGC->setLose(true);
