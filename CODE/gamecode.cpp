@@ -492,8 +492,20 @@ ErrorType Game::Update()
 	{
 		if (slowStarted == false)
 		{
-			slowStarted = true;
-			slowTime = 0.5;
+			if (gameStarted == true)
+			{
+				slowStarted = true;
+				slowTime = 0.5;
+			}
+			if (gameStarted == false)
+			{
+				slowStarted = false;
+				slowTime = 0.0;
+				gt.mdGameRate = 1;
+
+				backgroudMusicPlaying = false;
+				background->getComponent<SoundComponent>().setSound("backgroundMusic", true);
+			}
 		}
 		else if (slowStarted == true)
 		{
