@@ -440,11 +440,13 @@ ErrorType Game::StartOfGame(Levels selectedLevel)
 	Entity& newPlayer = entityManager.getEntity(0);
 	player = &newPlayer;
 	player->addComponent<GameComponent>();
-	player->addComponent<TransformComponent>(Vector2D(0, 5), 0.0f, 1.0f);
+	player->addComponent<TransformComponent>(Vector2D(0, 0), 0.0f, 1.0f);
 	player->addComponent<ImageComponent>(pDE, &assetManager);
 	player->addComponent<SoundComponent>(pSE, &assetManager);
 	player->addComponent<PhysicsComponent>(256.0f, 6144.0f, -128.0f);
+	player->getComponent<PhysicsComponent>().setActive(false);
 	player->addComponent<AnimationComponent>();
+	player->getComponent<AnimationComponent>().setActive(false);
 	player->addComponent<CollisionComponent>();
 	player->addComponent<InputComponent>(pInputs);
 
@@ -505,6 +507,7 @@ ErrorType Game::Update()
 
 				backgroudMusicPlaying = false;
 				background->getComponent<SoundComponent>().setSound("backgroundMusic", true);
+				player->getComponent<ImageComponent>().setImage("playerSmiley");
 			}
 		}
 		else if (slowStarted == true)
@@ -539,6 +542,27 @@ ErrorType Game::Update()
 
 	// check if the player uses the keyboard
 	player->getComponent<InputComponent>().checkForInputs();
+
+
+	// start game - if the first input is pressed -> gameStarted = true
+	// activate the animation component of the player -> player image is now changed depending on the players physics or if the player has won or lost
+	// activate the modify component of all world entities -> slowly destroys the level from the bottom to the top
+	if (player->getComponent<InputComponent>().getFirstInput() == true)
+	{
+		player->getComponent<AnimationComponent>().setActive(true);
+
+		if (gameStarted == false)
+		{
+			for (auto& e : entityManager.getAllEntities())
+			{
+				if (e->hasComponent<ModifyComponent>() == true)
+				{
+					e->getComponent<ModifyComponent>().setActive(true);
+				}
+			}
+		}
+		gameStarted = true;
+	}
 
 
 	// check if entities need to be removed
@@ -856,27 +880,9 @@ ErrorType Game::Update()
 
 
 	// welcome message
-	if (player->getComponent<InputComponent>().getFirstInput() == false)
+	if (gameStarted == false)
 	{
-		pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D(midX - 192, midY + gameAreaHeight / 2.0f)), welcomeMessage, MyDrawEngine::WHITE, 1);
-	}
-
-
-	// start game - if the first input is pressed->activate the modify component
-	// slowly destroys the level from the bottom to the top - chases the player
-	if (player->getComponent<InputComponent>().getFirstInput() == true)
-	{
-		if (gameStarted == false)
-		{
-			for (auto& e : entityManager.getAllEntities())
-			{
-				if (e->hasComponent<ModifyComponent>() == true)
-				{
-					e->getComponent<ModifyComponent>().setActive(true);
-				}
-			}
-		}
-		gameStarted = true;
+		pDE->WriteText(pDE->theCamera.ReverseTransform(Vector2D(midX - 208, midY + gameAreaHeight / 2.0f)), welcomeMessage, MyDrawEngine::WHITE, 1);
 	}
 
 

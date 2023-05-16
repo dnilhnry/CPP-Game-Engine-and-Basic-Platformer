@@ -11,6 +11,7 @@ void InputComponent::checkForInputs()
 	if (pInputs->KeyPressed(DIK_RETURN))
 	{
 		firstInput = true;
+		pPC->setActive(true);
 	}
 	if (firstInput == true)
 	{
