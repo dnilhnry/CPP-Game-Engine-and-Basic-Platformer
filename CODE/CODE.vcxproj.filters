@@ -65,9 +65,6 @@
     <ClInclude Include="vector2D.h">
       <Filter>Engine\Header Files\Sub Engines\Maths</Filter>
     </ClInclude>
-    <ClInclude Include="Shapes.h">
-      <Filter>Engine\Header Files\Sub Engines\Video</Filter>
-    </ClInclude>
     <ClInclude Include="myinputs.h">
       <Filter>Engine\Header Files\Sub Engines\Input</Filter>
     </ClInclude>
@@ -137,13 +134,13 @@
     <ClInclude Include="GameComponent.h">
       <Filter>Engine\Header Files\Main\Manager\ECS</Filter>
     </ClInclude>
+    <ClInclude Include="Shapes.h">
+      <Filter>Engine\Header Files\Sub Engines\Maths</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vector2D.cpp">
       <Filter>Engine\Source Files\Sub Engines\Maths</Filter>
-    </ClCompile>
-    <ClCompile Include="Shapes.cpp">
-      <Filter>Engine\Source Files\Sub Engines\Video</Filter>
     </ClCompile>
     <ClCompile Include="mydrawengine.cpp">
       <Filter>Engine\Source Files\Sub Engines\Video</Filter>
@@ -204,6 +201,9 @@
     </ClCompile>
     <ClCompile Include="SoundComponent.cpp">
       <Filter>Engine\Source Files\Main\Manager\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="Shapes.cpp">
+      <Filter>Engine\Source Files\Sub Engines\Maths</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
