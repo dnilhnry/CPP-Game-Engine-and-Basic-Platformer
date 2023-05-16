@@ -22,7 +22,7 @@ void CollisionComponent::checkCollision(std::vector<Entity*>& collidersVector)
 				WorldType colliderType = otherEntity->getWorldType();
 				if (colliderType == Platform)
 				{
-					if (collisionDirection.XValue <= leftBoundary && collisionDirection.XValue >= rightBoundary && collisionDirection.YValue >= lowerBoundary)
+					if ((collisionDirection.XValue <= leftBoundary && collisionDirection.XValue >= rightBoundary) && collisionDirection.YValue >= lowerBoundary)
 					{
 						if (pPC->getVelocity().YValue <= -255)
 						{
@@ -31,7 +31,18 @@ void CollisionComponent::checkCollision(std::vector<Entity*>& collidersVector)
 						}
 						pPC->stableGround();
 					}
-					if (collisionDirection.XValue > leftBoundary || collisionDirection.XValue < rightBoundary || collisionDirection.YValue <= upperBoundary)
+					if (collisionDirection.YValue < lowerBoundary && collisionDirection.YValue > upperBoundary)
+					{
+						if (collisionCircle.Intersection(otherCollisionBox).XValue < otherCollisionBox.GetCentre().XValue)
+						{
+							pTC->addPosition(Vector2D(collisionCircle.Intersection(otherCollisionBox).XValue - (otherCollisionBox.GetCentre().XValue - 32), 0));
+						}
+						if (collisionCircle.Intersection(otherCollisionBox).XValue > otherCollisionBox.GetCentre().XValue)
+						{
+							pTC->addPosition(Vector2D(collisionCircle.Intersection(otherCollisionBox).XValue - (otherCollisionBox.GetCentre().XValue + 32), 0));
+						}
+					}
+					if ((collisionDirection.XValue <= leftBoundary && collisionDirection.XValue >= rightBoundary) && collisionDirection.YValue <= upperBoundary)
 					{
 						pOtherCC->ignoreTime = 1.0;
 					}

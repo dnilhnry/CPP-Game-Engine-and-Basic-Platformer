@@ -56,10 +56,10 @@ public:
 			collisionBox.PlaceAt(lbCorner, rtCorner);*/
 			radius = 30.0f;
 			collisionCircle.PlaceAt(position, radius);
-			leftBoundary = (2.0f / 3.0f);
-			rightBoundary = -(2.0f / 3.0f);
-			upperBoundary = (3.0f / 4.0f);
-			lowerBoundary = -(3.0f / 4.0f);
+			leftBoundary = 0.6f;
+			rightBoundary = -0.6f;
+			upperBoundary = -0.8f;
+			lowerBoundary = 0.8f;
 
 			pGC = &entity->getComponent<GameComponent>();
 			pPC = &entity->getComponent<PhysicsComponent>();
